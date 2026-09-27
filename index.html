@@ -24,10 +24,6 @@
     --env-side-color: #6d1622;
     --env-bottom-color: #5a101a;
     --env-inside: #24050a;
-    
-    /* Чистые цвета для рельефа (без серого) */
-    --emboss-shadow: #4a0f1a; /* Темно-бордовый для тени */
-    --emboss-highlight: #a83a4a; /* Светло-бордовый для блика */
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
@@ -155,28 +151,28 @@
   .env-bottom { z-index: 2; transform-origin: bottom; }
   .env-bottom .flap-content { 
     background-color: var(--env-bottom-color);
-    clip-path: path('M 0 100% L 48% 50% Q 50% 47% 52% 50% L 100% 100% Z'); 
+    clip-path: path('M 0 100% L 48% 50% Q 50% 44% 52% 50% L 100% 100% Z'); 
   }
 
   /* 2. Левый клапан */
   .env-left { z-index: 3; transform-origin: left; filter: drop-shadow(8px 0px 15px rgba(0,0,0,0.4)); }
   .env-left .flap-content { 
     background-color: var(--env-side-color);
-    clip-path: path('M 0 0 L 50% 48% Q 53% 50% 50% 52% L 0 100% Z'); 
+    clip-path: path('M 0 0 L 50% 48% Q 56% 50% 50% 52% L 0 100% Z'); 
   }
 
   /* 3. Правый клапан */
   .env-right { z-index: 3; transform-origin: right; filter: drop-shadow(-8px 0px 15px rgba(0,0,0,0.4)); }
   .env-right .flap-content { 
     background-color: var(--env-side-color);
-    clip-path: path('M 100% 0 L 50% 48% Q 47% 50% 50% 52% L 100% 100% Z'); 
+    clip-path: path('M 100% 0 L 50% 48% Q 44% 50% 50% 52% L 100% 100% Z'); 
   }
 
   /* 4. Верхний клапан */
   .env-top { z-index: 4; transform-origin: top; filter: drop-shadow(0px 15px 30px rgba(0,0,0,0.7)); }
   .env-top .flap-content { 
     background-color: var(--env-top-color);
-    clip-path: path('M 0 0 L 100% 0 L 52% 50% Q 50% 53% 48% 50% Z'); 
+    clip-path: path('M 0 0 L 100% 0 L 52% 50% Q 50% 56% 48% 50% Z'); 
   }
 
   /* ВРАЩЕНИЕ КЛАПАНОВ ПРИ ОТКРЫТИИ */
@@ -191,35 +187,43 @@
   /* ========================================= */
   .decor {
     position: absolute;
-    width: 55vmin; height: 55vmin;
+    top: 0; left: 0; width: 100%; height: 100%;
     pointer-events: none;
     z-index: 1;
   }
-  
-  /* Расположение в углах */
-  .decor-bl { bottom: -5vmin; left: -5vmin; }
-  .decor-tr { top: -5vmin; right: -5vmin; transform: scaleX(-1) scaleY(-1); }
 
   .decor-layer {
-    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-    -webkit-mask-image: url('1517055.svg'); mask-image: url('1517055.svg');
-    -webkit-mask-size: 100% 100%; mask-size: 100% 100%;
-    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    /* Узор размещается в левом нижнем и правом верхнем углах */
+    -webkit-mask-image: url('1517055.svg'), url('1517055.svg');
+    mask-image: url('1517055.svg'), url('1517055.svg');
+    -webkit-mask-size: 45vmin 45vmin;
+    mask-size: 45vmin 45vmin;
+    -webkit-mask-position: bottom left, top right;
+    mask-position: bottom left, top right;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
   }
 
-  /* Чистые, благородные цвета для рельефа (без грязного серого) */
+  /* Чистые цвета для рельефа (без грязного серого) */
   .decor-shadow {
-    background-color: var(--emboss-shadow); 
+    background-color: #000000;
+    mix-blend-mode: multiply;
+    opacity: 0.6;
     transform: translate(3px, 4px);
     filter: blur(1px);
   }
   .decor-highlight {
-    background-color: var(--emboss-highlight);
+    background-color: #ffffff;
+    mix-blend-mode: screen;
+    opacity: 0.15;
     transform: translate(-2px, -3px);
     filter: blur(1px);
   }
   .decor-fill {
-    background-color: rgba(0, 0, 0, 0.08); /* Легкое затемнение основы */
+    background-color: #000000;
+    mix-blend-mode: overlay;
+    opacity: 0.1;
   }
 
 
@@ -259,12 +263,7 @@
       <!-- НИЖНИЙ КЛАПАН -->
       <div class="flap env-bottom">
         <div class="flap-content">
-           <div class="decor decor-bl">
-             <div class="decor-layer decor-shadow"></div>
-             <div class="decor-layer decor-highlight"></div>
-             <div class="decor-layer decor-fill"></div>
-           </div>
-           <div class="decor decor-tr">
+           <div class="decor">
              <div class="decor-layer decor-shadow"></div>
              <div class="decor-layer decor-highlight"></div>
              <div class="decor-layer decor-fill"></div>
@@ -275,12 +274,7 @@
       <!-- ЛЕВЫЙ КЛАПАН -->
       <div class="flap env-left">
         <div class="flap-content">
-           <div class="decor decor-bl">
-             <div class="decor-layer decor-shadow"></div>
-             <div class="decor-layer decor-highlight"></div>
-             <div class="decor-layer decor-fill"></div>
-           </div>
-           <div class="decor decor-tr">
+           <div class="decor">
              <div class="decor-layer decor-shadow"></div>
              <div class="decor-layer decor-highlight"></div>
              <div class="decor-layer decor-fill"></div>
@@ -291,12 +285,7 @@
       <!-- ПРАВЫЙ КЛАПАН -->
       <div class="flap env-right">
         <div class="flap-content">
-           <div class="decor decor-bl">
-             <div class="decor-layer decor-shadow"></div>
-             <div class="decor-layer decor-highlight"></div>
-             <div class="decor-layer decor-fill"></div>
-           </div>
-           <div class="decor decor-tr">
+           <div class="decor">
              <div class="decor-layer decor-shadow"></div>
              <div class="decor-layer decor-highlight"></div>
              <div class="decor-layer decor-fill"></div>
@@ -307,12 +296,7 @@
       <!-- ВЕРХНИЙ КЛАПАН -->
       <div class="flap env-top">
         <div class="flap-content">
-           <div class="decor decor-bl">
-             <div class="decor-layer decor-shadow"></div>
-             <div class="decor-layer decor-highlight"></div>
-             <div class="decor-layer decor-fill"></div>
-           </div>
-           <div class="decor decor-tr">
+           <div class="decor">
              <div class="decor-layer decor-shadow"></div>
              <div class="decor-layer decor-highlight"></div>
              <div class="decor-layer decor-fill"></div>
