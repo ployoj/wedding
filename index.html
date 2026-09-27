@@ -19,12 +19,12 @@
     /* Текстура бумаги */
     --paper-noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
     
-    /* Идеальные цвета конверта с вашего референса */
-    --env-top-color: #791b29;
-    --env-side-color: #681622;
-    --env-bottom-color: #58111b;
+    /* Глубокие, бархатные бордовые цвета точно с вашего референса */
+    --env-top-color: #821f2f;
+    --env-side-color: #6d1622;
+    --env-bottom-color: #5a101a;
     
-    /* Глубина внутри конверта */
+    /* Темная глубина конверта */
     --env-inside: #24050a;
   }
   *{box-sizing:border-box;}
@@ -98,13 +98,12 @@
   }
 
   /* ========================================= */
-  /* НОВАЯ АРХИТЕКТУРА 3D-КОНВЕРТА С РЕЛЬЕФОМ  */
+  /* АРХИТЕКТУРА КОНВЕРТА                      */
   /* ========================================= */
   .envelope-wrapper {
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
     width: 100dvw; height: 100dvh; display: flex; align-items: center; justify-content: center;
     z-index: 9999; perspective: 2000px;
-    /* Конверт исчезает с экрана через 7.5 секунд */
     transition: opacity 2s ease 5.5s, visibility 0s linear 8s;
   }
   .envelope-wrapper.opened { opacity: 0; pointer-events: none; }
@@ -117,7 +116,7 @@
   .envelope:hover { transform: scale(1.02); }
   .envelope-wrapper.opened .envelope { transform: scale(1.05) translateY(10px); }
 
-  /* Темный фон внутри конверта (Сразу исчезает, чтобы показать сайт) */
+  /* Темный фон внутри конверта */
   .env-inside {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background: var(--env-inside); box-shadow: inset 0 0 200px rgba(0,0,0,0.9);
@@ -130,17 +129,12 @@
   .flap {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     transform-style: preserve-3d;
-    /* Супер-медленная и плавная анимация открытия на 6 секунд */
     transition: transform 6s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
-  /* Контейнер для формы клапана (Именно он обрезает узоры ровно по краям!) */
   .flap-content {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background-image: var(--paper-noise);
   }
-
-  /* --- СЛОИ И ТЕНИ --- */
 
   /* 1. Нижний клапан */
   .env-bottom { z-index: 2; transform-origin: bottom; }
@@ -163,7 +157,7 @@
     clip-path: polygon(100% 0, 48% 50%, 100% 100%); 
   }
 
-  /* 4. Верхний клапан (накрывает всё и бросает густую тень вниз) */
+  /* 4. Верхний клапан (накрывает всё и бросает густую тень вниз НА УЗОРЫ) */
   .env-top { z-index: 4; transform-origin: top; filter: drop-shadow(0px 15px 30px rgba(0,0,0,0.7)); }
   .env-top .flap-content { 
     background-color: var(--env-top-color);
@@ -177,29 +171,55 @@
   .envelope-wrapper.opened .env-right { transform: rotateY(175deg); }
 
 
-  /* --- НАДЕЖНОЕ РЕЛЬЕФНОЕ ТИСНЕНИЕ (РАБОТАЕТ ВЕЗДЕ) --- */
+  /* ----------------------------------------- */
+  /* НОВЫЙ ИДЕАЛЬНЫЙ РЕЛЬЕФ (МЯГКИЙ И ГЛУБОКИЙ)*/
+  /* ----------------------------------------- */
   .decor {
     position: absolute;
-    width: 45vmin; height: 45vmin; min-width: 250px; min-height: 250px;
-    background-image: url('1517055.svg');
-    background-size: contain; background-repeat: no-repeat;
-    /* 
-      Этот фильтр делает магию:
-      1. brightness(0) делает любой SVG черным
-      2. opacity(0.25) делает его темно-бордовым вдавленным следом
-      3. drop-shadow с белым цветом дает светлый блик грани тиснения!
-    */
-    filter: brightness(0) opacity(0.25) drop-shadow(-1px -1px 0px rgba(255,255,255,0.3));
+    /* Увеличенный размер узора */
+    width: 60vmin; height: 60vmin; min-width: 320px; min-height: 320px;
     pointer-events: none;
+    z-index: 1;
   }
 
-  /* Идеальная расстановка по углам */
-  .decor-bottom-left { bottom: -2vmin; left: -2vmin; }
-  .decor-bottom-right { bottom: -2vmin; right: -2vmin; transform: scaleX(-1); }
-  .decor-top-right { top: -2vmin; right: -2vmin; transform: scaleX(-1) scaleY(-1); }
+  .decor-layer {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    -webkit-mask-image: url('1517055.svg'); mask-image: url('1517055.svg');
+    -webkit-mask-size: contain; mask-size: contain;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  }
+
+  /* 1. Глубокая, мягкая тень (без грязи, используем темно-бордовый) */
+  .decor-shadow {
+    background-color: rgba(30, 0, 5, 0.6); 
+    transform: translate(3px, 4px);
+    filter: blur(2px);
+  }
+  
+  /* 2. Мягкий, теплый блик (для эффекта выдавленной бумаги) */
+  .decor-highlight {
+    background-color: rgba(255, 180, 190, 0.2);
+    transform: translate(-2px, -2px);
+    filter: blur(1.5px);
+  }
+  
+  /* 3. Заливка самого узора (чуть темнее фона для реализма) */
+  .decor-fill {
+    background-color: rgba(0, 0, 0, 0.08);
+  }
+
+  /* Расположение ТОЛЬКО в двух углах (Левый нижний и Правый верхний) */
+  .decor-bottom-left { 
+    bottom: -4vmin; left: -4vmin; 
+  }
+  .decor-top-right { 
+    top: -4vmin; right: -4vmin; 
+    transform: scaleX(-1) scaleY(-1); /* Зеркально переворачиваем */
+  }
+
 
   /* ========================================= */
-  /* СУРГУЧНАЯ ПЕЧАТЬ                          */
+  /* СУРГУЧНАЯ ПЕЧАТЬ (БЕЗОПАСНЫЙ СЛОЙ)        */
   /* ========================================= */
   .wax-seal-img {
     position: absolute;
@@ -234,37 +254,51 @@
       
       <div class="env-inside"></div>
 
-      <!-- НИЖНИЙ КЛАПАН (содержит части левого и правого узоров) -->
+      <!-- НИЖНИЙ КЛАПАН (содержит часть узора слева снизу) -->
       <div class="flap env-bottom">
         <div class="flap-content">
-           <div class="decor decor-bottom-left"></div>
-           <div class="decor decor-bottom-right"></div>
+           <div class="decor decor-bottom-left">
+             <div class="decor-layer decor-shadow"></div>
+             <div class="decor-layer decor-highlight"></div>
+             <div class="decor-layer decor-fill"></div>
+           </div>
         </div>
       </div>
       
-      <!-- ЛЕВЫЙ КЛАПАН (содержит часть левого узора) -->
+      <!-- ЛЕВЫЙ КЛАПАН (содержит часть узора слева снизу) -->
       <div class="flap env-left">
         <div class="flap-content">
-           <div class="decor decor-bottom-left"></div>
+           <div class="decor decor-bottom-left">
+             <div class="decor-layer decor-shadow"></div>
+             <div class="decor-layer decor-highlight"></div>
+             <div class="decor-layer decor-fill"></div>
+           </div>
         </div>
       </div>
       
-      <!-- ПРАВЫЙ КЛАПАН (содержит части правого и верхнего узоров) -->
+      <!-- ПРАВЫЙ КЛАПАН (содержит часть узора справа сверху) -->
       <div class="flap env-right">
         <div class="flap-content">
-           <div class="decor decor-bottom-right"></div>
-           <div class="decor decor-top-right"></div>
+           <div class="decor decor-top-right">
+             <div class="decor-layer decor-shadow"></div>
+             <div class="decor-layer decor-highlight"></div>
+             <div class="decor-layer decor-fill"></div>
+           </div>
         </div>
       </div>
       
-      <!-- ВЕРХНИЙ КЛАПАН (содержит часть верхнего узора) -->
+      <!-- ВЕРХНИЙ КЛАПАН (содержит часть узора справа сверху) -->
       <div class="flap env-top">
         <div class="flap-content">
-           <div class="decor decor-top-right"></div>
+           <div class="decor decor-top-right">
+             <div class="decor-layer decor-shadow"></div>
+             <div class="decor-layer decor-highlight"></div>
+             <div class="decor-layer decor-fill"></div>
+           </div>
         </div>
       </div>
       
-      <!-- ПЕЧАТЬ (Абсолютно независима от клапанов) -->
+      <!-- ПЕЧАТЬ -->
       <img src="seal.png" class="wax-seal-img" alt="Печать S&S">
       
     </div>
@@ -384,7 +418,7 @@
       heroSection.classList.add('hero-active'); 
     }, 400); 
 
-    // Удаляем конверт из HTML через 8 секунд
+    // Удаляем из HTML через 8 секунд
     setTimeout(() => {
       this.style.display = 'none';
     }, 8000);
