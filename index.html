@@ -18,12 +18,9 @@
     --burgundy-light:#8f3240;
     --line: rgba(232,221,201,0.18);
     
-    /* Текстура бумаги (шум) */
+    /* Текстура бумаги (легкий шум) */
     --paper-noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.06'/%3E%3C/svg%3E");
     
-    /* Изящный цветочный узор (тиснение) - светлая заливка и темный контур создают объем 3D */
-    --emboss-pattern: url("data:image/svg+xml,%3Csvg width='90' height='90' viewBox='0 0 90 90' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M45 45c15-25 35-35 45-15-25 15-35 35-15 45-25-15-45-35-35-45 15 25 35 35 15 45 25-15 35-35 45-15-15-25-35-35-45-15-25 15-35 35-15 45z' fill='%23ffffff' fill-opacity='0.04' stroke='%23000000' stroke-width='1.5' stroke-opacity='0.15'/%3E%3C/svg%3E");
-
     /* Реалистичные оттенки картона с учетом освещения сверху-слева */
     --env-top-color: linear-gradient(135deg, #6c1c28, #55151f);
     --env-bottom-color: linear-gradient(135deg, #5c1822, #47111a);
@@ -186,7 +183,7 @@
   }
 
   /* ========================================= */
-  /* КОНВЕРТ НА ВЕСЬ ЭКРАН С ТИСНЕНИЕМ         */
+  /* КОНВЕРТ НА ВЕСЬ ЭКРАН (ПЛАВНОЕ ОТКРЫТИЕ ВСЕХ ЧАСТЕЙ) */
   /* ========================================= */
   .envelope-wrapper {
     position: fixed;
@@ -199,7 +196,8 @@
     justify-content: center;
     z-index: 9999;
     perspective: 1500px;
-    transition: opacity 0.8s ease 0.3s, visibility 0s linear 1.2s;
+    /* Задержка исчезновения, чтобы дать клапанам красиво распахнуться */
+    transition: opacity 1.5s ease 1s, visibility 0s linear 2.5s;
   }
   .envelope-wrapper.opened {
     opacity: 0;
@@ -217,89 +215,110 @@
     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
     transform-style: preserve-3d;
   }
+  
   .envelope:hover {
-    transform: scale(1.02);
-  }
-  .envelope-wrapper.opened .envelope {
-    transform: scale(1.1) translateY(30px);
-  }
-
-  .env-flap-wrapper {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    transform: scale(1.01);
   }
   
+  .envelope-wrapper.opened .envelope {
+    transform: scale(1.05) translateY(20px);
+  }
+
+  /* Общие стили для оберток клапанов - они все открываются медленно и плавно */
+  .env-flap-wrapper {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    transition: transform 1.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
   .env-flap-shape {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background-size: 110px 110px; /* Размер паттерна тиснения */
-    background-position: center;
+    background-size: cover;
   }
 
-  /* Идеальный X: все клапаны сходятся ровно в центре экрана (50% 50%) */
-  .env-left-wrapper { z-index: 1; filter: drop-shadow(4px 0px 8px rgba(0,0,0,0.4)); }
-  .env-flap-left { 
-    /* Наложение: Шум + Узор тиснения + Градиент */
-    background: var(--paper-noise), var(--emboss-pattern), var(--env-left-color);
-    clip-path: polygon(0 0, 50% 50%, 0 100%); 
+  /* Нижний клапан (теперь в самом низу, под боковыми) */
+  .env-bottom-wrapper { 
+    z-index: 3; 
+    transform-origin: bottom; /* Откидывается вниз */
   }
-
-  .env-right-wrapper { z-index: 1; filter: drop-shadow(-4px 0px 8px rgba(0,0,0,0.4)); }
-  .env-flap-right { 
-    background: var(--paper-noise), var(--emboss-pattern), var(--env-right-color);
-    clip-path: polygon(100% 0, 50% 50%, 100% 100%); 
-  }
-
-  .env-bottom-wrapper { z-index: 2; filter: drop-shadow(0px -4px 8px rgba(0,0,0,0.5)); }
   .env-flap-bottom { 
-    background: var(--paper-noise), var(--emboss-pattern), var(--env-bottom-color);
+    background: var(--paper-noise), var(--env-bottom-color);
     clip-path: polygon(0 100%, 50% 50%, 100% 100%); 
   }
 
-  .env-top-wrapper {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    transform-origin: top;
-    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 5;
-    filter: drop-shadow(0px 5px 12px rgba(0,0,0,0.7));
+  /* Боковые клапаны (сверху нижнего, отбрасывают тень) */
+  .env-left-wrapper { 
+    z-index: 4; 
+    transform-origin: left; /* Откидывается влево */
+    filter: drop-shadow(5px 0px 10px rgba(0,0,0,0.5)); 
   }
-  .env-flap-top-shape {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: var(--paper-noise), var(--emboss-pattern), var(--env-top-color);
-    background-size: 110px 110px;
-    background-position: center;
-    clip-path: polygon(0 0, 100% 0, 50% 50%);
-  }
-  .envelope-wrapper.opened .env-top-wrapper {
-    transform: rotateX(175deg);
+  .env-flap-left { 
+    background: var(--paper-noise), var(--env-left-color);
+    clip-path: polygon(0 0, 50% 50%, 0 100%); 
   }
 
+  .env-right-wrapper { 
+    z-index: 4; 
+    transform-origin: right; /* Откидывается вправо */
+    filter: drop-shadow(-5px 0px 10px rgba(0,0,0,0.5)); 
+  }
+  .env-flap-right { 
+    background: var(--paper-noise), var(--env-right-color);
+    clip-path: polygon(100% 0, 50% 50%, 100% 100%); 
+  }
+
+  /* Верхний клапан (накрывает всё) */
+  .env-top-wrapper {
+    z-index: 5;
+    transform-origin: top; /* Откидывается вверх */
+    filter: drop-shadow(0px 6px 12px rgba(0,0,0,0.7));
+  }
+  .env-flap-top-shape {
+    background: var(--paper-noise), var(--env-top-color);
+    clip-path: polygon(0 0, 100% 0, 50% 50%);
+  }
+
+  /* АНИМАЦИИ ОТКРЫТИЯ (все 4 клапана раскрываются наружу) */
+  .envelope-wrapper.opened .env-top-wrapper { transform: rotateX(160deg); }
+  .envelope-wrapper.opened .env-bottom-wrapper { transform: rotateX(-160deg); }
+  .envelope-wrapper.opened .env-left-wrapper { transform: rotateY(-160deg); }
+  .envelope-wrapper.opened .env-right-wrapper { transform: rotateY(160deg); }
+
   /* ========================================= */
-  /* ПЕЧАТЬ (БОЛЬШАЯ, РОВНО В ЦЕНТРЕ)          */
+  /* ПЕЧАТЬ (ПО ЦЕНТРУ СТЫКА)                  */
   /* ========================================= */
   .wax-seal-img {
     position: absolute;
-    /* Центрируем идеально по стыку всех 4-х клапанов */
     top: 50%; 
     left: 50%;
     transform: translate(-50%, -50%);
-    /* Увеличенный размер для точного соответствия референсу */
     width: clamp(120px, 32vw, 200px);
     z-index: 6;
-    transition: opacity 0.3s ease, transform 0.4s ease;
+    transition: opacity 0.5s ease, transform 0.8s ease;
     filter: drop-shadow(0px 8px 12px rgba(0,0,0,0.6));
   }
 
   .envelope-wrapper.opened .wax-seal-img {
     opacity: 0; 
-    transform: translate(-50%, -50%) scale(1.4);
+    transform: translate(-50%, -50%) scale(1.6); /* Красиво увеличивается и растворяется */
   }
 
 </style>
 </head>
 <body class="locked">
 
-  <!-- КОНВЕРТ (ФУЛЛСКРИН) -->
+  <!-- МУЗЫКА НА ФОНЕ -->
+  <!-- loop означает, что музыка будет повторяться бесконечно -->
+  <audio id="bg-music" loop>
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- КОНВЕРТ -->
   <div class="envelope-wrapper" id="envelope-wrapper">
     <div class="envelope">
+      
+      <!-- Обратите внимание: порядок изменен для z-index теней -->
+      <div class="env-flap-wrapper env-bottom-wrapper">
+        <div class="env-flap-shape env-flap-bottom"></div>
+      </div>
       
       <div class="env-flap-wrapper env-left-wrapper">
         <div class="env-flap-shape env-flap-left"></div>
@@ -308,17 +327,11 @@
         <div class="env-flap-shape env-flap-right"></div>
       </div>
       
-      <div class="env-flap-wrapper env-bottom-wrapper">
-        <div class="env-flap-shape env-flap-bottom"></div>
+      <div class="env-flap-wrapper env-top-wrapper">
+        <div class="env-flap-top-shape"></div>
+        <img src="seal.png" class="wax-seal-img" alt="Печать S&S">
       </div>
       
-      <div class="env-top-wrapper">
-        <div class="env-flap-top-shape"></div>
-        
-        <!-- Картинка-печать в формате PNG -->
-        <img src="seal.png" class="wax-seal-img" alt="Печать S&S">
-        
-      </div>
     </div>
   </div>
 
@@ -422,21 +435,28 @@
   }, { threshold: 0.15 });
   document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-  // ---- Быстрое открытие сайта ----
+  // ---- Быстрое открытие сайта + Музыка ----
   const envelopeWrapper = document.getElementById('envelope-wrapper');
   const heroSection = document.getElementById('hero-section');
+  const bgMusic = document.getElementById('bg-music');
 
   envelopeWrapper.addEventListener('click', function() {
+    // 1. Запускаем анимацию открытия всех клапанов
     this.classList.add('opened'); 
     
+    // 2. Включаем музыку (play может вернуть ошибку, если браузер строгий, поэтому ловим её)
+    bgMusic.play().catch(e => console.log("Браузер заблокировал автовоспроизведение:", e));
+    
+    // 3. Запускаем анимации сайта, пока конверт плавно растворяется
     setTimeout(() => {
       document.body.classList.remove('locked'); 
       heroSection.classList.add('hero-active'); 
-    }, 200); 
+    }, 800); 
 
+    // 4. Окончательно удаляем конверт
     setTimeout(() => {
       this.style.display = 'none';
-    }, 1200);
+    }, 2500);
   });
 
   // ---- RSVP submit ----
