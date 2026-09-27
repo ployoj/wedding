@@ -18,9 +18,12 @@
     --burgundy-light:#8f3240;
     --line: rgba(232,221,201,0.18);
     
-    /* Текстура бумаги (легкий шум) */
+    /* Текстура бумаги (шум) */
     --paper-noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.06'/%3E%3C/svg%3E");
     
+    /* Изящный цветочный узор (тиснение) - светлая заливка и темный контур создают объем 3D */
+    --emboss-pattern: url("data:image/svg+xml,%3Csvg width='90' height='90' viewBox='0 0 90 90' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M45 45c15-25 35-35 45-15-25 15-35 35-15 45-25-15-45-35-35-45 15 25 35 35 15 45 25-15 35-35 45-15-15-25-35-35-45-15-25 15-35 35-15 45z' fill='%23ffffff' fill-opacity='0.04' stroke='%23000000' stroke-width='1.5' stroke-opacity='0.15'/%3E%3C/svg%3E");
+
     /* Реалистичные оттенки картона с учетом освещения сверху-слева */
     --env-top-color: linear-gradient(135deg, #6c1c28, #55151f);
     --env-bottom-color: linear-gradient(135deg, #5c1822, #47111a);
@@ -183,14 +186,14 @@
   }
 
   /* ========================================= */
-  /* КОНВЕРТ НА ВЕСЬ ЭКРАН (БЕЗ РАМОК)         */
+  /* КОНВЕРТ НА ВЕСЬ ЭКРАН С ТИСНЕНИЕМ         */
   /* ========================================= */
   .envelope-wrapper {
     position: fixed;
     top: 0; left: 0;
     width: 100vw; height: 100vh;
     width: 100dvw; height: 100dvh;
-    background: var(--env-inside); /* Фон враппера сливается с нутром конверта */
+    background: var(--env-inside); 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -206,20 +209,17 @@
 
   .envelope {
     position: relative;
-    /* Убраны max-width и max-height. Конверт 100% экрана. */
     width: 100%;
     height: 100%;
     background: var(--env-inside);
-    box-shadow: inset 0 0 100px rgba(0,0,0,0.8); /* Внутренняя тень по краям экрана */
+    box-shadow: inset 0 0 100px rgba(0,0,0,0.8);
     cursor: pointer;
     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
     transform-style: preserve-3d;
   }
-  
   .envelope:hover {
     transform: scale(1.02);
   }
-  
   .envelope-wrapper.opened .envelope {
     transform: scale(1.1) translateY(30px);
   }
@@ -227,27 +227,31 @@
   .env-flap-wrapper {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
   }
+  
   .env-flap-shape {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-size: 110px 110px; /* Размер паттерна тиснения */
+    background-position: center;
   }
 
-  /* Углы, пересчитанные для полноэкранного вертикального формата */
-  .env-left-wrapper { z-index: 1; }
+  /* Идеальный X: все клапаны сходятся ровно в центре экрана (50% 50%) */
+  .env-left-wrapper { z-index: 1; filter: drop-shadow(4px 0px 8px rgba(0,0,0,0.4)); }
   .env-flap-left { 
-    background: var(--paper-noise), var(--env-left-color);
-    clip-path: polygon(0 0, 55% 40%, 0 100%); 
+    /* Наложение: Шум + Узор тиснения + Градиент */
+    background: var(--paper-noise), var(--emboss-pattern), var(--env-left-color);
+    clip-path: polygon(0 0, 50% 50%, 0 100%); 
   }
 
-  .env-right-wrapper { z-index: 1; }
+  .env-right-wrapper { z-index: 1; filter: drop-shadow(-4px 0px 8px rgba(0,0,0,0.4)); }
   .env-flap-right { 
-    background: var(--paper-noise), var(--env-right-color);
-    clip-path: polygon(100% 0, 45% 40%, 100% 100%); 
+    background: var(--paper-noise), var(--emboss-pattern), var(--env-right-color);
+    clip-path: polygon(100% 0, 50% 50%, 100% 100%); 
   }
 
-  .env-bottom-wrapper { filter: drop-shadow(0px -3px 6px rgba(0,0,0,0.4)); z-index: 2; }
+  .env-bottom-wrapper { z-index: 2; filter: drop-shadow(0px -4px 8px rgba(0,0,0,0.5)); }
   .env-flap-bottom { 
-    background: var(--paper-noise), var(--env-bottom-color);
-    clip-path: polygon(0 100%, 50% 38%, 100% 100%); 
+    background: var(--paper-noise), var(--emboss-pattern), var(--env-bottom-color);
+    clip-path: polygon(0 100%, 50% 50%, 100% 100%); 
   }
 
   .env-top-wrapper {
@@ -255,29 +259,33 @@
     transform-origin: top;
     transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 5;
-    filter: drop-shadow(0px 4px 7px rgba(0,0,0,0.6));
+    filter: drop-shadow(0px 5px 12px rgba(0,0,0,0.7));
   }
   .env-flap-top-shape {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: var(--paper-noise), var(--env-top-color);
-    clip-path: polygon(0 0, 100% 0, 50% 40%); /* Острие ровно на 40% высоты экрана */
+    background: var(--paper-noise), var(--emboss-pattern), var(--env-top-color);
+    background-size: 110px 110px;
+    background-position: center;
+    clip-path: polygon(0 0, 100% 0, 50% 50%);
   }
   .envelope-wrapper.opened .env-top-wrapper {
     transform: rotateX(175deg);
   }
 
   /* ========================================= */
-  /* ПЕЧАТЬ ИЗ PNG КАРТИНКИ ПОЛЬЗОВАТЕЛЯ       */
+  /* ПЕЧАТЬ (БОЛЬШАЯ, РОВНО В ЦЕНТРЕ)          */
   /* ========================================= */
   .wax-seal-img {
     position: absolute;
-    top: 40%; /* Выровнено с острием полноэкранного клапана */
+    /* Центрируем идеально по стыку всех 4-х клапанов */
+    top: 50%; 
     left: 50%;
     transform: translate(-50%, -50%);
-    width: clamp(75px, 20vw, 120px);
+    /* Увеличенный размер для точного соответствия референсу */
+    width: clamp(120px, 32vw, 200px);
     z-index: 6;
     transition: opacity 0.3s ease, transform 0.4s ease;
-    filter: drop-shadow(0px 6px 8px rgba(0,0,0,0.6));
+    filter: drop-shadow(0px 8px 12px rgba(0,0,0,0.6));
   }
 
   .envelope-wrapper.opened .wax-seal-img {
@@ -308,7 +316,7 @@
         <div class="env-flap-top-shape"></div>
         
         <!-- Картинка-печать в формате PNG -->
-        <img src="sru.png" class="wax-seal-img" alt="Печать S&S">
+        <img src="seal.png" class="wax-seal-img" alt="Печать S&S">
         
       </div>
     </div>
