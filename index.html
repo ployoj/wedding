@@ -14,17 +14,15 @@
     --charcoal:#221d1b;
     --beige:#e8ddc9;
     --beige-soft:#f2ead9;
-    --burgundy:#6e1f2a;
     --line: rgba(232,221,201,0.18);
     
-    /* Текстура бумаги */
+    /* Текстура бумаги (оставляем легкий шум) */
     --paper-noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
     
-    /* Оттенки конверта (как на вашем референсе) */
-    --env-top-color: #842031;
-    --env-left-color: #701928;
-    --env-right-color: #701928;
-    --env-bottom-color: #5c1421;
+    /* Точные цвета с вашего референса: глубокий карминно-бордовый */
+    --env-top-color: #8c2333;
+    --env-side-color: #801d2a;
+    --env-bottom-color: #731724;
     
     /* Внутренняя часть конверта (темная глубина) */
     --env-inside: #2b0308;
@@ -176,7 +174,7 @@
   }
 
   /* ========================================= */
-  /* КОНВЕРТ С РЕЛЬЕФНЫМ ТИСНЕНИЕМ (EMBOSS)    */
+  /* КОНВЕРТ НА ВЕСЬ ЭКРАН (АНИМАЦИЯ 6 СЕКУНД) */
   /* ========================================= */
   .envelope-wrapper {
     position: fixed;
@@ -188,7 +186,7 @@
     justify-content: center;
     z-index: 9999;
     perspective: 1800px;
-    transition: opacity 2.5s ease 7.5s, visibility 0s linear 10s;
+    transition: opacity 2s ease 4.5s, visibility 0s linear 7s;
   }
   .envelope-wrapper.opened {
     opacity: 0;
@@ -199,64 +197,80 @@
     position: relative;
     width: 100%;
     height: 100%;
-    border-radius: 16px; 
     cursor: pointer;
     transition: transform 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
     transform-style: preserve-3d;
   }
   
   .envelope:hover {
-    transform: scale(1.02);
+    transform: scale(1.015);
   }
   
   .envelope-wrapper.opened .envelope {
     transform: scale(1.05) translateY(10px);
   }
 
-  /* ВНУТРЕННИЙ ФОН - Исчезает быстро, открывая сайт сквозь створки */
+  /* Тёмная комната (внутренность). Исчезает быстро, открывая сайт */
   .envelope::before {
     content: "";
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background: var(--env-inside);
-    box-shadow: inset 0 0 150px rgba(0,0,0,0.9);
+    box-shadow: inset 0 0 200px rgba(0,0,0,0.9);
     z-index: 1;
-    border-radius: 16px;
     transition: opacity 1.5s ease 0.1s; 
   }
   .envelope-wrapper.opened .envelope::before {
     opacity: 0;
   }
 
-  /* ОБЕРТКИ КЛАПАНОВ - Время анимации 8 СЕКУНД */
+  /* ОБЕРТКИ КЛАПАНОВ (Контролируют тени и поворот) */
   .env-flap-wrapper {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    transition: transform 8s cubic-bezier(0.35, 0, 0.2, 1);
+    transition: transform 6s cubic-bezier(0.35, 0, 0.15, 1);
   }
-  
   .envelope-wrapper.opened .env-flap-wrapper {
     opacity: 0;
-    transition: transform 8s cubic-bezier(0.35, 0, 0.2, 1), opacity 3s ease 5s;
+    transition: transform 6s cubic-bezier(0.35, 0, 0.15, 1), opacity 2.5s ease 4s;
   }
 
-  /* БАЗА КЛАПАНА */
+  /* БАЗОВАЯ ФОРМА КЛАПАНА (Внутри обертки) */
   .env-flap-shape {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background-image: var(--paper-noise);
+    /* Эта переменная передает цвет клапана в узор-тиснение */
+    background-color: var(--current-flap-color);
   }
 
   /* ----------------------------------------- */
-  /* ЛОГИКА 3D-ТИСНЕНИЯ (EMBOSS)               */
+  /* ПРАВИЛЬНОЕ ТИСНЕНИЕ (ВНУТРИ ФОРМЫ КЛАПАНА)*/
   /* ----------------------------------------- */
+  /* Контейнер узора. Он лежит поверх бумаги, но ВНУТРИ clip-path клапана */
   .emboss-decor {
     position: absolute;
+    width: clamp(250px, 45vmin, 500px);
+    height: clamp(250px, 45vmin, 500px);
     pointer-events: none;
-    z-index: 2;
   }
-  /* Слои масок: псевдоэлементы создают блик и тень */
-  .emboss-decor::before, 
-  .emboss-decor::after {
-    content: "";
-    position: absolute; 
+
+  /* Позиционирование узоров точно по углам, как на референсе */
+  .decor-top-right {
+    top: 0; right: 0;
+    transform: scaleY(-1); /* Переворот: угол узора смотрит в правый верхний край */
+  }
+  .decor-bottom-left {
+    bottom: 0; left: 0;
+    transform: scaleX(-1); /* Переворот: угол смотрит в левый нижний край */
+  }
+  .decor-bottom-right {
+    bottom: 0; right: 0;
+    /* Узор по умолчанию смотрит в правый нижний край - оставляем как есть */
+  }
+
+  /* Три слоя иллюзии тиснения */
+  .emboss-decor .shadow,
+  .emboss-decor .highlight,
+  .emboss-decor .fill {
+    position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
     -webkit-mask-image: url('1517055.svg');
     mask-image: url('1517055.svg');
@@ -267,71 +281,69 @@
     -webkit-mask-position: center;
     mask-position: center;
   }
-  /* Блик (Свет от освещения) */
-  .emboss-decor::before {
-    background-color: rgba(255, 255, 255, 0.15); 
-    transform: translate(-1px, -1px);
-  }
-  /* Тень (Глубина вдавленности) */
-  .emboss-decor::after {
-    background-color: rgba(0, 0, 0, 0.5); 
+
+  /* Слой 1: Глубокая тень вдавленности (Сдвиг вниз-вправо) */
+  .emboss-decor .shadow {
+    background-color: rgba(0, 0, 0, 0.45);
     transform: translate(1px, 2px);
   }
-
-  /* ПОЗИЦИИ ТИСНЕНИЯ КАК НА РЕФЕРЕНСЕ */
-  /* Левый клапан - огромный узор снизу */
-  .decor-left-main {
-    width: 65vmin; height: 65vmin;
-    bottom: -10vmin; left: -10vmin;
-    transform: rotate(15deg);
+  /* Слой 2: Светлый блик грани (Сдвиг вверх-влево) */
+  .emboss-decor .highlight {
+    background-color: rgba(255, 255, 255, 0.15);
+    transform: translate(-1px, -1px);
   }
-  /* Правый клапан - узор посередине */
-  .decor-right-main {
-    width: 50vmin; height: 50vmin;
-    top: 40vh; right: -5vmin;
-    transform: scaleX(-1) rotate(25deg); /* Зеркально */
-  }
-  /* Верхний клапан - узор справа */
-  .decor-top-right {
-    width: 45vmin; height: 45vmin;
-    top: -5vmin; right: 5vmin;
-    transform: rotate(110deg);
-  }
-  /* Нижний клапан - узор слева */
-  .decor-bottom-left {
-    width: 40vmin; height: 40vmin;
-    bottom: -5vmin; left: 25vw;
-    transform: rotate(-30deg);
+  /* Слой 3: Заливка узора текстурой и цветом самого конверта (перекрывает центр) */
+  .emboss-decor .fill {
+    background-color: var(--current-flap-color);
+    background-image: var(--paper-noise);
   }
   /* ----------------------------------------- */
 
-  /* 1. Нижний клапан */
-  .env-bottom-wrapper { z-index: 3; transform-origin: bottom; }
+
+  /* ИЕРАРХИЯ СЛОЕВ: НИЗ -> БОКА -> ВЕРХ. (Тень падает на слои ниже!) */
+
+  /* 1. Нижний клапан (Самый нижний уровень) */
+  .env-bottom-wrapper { 
+    z-index: 2; 
+    transform-origin: bottom; 
+    --current-flap-color: var(--env-bottom-color);
+  }
   .env-flap-bottom { 
-    background-color: var(--env-bottom-color);
-    clip-path: polygon(0 100%, 48% 50%, 49% 48.5%, 50% 48%, 51% 48.5%, 52% 50%, 100% 100%); 
+    clip-path: polygon(0 100%, 50% 50%, 100% 100%); 
   }
 
-  /* 2. Боковые клапаны */
-  .env-left-wrapper { z-index: 4; transform-origin: left; filter: drop-shadow(6px 0px 10px rgba(0,0,0,0.4)); }
+  /* 2. Левый клапан (Уровень 2, бросает тень на нижний) */
+  .env-left-wrapper { 
+    z-index: 3; 
+    transform-origin: left; 
+    --current-flap-color: var(--env-side-color);
+    filter: drop-shadow(5px 0px 15px rgba(0,0,0,0.3)); 
+  }
   .env-flap-left { 
-    background-color: var(--env-left-color);
-    clip-path: polygon(0 0, 50% 48%, 51.5% 49.5%, 52% 51%, 51.5% 52.5%, 50% 54%, 0 100%); 
+    clip-path: polygon(0 0, 50% 50%, 0 100%); 
   }
 
-  .env-right-wrapper { z-index: 4; transform-origin: right; filter: drop-shadow(-6px 0px 10px rgba(0,0,0,0.4)); }
+  /* 3. Правый клапан (Уровень 2, бросает тень на нижний) */
+  .env-right-wrapper { 
+    z-index: 3; 
+    transform-origin: right; 
+    --current-flap-color: var(--env-side-color);
+    filter: drop-shadow(-5px 0px 15px rgba(0,0,0,0.3)); 
+  }
   .env-flap-right { 
-    background-color: var(--env-right-color);
-    clip-path: polygon(100% 0, 50% 48%, 48.5% 49.5%, 48% 51%, 48.5% 52.5%, 50% 54%, 100% 100%); 
+    clip-path: polygon(100% 0, 50% 50%, 100% 100%); 
   }
 
-  /* 3. Верхний клапан */
-  .env-top-wrapper { z-index: 5; transform-origin: top; filter: drop-shadow(0px 10px 20px rgba(0,0,0,0.6)); }
-  .env-flap-top-shape {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background-color: var(--env-top-color);
-    background-image: var(--paper-noise);
-    clip-path: polygon(0 0, 100% 0, 52% 53%, 51% 54.5%, 50% 55%, 49% 54.5%, 48% 53%);
+  /* 4. Верхний клапан (Самый верхний, бросает гигантскую тень НА ВСЕ ОСТАЛЬНЫЕ) */
+  .env-top-wrapper { 
+    z-index: 4; 
+    transform-origin: top; 
+    --current-flap-color: var(--env-top-color);
+    /* Эта густая тень упадет поверх нижних створок и поверх узоров на них */
+    filter: drop-shadow(0px 12px 25px rgba(0,0,0,0.5)); 
+  }
+  .env-flap-top {
+    clip-path: polygon(0 0, 100% 0, 50% 50%);
   }
 
   /* РАСКРЫТИЕ КЛАПАНОВ НАРУЖУ */
@@ -341,16 +353,16 @@
   .envelope-wrapper.opened .env-right-wrapper { transform: rotateY(175deg); }
 
   /* ========================================= */
-  /* ПЕЧАТЬ                                    */
+  /* ПЕЧАТЬ (Центр)                            */
   /* ========================================= */
   .wax-seal-img {
     position: absolute;
-    top: 55%; 
+    top: 50%; 
     left: 50%;
     transform: translate(-50%, -50%);
-    width: clamp(120px, 15vw, 180px);
+    width: clamp(90px, 12vw, 150px);
     z-index: 6;
-    transition: opacity 1.5s ease 0.3s, transform 4s cubic-bezier(0.25, 1, 0.5, 1);
+    transition: opacity 1.5s ease 0.3s, transform 3.5s cubic-bezier(0.25, 1, 0.5, 1);
     filter: drop-shadow(0px 8px 12px rgba(0,0,0,0.7));
   }
 
@@ -371,31 +383,35 @@
   <div class="envelope-wrapper" id="envelope-wrapper">
     <div class="envelope">
       
-      <!-- Нижний клапан + Узор -->
+      <!-- Нижний клапан (Без узора, как на референсе) -->
       <div class="env-flap-wrapper env-bottom-wrapper">
-        <div class="env-flap-shape env-flap-bottom">
-          <div class="emboss-decor decor-bottom-left"></div>
-        </div>
+        <div class="env-flap-shape env-flap-bottom"></div>
       </div>
       
-      <!-- Левый клапан + Узор -->
+      <!-- Левый клапан + Узор в левом нижнем углу -->
       <div class="env-flap-wrapper env-left-wrapper">
         <div class="env-flap-shape env-flap-left">
-          <div class="emboss-decor decor-left-main"></div>
+          <div class="emboss-decor decor-bottom-left">
+            <div class="shadow"></div><div class="highlight"></div><div class="fill"></div>
+          </div>
         </div>
       </div>
       
-      <!-- Правый клапан + Узор -->
+      <!-- Правый клапан + Узор в правом нижнем углу -->
       <div class="env-flap-wrapper env-right-wrapper">
         <div class="env-flap-shape env-flap-right">
-          <div class="emboss-decor decor-right-main"></div>
+          <div class="emboss-decor decor-bottom-right">
+            <div class="shadow"></div><div class="highlight"></div><div class="fill"></div>
+          </div>
         </div>
       </div>
       
-      <!-- Верхний клапан + Узор -->
+      <!-- Верхний клапан + Узор в правом верхнем углу -->
       <div class="env-flap-wrapper env-top-wrapper">
-        <div class="env-flap-top-shape">
-          <div class="emboss-decor decor-top-right"></div>
+        <div class="env-flap-shape env-flap-top">
+          <div class="emboss-decor decor-top-right">
+            <div class="shadow"></div><div class="highlight"></div><div class="fill"></div>
+          </div>
         </div>
         <img src="seal.png" class="wax-seal-img" alt="Печать S&S">
       </div>
@@ -511,16 +527,16 @@
     
     bgMusic.play().catch(e => console.log("Браузер заблокировал музыку:", e));
     
-    // Сайт начинает проявляться сразу после клика
+    // Сайт начинает проявляться сразу
     setTimeout(() => {
       document.body.classList.remove('locked'); 
       heroSection.classList.add('hero-active'); 
     }, 400); 
 
-    // Конверт полностью удаляется из HTML через 10 секунд
+    // Удаляем из HTML
     setTimeout(() => {
       this.style.display = 'none';
-    }, 10000);
+    }, 7500);
   });
 
   const SCRIPT_URL = "ВСТАВЬТЕ_СЮДА_URL_GOOGLE_APPS_SCRIPT";
