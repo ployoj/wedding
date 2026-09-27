@@ -32,6 +32,7 @@
   html{scroll-behavior:smooth;}
   body{
     margin:0;
+    padding:0;
     background:var(--black);
     color:var(--beige);
     font-family:'Montserrat', sans-serif;
@@ -182,14 +183,14 @@
   }
 
   /* ========================================= */
-  /* ВЕРТИКАЛЬНЫЙ КОНВЕРТ НА ВЕСЬ ЭКРАН        */
+  /* КОНВЕРТ НА ВЕСЬ ЭКРАН (БЕЗ РАМОК)         */
   /* ========================================= */
   .envelope-wrapper {
     position: fixed;
     top: 0; left: 0;
     width: 100vw; height: 100vh;
     width: 100dvw; height: 100dvh;
-    background: rgba(10, 8, 7, 0.98);
+    background: var(--env-inside); /* Фон враппера сливается с нутром конверта */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -205,20 +206,20 @@
 
   .envelope {
     position: relative;
-    /* Вертикальные пропорции, адаптированные под мобильные телефоны */
-    width: 90vw;
-    height: 85vh;
-    max-width: 480px; /* Ограничитель ширины для ПК */
-    max-height: 750px; /* Ограничитель высоты для ПК */
+    /* Убраны max-width и max-height. Конверт 100% экрана. */
+    width: 100%;
+    height: 100%;
     background: var(--env-inside);
-    box-shadow: 0 40px 80px rgba(0,0,0,0.8), inset 0 0 100px rgba(0,0,0,0.8);
+    box-shadow: inset 0 0 100px rgba(0,0,0,0.8); /* Внутренняя тень по краям экрана */
     cursor: pointer;
     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
     transform-style: preserve-3d;
   }
+  
   .envelope:hover {
     transform: scale(1.02);
   }
+  
   .envelope-wrapper.opened .envelope {
     transform: scale(1.1) translateY(30px);
   }
@@ -230,23 +231,23 @@
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
   }
 
-  /* Скорректированные углы для вертикального формата */
+  /* Углы, пересчитанные для полноэкранного вертикального формата */
   .env-left-wrapper { z-index: 1; }
   .env-flap-left { 
     background: var(--paper-noise), var(--env-left-color);
-    clip-path: polygon(0 0, 55% 45%, 0 100%); 
+    clip-path: polygon(0 0, 55% 40%, 0 100%); 
   }
 
   .env-right-wrapper { z-index: 1; }
   .env-flap-right { 
     background: var(--paper-noise), var(--env-right-color);
-    clip-path: polygon(100% 0, 45% 45%, 100% 100%); 
+    clip-path: polygon(100% 0, 45% 40%, 100% 100%); 
   }
 
   .env-bottom-wrapper { filter: drop-shadow(0px -3px 6px rgba(0,0,0,0.4)); z-index: 2; }
   .env-flap-bottom { 
     background: var(--paper-noise), var(--env-bottom-color);
-    clip-path: polygon(0 100%, 50% 40%, 100% 100%); 
+    clip-path: polygon(0 100%, 50% 38%, 100% 100%); 
   }
 
   .env-top-wrapper {
@@ -259,7 +260,7 @@
   .env-flap-top-shape {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background: var(--paper-noise), var(--env-top-color);
-    clip-path: polygon(0 0, 100% 0, 50% 45%); /* Острие заканчивается на 45% высоты */
+    clip-path: polygon(0 0, 100% 0, 50% 40%); /* Острие ровно на 40% высоты экрана */
   }
   .envelope-wrapper.opened .env-top-wrapper {
     transform: rotateX(175deg);
@@ -270,18 +271,15 @@
   /* ========================================= */
   .wax-seal-img {
     position: absolute;
-    top: 45%; /* Смещено выше, чтобы совпадать с острием клапана */
+    top: 40%; /* Выровнено с острием полноэкранного клапана */
     left: 50%;
     transform: translate(-50%, -50%);
     width: clamp(75px, 20vw, 120px);
     z-index: 6;
     transition: opacity 0.3s ease, transform 0.4s ease;
-    
-    /* Идеальная мягкая тень по контуру прозрачного PNG */
     filter: drop-shadow(0px 6px 8px rgba(0,0,0,0.6));
   }
 
-  /* Анимация исчезновения печати при открытии */
   .envelope-wrapper.opened .wax-seal-img {
     opacity: 0; 
     transform: translate(-50%, -50%) scale(1.4);
@@ -291,7 +289,7 @@
 </head>
 <body class="locked">
 
-  <!-- КОНВЕРТ -->
+  <!-- КОНВЕРТ (ФУЛЛСКРИН) -->
   <div class="envelope-wrapper" id="envelope-wrapper">
     <div class="envelope">
       
