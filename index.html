@@ -276,38 +276,27 @@
     background-repeat: no-repeat;
     pointer-events: none;
     z-index: 2;
-    /* Делаем узор темнее фона и вдавливаем в бумагу */
-    opacity: 0.55;
+    opacity: 0.9;
+    /* Смешивание с красным фоном, чтобы узор стал темно-бордовым */
     mix-blend-mode: multiply;
-    filter: brightness(0.55) contrast(1.1) drop-shadow(0.5px 0.5px 0 rgba(255,255,255,0.15));
+    /* Магия для эффекта ВЫДАВЛИВАНИЯ (Debossed): 
+       Белая тень сверху-слева (подсветка края) + Черная тень снизу-справа (тень углубления) */
+    filter: brightness(0.65) contrast(1.2) 
+            drop-shadow(-1.5px -1.5px 1px rgba(255, 255, 255, 0.25)) 
+            drop-shadow(1.5px 1.5px 1px rgba(0, 0, 0, 0.9));
   }
 
-  /* Верхний клапан: узоры по верхним углам */
-  .env-flap-top-shape .env-pattern-layer {
-    background-image: url('pattern.svg'), url('pattern.svg');
-    background-position: top left, top right;
-    background-size: 55%, 55%;
-  }
-
-  /* Нижний клапан: узоры по нижним углам */
-  .env-flap-bottom .env-pattern-layer {
-    background-image: url('pattern.svg'), url('pattern.svg');
-    background-position: bottom left, bottom right;
-    background-size: 55%, 55%;
-    transform: scaleY(-1);
-  }
-
-  /* Левый клапан: узор снизу */
+  /* Левый клапан: узор строго в НИЖНЕМ ЛЕВОМ углу */
   .env-flap-left .env-pattern-layer {
     background-position: bottom left;
-    background-size: 75%;
+    background-size: 80%;
   }
 
-  /* Правый клапан: узор сверху */
+  /* Правый клапан: узор строго в ВЕРХНЕМ ПРАВОМ углу + зеркальное отражение */
   .env-flap-right .env-pattern-layer {
     background-position: top right;
-    background-size: 75%;
-    transform: scaleX(-1);
+    background-size: 80%;
+    transform: scaleX(-1); /* Отражаем узор по горизонтали для симметрии */
   }
 
   /* ========================================= */
@@ -342,28 +331,28 @@
   <div class="envelope-wrapper" id="envelope-wrapper">
     <div class="envelope">
       
+      <!-- Нижний клапан (БЕЗ узора) -->
       <div class="env-flap-wrapper env-bottom-wrapper">
-        <div class="env-flap-shape env-flap-bottom">
-          <div class="env-pattern-layer"></div>
-        </div>
+        <div class="env-flap-shape env-flap-bottom"></div>
       </div>
       
+      <!-- Левый клапан (УЗОР ВНИЗУ СЛЕВА) -->
       <div class="env-flap-wrapper env-left-wrapper">
         <div class="env-flap-shape env-flap-left">
           <div class="env-pattern-layer"></div>
         </div>
       </div>
       
+      <!-- Правый клапан (УЗОР ВВЕРХУ СПРАВА) -->
       <div class="env-flap-wrapper env-right-wrapper">
         <div class="env-flap-shape env-flap-right">
           <div class="env-pattern-layer"></div>
         </div>
       </div>
       
+      <!-- Верхний клапан (БЕЗ узора) -->
       <div class="env-flap-wrapper env-top-wrapper">
-        <div class="env-flap-top-shape">
-          <div class="env-pattern-layer"></div>
-        </div>
+        <div class="env-flap-top-shape"></div>
         <img src="seal.png" class="wax-seal-img" alt="Печать S&S">
       </div>
       
