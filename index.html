@@ -19,316 +19,196 @@
     /* Текстура бумаги */
     --paper-noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
     
-    /* Глубокие, бархатные бордовые цвета точно с вашего референса */
-    --env-top-color: #821f2f;
-    --env-side-color: #6d1622;
-    --env-bottom-color: #5a101a;
+    /* Идеальные цвета конверта с вашего референса */
+    --env-top-color: #791b29;
+    --env-side-color: #681622;
+    --env-bottom-color: #58111b;
     
-    /* Темная глубина конверта */
+    /* Глубина внутри конверта */
     --env-inside: #24050a;
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
   body{
-    margin:0;
-    padding:0;
-    background:var(--black);
-    color:var(--beige);
-    font-family:'Montserrat', sans-serif;
-    font-weight:300;
-    line-height:1.6;
-    overflow-x:hidden;
+    margin:0; padding:0; background:var(--black); color:var(--beige);
+    font-family:'Montserrat', sans-serif; font-weight:300; line-height:1.6; overflow-x:hidden;
   }
-  body.locked {
-    overflow: hidden; 
-  }
+  body.locked { overflow: hidden; }
 
-  h1,h2,h3,.serif{
-    font-family:'Cormorant Garamond', serif;
-    font-weight:500;
-    margin:0;
-  }
-  .section{
-    max-width:760px;
-    margin:0 auto;
-    padding:110px 28px;
-    position:relative;
-  }
-  .section + .section{
-    border-top:1px solid var(--line);
-  }
+  h1,h2,h3,.serif{ font-family:'Cormorant Garamond', serif; font-weight:500; margin:0; }
+  .section{ max-width:760px; margin:0 auto; padding:110px 28px; position:relative; }
+  .section + .section{ border-top:1px solid var(--line); }
 
-  .reveal{
-    opacity:0;
-    transform:translateY(28px);
-    transition:opacity 1s ease, transform 1s ease;
-  }
-  .reveal.visible{opacity:1; transform:translateY(0);}
+  .reveal{ opacity:0; transform:translateY(28px); transition:opacity 1s ease, transform 1s ease; }
+  .reveal.visible{ opacity:1; transform:translateY(0); }
 
-  .hero{
-    min-height:100vh;
-    min-height:100dvh;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    padding:40px 24px;
-    position:relative;
-  }
-  .hero::before{
-    content:"";
-    position:absolute;
-    top:50%; left:50%;
-    width:1px; height:0;
-    background:#8f3240;
-  }
-  
+  .hero{ min-height:100vh; min-height:100dvh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:40px 24px; position:relative; }
+  .hero::before{ content:""; position:absolute; top:50%; left:50%; width:1px; height:0; background:#8f3240; }
   .hero-active::before { animation: growLine 1.6s ease forwards 0.2s; }
   .hero-active .hero-label { animation: fadeIn 1s ease forwards 0.1s; }
   .hero-active .hero-names { animation: fadeUp 1.2s ease forwards 0.3s; }
   .hero-active .hero-date { animation: fadeIn 1s ease forwards 0.8s; }
   .hero-active .hero-venue { animation: fadeIn 1s ease forwards 1s; }
-
   @keyframes growLine{ to{ height:120px; top:calc(50% - 60px);} }
-  
   .hero-label{ font-size:12px; letter-spacing:4px; color:#8f3240; opacity:0; }
   .hero-names{ font-size:clamp(48px,11vw,96px); letter-spacing:1px; margin:26px 0 10px; opacity:0; }
   .hero-amp{ display:block; font-style:italic; color:#8f3240; font-size:0.5em; margin:6px 0; }
   .hero-date{ font-size:15px; letter-spacing:3px; color:var(--beige-soft); opacity:0; }
   .hero-venue{ margin-top:8px; font-size:13px; letter-spacing:2px; color:#8a7f6e; opacity:0; }
   .hero-venue .fill{ border-bottom:1px dashed #8a7f6e; padding:0 6px; }
-  
   @keyframes fadeIn{ to{opacity:1;} }
   @keyframes fadeUp{ from{opacity:0; transform:translateY(18px);} to{opacity:1; transform:translateY(0);} }
 
   .eyebrow{ font-size:12px; letter-spacing:3px; color:#8f3240; margin-bottom:18px; }
   .section h2{ font-size:clamp(32px,5vw,46px); margin-bottom:34px; }
   .section p{ color:#cfc4ac; font-size:16px; max-width:60ch; }
-
   .program-list{ list-style:none; padding:0; margin:0; border-top:1px solid var(--line); }
   .program-list li{ display:flex; justify-content:space-between; gap:24px; padding:20px 0; border-bottom:1px solid var(--line); }
   .program-time{ font-family:'Cormorant Garamond', serif; font-size:24px; color:#8f3240; white-space:nowrap; }
   .program-desc{ color:#cfc4ac; text-align:right; }
 
-  .venue-frame{
-    aspect-ratio:16/9; border:1px solid var(--line);
-    background:linear-gradient(135deg, var(--charcoal), #1b1615);
-    display:flex; align-items:center; justify-content:center; text-align:center;
-    color:#6f6559; font-size:13px; letter-spacing:1px; padding:20px;
-  }
+  .venue-frame{ aspect-ratio:16/9; border:1px solid var(--line); background:linear-gradient(135deg, var(--charcoal), #1b1615); display:flex; align-items:center; justify-content:center; text-align:center; color:#6f6559; font-size:13px; letter-spacing:1px; padding:20px; }
   .venue-address{ margin-top:22px; font-family:'Cormorant Garamond', serif; font-size:22px; color:var(--beige-soft); }
   .venue-address .fill{ border-bottom:1px dashed #8a7f6e; padding:0 8px; }
 
   .palette{ display:flex; gap:16px; margin-bottom:44px; }
   .swatch{ flex:1; height:64px; border:1px solid var(--line); }
   .dress-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
-  .dress-item{
-    aspect-ratio:3/4; border:1px solid var(--line);
-    background:linear-gradient(160deg, var(--charcoal), #1b1615);
-    display:flex; align-items:center; justify-content:center; text-align:center;
-    color:#6f6559; font-size:12px; padding:10px;
-  }
+  .dress-item{ aspect-ratio:3/4; border:1px solid var(--line); background:linear-gradient(160deg, var(--charcoal), #1b1615); display:flex; align-items:center; justify-content:center; text-align:center; color:#6f6559; font-size:12px; padding:10px; }
   .dress-note{ margin-top:20px; font-size:13px; color:#8a7f6e; }
 
   .gift{ text-align:center; padding-top:100px; padding-bottom:100px; }
-  .gift-mark{
-    width:46px; height:46px; margin:0 auto 28px;
-    border:1px solid #8f3240; border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-    font-family:'Cormorant Garamond', serif; font-style:italic;
-    color:#8f3240; font-size:20px;
-  }
+  .gift-mark{ width:46px; height:46px; margin:0 auto 28px; border:1px solid #8f3240; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond', serif; font-style:italic; color:#8f3240; font-size:20px; }
   .gift p{ margin:0 auto; }
 
   form{ display:flex; flex-direction:column; gap:22px; }
   .field{ display:flex; flex-direction:column; gap:8px; }
   label{ font-size:12px; letter-spacing:2px; color:#8a7f6e; }
-  input, textarea, select{
-    background:transparent; border:none; border-bottom:1px solid var(--line);
-    color:var(--beige-soft); font-family:'Montserrat', sans-serif; font-size:16px;
-    padding:8px 2px; outline:none; transition:border-color 0.3s ease;
-  }
+  input, textarea, select{ background:transparent; border:none; border-bottom:1px solid var(--line); color:var(--beige-soft); font-family:'Montserrat', sans-serif; font-size:16px; padding:8px 2px; outline:none; transition:border-color 0.3s ease; }
   input:focus, textarea:focus, select:focus{ border-color:#8f3240; }
   select option{ background:var(--charcoal); }
   textarea{ resize:vertical; min-height:70px; }
-  .submit-btn{
-    margin-top:10px; align-self:flex-start;
-    background:transparent; border:1px solid #8f3240;
-    color:var(--beige-soft); padding:14px 34px;
-    font-family:'Montserrat', sans-serif; letter-spacing:2px; font-size:13px;
-    cursor:pointer; transition:background 0.35s ease, color 0.35s ease;
-  }
+  .submit-btn{ margin-top:10px; align-self:flex-start; background:transparent; border:1px solid #8f3240; color:var(--beige-soft); padding:14px 34px; font-family:'Montserrat', sans-serif; letter-spacing:2px; font-size:13px; cursor:pointer; transition:background 0.35s ease, color 0.35s ease; }
   .submit-btn:hover{ background:var(--burgundy); color:var(--beige-soft); }
   .form-status{ font-size:13px; color:#8a7f6e; min-height:20px; }
   footer{ text-align:center; padding:50px 20px 60px; font-family:'Cormorant Garamond', serif; font-style:italic; color:#6f6559; font-size:15px; }
 
   @media (max-width:560px){
-    .section{padding:80px 20px;}
-    .program-list li{flex-direction:column; gap:4px;}
-    .program-desc{text-align:left;}
-    .dress-grid{grid-template-columns:repeat(2,1fr);}
+    .section{padding:80px 20px;} .program-list li{flex-direction:column; gap:4px;} .program-desc{text-align:left;} .dress-grid{grid-template-columns:repeat(2,1fr);}
   }
-  @media (prefers-reduced-motion: reduce){
-    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
-  }
-
 
   /* ========================================= */
-  /* ИДЕАЛЬНЫЙ КОНВЕРТ С РЕЛЬЕФОМ              */
+  /* НОВАЯ АРХИТЕКТУРА 3D-КОНВЕРТА С РЕЛЬЕФОМ  */
   /* ========================================= */
   .envelope-wrapper {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    width: 100dvw; height: 100dvh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    perspective: 2000px;
-    /* Конверт пропадает с экрана через 7 секунд */
-    transition: opacity 2s ease 5s, visibility 0s linear 7.5s;
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    width: 100dvw; height: 100dvh; display: flex; align-items: center; justify-content: center;
+    z-index: 9999; perspective: 2000px;
+    /* Конверт исчезает с экрана через 7.5 секунд */
+    transition: opacity 2s ease 5.5s, visibility 0s linear 8s;
   }
-  .envelope-wrapper.opened {
-    opacity: 0;
-    pointer-events: none;
-  }
+  .envelope-wrapper.opened { opacity: 0; pointer-events: none; }
 
   .envelope {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    border-radius: 16px; 
-    cursor: pointer;
+    position: relative; width: 100%; height: 100%; border-radius: 16px; 
+    cursor: pointer; transform-style: preserve-3d;
     transition: transform 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-    transform-style: preserve-3d;
   }
   .envelope:hover { transform: scale(1.02); }
   .envelope-wrapper.opened .envelope { transform: scale(1.05) translateY(10px); }
 
-  /* Тёмная комната (внутри конверта). Исчезает быстро, открывая сайт */
+  /* Темный фон внутри конверта (Сразу исчезает, чтобы показать сайт) */
   .env-inside {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: var(--env-inside);
-    box-shadow: inset 0 0 200px rgba(0,0,0,0.9);
-    z-index: 1;
-    border-radius: 16px;
-    transition: opacity 1s ease 0.2s; 
+    background: var(--env-inside); box-shadow: inset 0 0 200px rgba(0,0,0,0.9);
+    z-index: 1; border-radius: 16px;
+    transition: opacity 1.5s ease 0.1s; 
   }
   .envelope-wrapper.opened .env-inside { opacity: 0; }
 
-  /* --- КЛАПАНЫ КОНВЕРТА --- */
+  /* --- КЛАПАНЫ --- */
   .flap {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    /* Очень плавная анимация раскрытия на 6 секунд */
-    transition: transform 6s cubic-bezier(0.35, 0, 0.15, 1);
     transform-style: preserve-3d;
+    /* Супер-медленная и плавная анимация открытия на 6 секунд */
+    transition: transform 6s cubic-bezier(0.4, 0, 0.2, 1);
   }
-
-  .flap-clip {
+  
+  /* Контейнер для формы клапана (Именно он обрезает узоры ровно по краям!) */
+  .flap-content {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background-image: var(--paper-noise);
   }
 
-  /* 1. НИЖНИЙ КЛАПАН */
+  /* --- СЛОИ И ТЕНИ --- */
+
+  /* 1. Нижний клапан */
   .env-bottom { z-index: 2; transform-origin: bottom; }
-  .env-bottom .flap-clip { 
+  .env-bottom .flap-content { 
     background-color: var(--env-bottom-color);
     clip-path: polygon(0 100%, 50% 48%, 100% 100%); 
   }
 
-  /* 2. ЛЕВЫЙ КЛАПАН */
-  .env-left { 
-    z-index: 3; transform-origin: left; 
-    filter: drop-shadow(8px 0px 15px rgba(0,0,0,0.4)); 
-  }
-  .env-left .flap-clip { 
+  /* 2. Левый клапан */
+  .env-left { z-index: 3; transform-origin: left; filter: drop-shadow(8px 0px 15px rgba(0,0,0,0.4)); }
+  .env-left .flap-content { 
     background-color: var(--env-side-color);
     clip-path: polygon(0 0, 52% 50%, 0 100%); 
   }
 
-  /* 3. ПРАВЫЙ КЛАПАН */
-  .env-right { 
-    z-index: 3; transform-origin: right; 
-    filter: drop-shadow(-8px 0px 15px rgba(0,0,0,0.4)); 
-  }
-  .env-right .flap-clip { 
+  /* 3. Правый клапан */
+  .env-right { z-index: 3; transform-origin: right; filter: drop-shadow(-8px 0px 15px rgba(0,0,0,0.4)); }
+  .env-right .flap-content { 
     background-color: var(--env-side-color);
     clip-path: polygon(100% 0, 48% 50%, 100% 100%); 
   }
 
-  /* 4. ВЕРХНИЙ КЛАПАН (Бросает тень на всё) */
-  .env-top { 
-    z-index: 4; transform-origin: top; 
-    filter: drop-shadow(0px 15px 30px rgba(0,0,0,0.7)); 
-  }
-  .env-top .flap-clip { 
+  /* 4. Верхний клапан (накрывает всё и бросает густую тень вниз) */
+  .env-top { z-index: 4; transform-origin: top; filter: drop-shadow(0px 15px 30px rgba(0,0,0,0.7)); }
+  .env-top .flap-content { 
     background-color: var(--env-top-color);
     clip-path: polygon(0 0, 100% 0, 50% 52%); 
   }
 
-  /* Анимация вращения */
-  .envelope-wrapper.opened .env-top { transform: rotateX(160deg); }
-  .envelope-wrapper.opened .env-bottom { transform: rotateX(-160deg); }
-  .envelope-wrapper.opened .env-left { transform: rotateY(-160deg); }
-  .envelope-wrapper.opened .env-right { transform: rotateY(160deg); }
+  /* ВРАЩЕНИЕ КЛАПАНОВ ПРИ ОТКРЫТИИ */
+  .envelope-wrapper.opened .env-top { transform: rotateX(175deg); }
+  .envelope-wrapper.opened .env-bottom { transform: rotateX(-175deg); }
+  .envelope-wrapper.opened .env-left { transform: rotateY(-175deg); }
+  .envelope-wrapper.opened .env-right { transform: rotateY(175deg); }
 
 
-  /* --- РЕЛЬЕФНЫЕ УЗОРЫ --- */
+  /* --- НАДЕЖНОЕ РЕЛЬЕФНОЕ ТИСНЕНИЕ (РАБОТАЕТ ВЕЗДЕ) --- */
   .decor {
     position: absolute;
-    width: 45vmin; height: 45vmin;
-    min-width: 250px; min-height: 250px;
+    width: 45vmin; height: 45vmin; min-width: 250px; min-height: 250px;
+    background-image: url('1517055.svg');
+    background-size: contain; background-repeat: no-repeat;
+    /* 
+      Этот фильтр делает магию:
+      1. brightness(0) делает любой SVG черным
+      2. opacity(0.25) делает его темно-бордовым вдавленным следом
+      3. drop-shadow с белым цветом дает светлый блик грани тиснения!
+    */
+    filter: brightness(0) opacity(0.25) drop-shadow(-1px -1px 0px rgba(255,255,255,0.3));
     pointer-events: none;
   }
-  /* Слои тиснения (маски из SVG) */
-  .decor-layer {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    -webkit-mask-image: url('1517055.svg');
-    mask-image: url('1517055.svg');
-    -webkit-mask-size: contain; mask-size: contain;
-    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
-  }
-  
-  /* Тень (Эффект вдавленности внутрь картона) */
-  .decor-shadow {
-    background-color: rgba(0, 0, 0, 0.4);
-    transform: translate(2px, 2px);
-  }
-  /* Блик (Освещенный край) */
-  .decor-highlight {
-    background-color: rgba(255, 255, 255, 0.15);
-    transform: translate(-1px, -1px);
-  }
 
-  /* Расстановка по углам конверта как на референсе */
-  .decor-bottom-left {
-    bottom: -2vmin; left: -2vmin;
-  }
-  .decor-bottom-right {
-    bottom: -2vmin; right: -2vmin;
-    transform: scaleX(-1); /* Зеркалим для правого угла */
-  }
-  .decor-top-right {
-    top: -2vmin; right: -2vmin;
-    transform: scaleX(-1) scaleY(-1); /* Переворачиваем в правый верхний угол */
-  }
+  /* Идеальная расстановка по углам */
+  .decor-bottom-left { bottom: -2vmin; left: -2vmin; }
+  .decor-bottom-right { bottom: -2vmin; right: -2vmin; transform: scaleX(-1); }
+  .decor-top-right { top: -2vmin; right: -2vmin; transform: scaleX(-1) scaleY(-1); }
 
   /* ========================================= */
-  /* ПЕЧАТЬ (ПОЛНОСТЬЮ НЕЗАВИСИМЫЙ СЛОЙ)       */
+  /* СУРГУЧНАЯ ПЕЧАТЬ                          */
   /* ========================================= */
   .wax-seal-img {
     position: absolute;
-    top: 52%; 
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 52%; left: 50%;
+    /* translateZ(50px) поднимает печать БЛИЖЕ К НАМ в 3D, чтобы клапаны её не задели! */
+    transform: translate(-50%, -50%) translateZ(50px);
     width: clamp(90px, 12vw, 150px);
+    z-index: 10; /* Строго поверх всего */
     
-    /* ОЧЕНЬ ВАЖНО: z-index 10 гарантирует, что печать ВСЕГДА ПОВЕРХ всех клапанов */
-    z-index: 10; 
-    
-    /* Плавное исчезновение и масштабирование без привязки к 3D-вращению клапанов */
     transition: opacity 1.2s ease 0.1s, transform 3s cubic-bezier(0.25, 1, 0.5, 1);
     filter: drop-shadow(0px 8px 12px rgba(0,0,0,0.8));
     pointer-events: none;
@@ -336,7 +216,8 @@
 
   .envelope-wrapper.opened .wax-seal-img {
     opacity: 0; 
-    transform: translate(-50%, -50%) scale(1.6);
+    /* Масштабируем и растворяем */
+    transform: translate(-50%, -50%) translateZ(50px) scale(1.6);
   }
 
 </style>
@@ -351,45 +232,39 @@
   <div class="envelope-wrapper" id="envelope-wrapper">
     <div class="envelope">
       
-      <!-- Темный фон внутри -->
       <div class="env-inside"></div>
 
-      <!-- 1. Нижний клапан (Без узоров) -->
+      <!-- НИЖНИЙ КЛАПАН (содержит части левого и правого узоров) -->
       <div class="flap env-bottom">
-        <div class="flap-clip"></div>
+        <div class="flap-content">
+           <div class="decor decor-bottom-left"></div>
+           <div class="decor decor-bottom-right"></div>
+        </div>
       </div>
       
-      <!-- 2. Левый клапан + Узор -->
+      <!-- ЛЕВЫЙ КЛАПАН (содержит часть левого узора) -->
       <div class="flap env-left">
-        <div class="flap-clip">
-          <div class="decor decor-bottom-left">
-            <div class="decor-layer decor-shadow"></div>
-            <div class="decor-layer decor-highlight"></div>
-          </div>
+        <div class="flap-content">
+           <div class="decor decor-bottom-left"></div>
         </div>
       </div>
       
-      <!-- 3. Правый клапан + Узор -->
+      <!-- ПРАВЫЙ КЛАПАН (содержит части правого и верхнего узоров) -->
       <div class="flap env-right">
-        <div class="flap-clip">
-          <div class="decor decor-bottom-right">
-            <div class="decor-layer decor-shadow"></div>
-            <div class="decor-layer decor-highlight"></div>
-          </div>
+        <div class="flap-content">
+           <div class="decor decor-bottom-right"></div>
+           <div class="decor decor-top-right"></div>
         </div>
       </div>
       
-      <!-- 4. Верхний клапан + Узор -->
+      <!-- ВЕРХНИЙ КЛАПАН (содержит часть верхнего узора) -->
       <div class="flap env-top">
-        <div class="flap-clip">
-          <div class="decor decor-top-right">
-            <div class="decor-layer decor-shadow"></div>
-            <div class="decor-layer decor-highlight"></div>
-          </div>
+        <div class="flap-content">
+           <div class="decor decor-top-right"></div>
         </div>
       </div>
       
-      <!-- Печать (Лежит снаружи клапанов, безопасно растворяется поверх них) -->
+      <!-- ПЕЧАТЬ (Абсолютно независима от клапанов) -->
       <img src="seal.png" class="wax-seal-img" alt="Печать S&S">
       
     </div>
@@ -503,13 +378,13 @@
     
     bgMusic.play().catch(e => console.log("Браузер заблокировал музыку:", e));
     
-    // Сайт начинает проявляться почти сразу, пока конверт открывается
+    // Сайт начинает проявляться сразу
     setTimeout(() => {
       document.body.classList.remove('locked'); 
       heroSection.classList.add('hero-active'); 
     }, 400); 
 
-    // Удаляем из HTML через 8 секунд
+    // Удаляем конверт из HTML через 8 секунд
     setTimeout(() => {
       this.style.display = 'none';
     }, 8000);
