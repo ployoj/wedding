@@ -19,7 +19,7 @@
     /* Текстура бумаги */
     --paper-noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
     
-    /* Глубокие, бархатные бордовые цвета точно с вашего референса */
+    /* Глубокие, бархатные бордовые цвета */
     --env-top-color: #821f2f;
     --env-side-color: #6d1622;
     --env-bottom-color: #5a101a;
@@ -116,6 +116,13 @@
   .envelope:hover { transform: scale(1.02); }
   .envelope-wrapper.opened .envelope { transform: scale(1.05) translateY(10px); }
 
+  /* Виньетка по краям для глубины */
+  .envelope::after {
+    content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    box-shadow: inset 0 0 120px rgba(0,0,0,0.8);
+    pointer-events: none; z-index: 5; border-radius: 16px;
+  }
+
   /* Темный фон внутри конверта */
   .env-inside {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -157,7 +164,7 @@
     clip-path: polygon(100% 0, 48% 50%, 100% 100%); 
   }
 
-  /* 4. Верхний клапан (накрывает всё и бросает густую тень вниз НА УЗОРЫ) */
+  /* 4. Верхний клапан */
   .env-top { z-index: 4; transform-origin: top; filter: drop-shadow(0px 15px 30px rgba(0,0,0,0.7)); }
   .env-top .flap-content { 
     background-color: var(--env-top-color);
@@ -171,64 +178,54 @@
   .envelope-wrapper.opened .env-right { transform: rotateY(175deg); }
 
 
-  /* ----------------------------------------- */
-  /* НОВЫЙ ИДЕАЛЬНЫЙ РЕЛЬЕФ (МЯГКИЙ И ГЛУБОКИЙ)*/
-  /* ----------------------------------------- */
+  /* ========================================= */
+  /* ИДЕАЛЬНЫЙ РЕЛЬЕФ (ТИСНЕНИЕ)               */
+  /* ========================================= */
   .decor {
     position: absolute;
-    /* Увеличенный размер узора */
-    width: 60vmin; height: 60vmin; min-width: 320px; min-height: 320px;
+    top: 0; left: 0;
+    width: 100%; height: 100%; /* Растягиваем на весь конверт */
     pointer-events: none;
     z-index: 1;
   }
 
   .decor-layer {
-    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     -webkit-mask-image: url('1517055.svg'); mask-image: url('1517055.svg');
-    -webkit-mask-size: contain; mask-size: contain;
+    -webkit-mask-size: 100% 100%; /* Масштабируем SVG под размер всего конверта */
+    -webkit-mask-position: center; mask-position: center;
     -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
   }
 
-  /* 1. Глубокая, мягкая тень (без грязи, используем темно-бордовый) */
+  /* 1. Глубокая, мягкая тень */
   .decor-shadow {
     background-color: rgba(30, 0, 5, 0.6); 
-    transform: translate(3px, 4px);
+    transform: translate(4px, 5px);
+    filter: blur(3px);
+  }
+  
+  /* 2. Мягкий, теплый блик */
+  .decor-highlight {
+    background-color: rgba(255, 180, 190, 0.2);
+    transform: translate(-2px, -3px);
     filter: blur(2px);
   }
   
-  /* 2. Мягкий, теплый блик (для эффекта выдавленной бумаги) */
-  .decor-highlight {
-    background-color: rgba(255, 180, 190, 0.2);
-    transform: translate(-2px, -2px);
-    filter: blur(1.5px);
-  }
-  
-  /* 3. Заливка самого узора (чуть темнее фона для реализма) */
+  /* 3. Заливка самого узора */
   .decor-fill {
-    background-color: rgba(0, 0, 0, 0.08);
-  }
-
-  /* Расположение ТОЛЬКО в двух углах (Левый нижний и Правый верхний) */
-  .decor-bottom-left { 
-    bottom: -4vmin; left: -4vmin; 
-  }
-  .decor-top-right { 
-    top: -4vmin; right: -4vmin; 
-    transform: scaleX(-1) scaleY(-1); /* Зеркально переворачиваем */
+    background-color: rgba(0, 0, 0, 0.1);
   }
 
 
   /* ========================================= */
-  /* СУРГУЧНАЯ ПЕЧАТЬ (БЕЗОПАСНЫЙ СЛОЙ)        */
+  /* СУРГУЧНАЯ ПЕЧАТЬ                          */
   /* ========================================= */
   .wax-seal-img {
     position: absolute;
     top: 52%; left: 50%;
-    /* translateZ(50px) поднимает печать БЛИЖЕ К НАМ в 3D, чтобы клапаны её не задели! */
     transform: translate(-50%, -50%) translateZ(50px);
     width: clamp(90px, 12vw, 150px);
-    z-index: 10; /* Строго поверх всего */
-    
+    z-index: 10;
     transition: opacity 1.2s ease 0.1s, transform 3s cubic-bezier(0.25, 1, 0.5, 1);
     filter: drop-shadow(0px 8px 12px rgba(0,0,0,0.8));
     pointer-events: none;
@@ -236,7 +233,6 @@
 
   .envelope-wrapper.opened .wax-seal-img {
     opacity: 0; 
-    /* Масштабируем и растворяем */
     transform: translate(-50%, -50%) translateZ(50px) scale(1.6);
   }
 
@@ -254,10 +250,10 @@
       
       <div class="env-inside"></div>
 
-      <!-- НИЖНИЙ КЛАПАН (содержит часть узора слева снизу) -->
+      <!-- НИЖНИЙ КЛАПАН -->
       <div class="flap env-bottom">
         <div class="flap-content">
-           <div class="decor decor-bottom-left">
+           <div class="decor">
              <div class="decor-layer decor-shadow"></div>
              <div class="decor-layer decor-highlight"></div>
              <div class="decor-layer decor-fill"></div>
@@ -265,10 +261,10 @@
         </div>
       </div>
       
-      <!-- ЛЕВЫЙ КЛАПАН (содержит часть узора слева снизу) -->
+      <!-- ЛЕВЫЙ КЛАПАН -->
       <div class="flap env-left">
         <div class="flap-content">
-           <div class="decor decor-bottom-left">
+           <div class="decor">
              <div class="decor-layer decor-shadow"></div>
              <div class="decor-layer decor-highlight"></div>
              <div class="decor-layer decor-fill"></div>
@@ -276,10 +272,10 @@
         </div>
       </div>
       
-      <!-- ПРАВЫЙ КЛАПАН (содержит часть узора справа сверху) -->
+      <!-- ПРАВЫЙ КЛАПАН -->
       <div class="flap env-right">
         <div class="flap-content">
-           <div class="decor decor-top-right">
+           <div class="decor">
              <div class="decor-layer decor-shadow"></div>
              <div class="decor-layer decor-highlight"></div>
              <div class="decor-layer decor-fill"></div>
@@ -287,10 +283,10 @@
         </div>
       </div>
       
-      <!-- ВЕРХНИЙ КЛАПАН (содержит часть узора справа сверху) -->
+      <!-- ВЕРХНИЙ КЛАПАН -->
       <div class="flap env-top">
         <div class="flap-content">
-           <div class="decor decor-top-right">
+           <div class="decor">
              <div class="decor-layer decor-shadow"></div>
              <div class="decor-layer decor-highlight"></div>
              <div class="decor-layer decor-fill"></div>
