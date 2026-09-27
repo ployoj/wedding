@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Сергей и Софья</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --black:#141110;
+    --charcoal:#221d1b;
+    --beige:#e8ddc9;
+    --beige-soft:#f2ead9;
+    --burgundy:#6e1f2a;
+    --burgundy-light:#8f3240;
+    --line: rgba(232,221,201,0.18);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--black);
+    color:var(--beige);
+    font-family:'Montserrat', sans-serif;
+    font-weight:300;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.serif{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:500;
+    margin:0;
+  }
+  .section{
+    max-width:760px;
+    margin:0 auto;
+    padding:110px 28px;
+    position:relative;
+  }
+  .section + .section{
+    border-top:1px solid var(--line);
+  }
+
+  /* ---- reveal on scroll ---- */
+  .reveal{
+    opacity:0;
+    transform:translateY(28px);
+    transition:opacity 1s ease, transform 1s ease;
+  }
+  .reveal.visible{opacity:1; transform:translateY(0);}
+
+  /* ---- HERO ---- */
+  .hero{
+    min-height:100vh;
+    min-height:100dvh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:40px 24px;
+    position:relative;
+  }
+  .hero::before{
+    content:"";
+    position:absolute;
+    top:50%; left:50%;
+    width:1px; height:0;
+    background:var(--burgundy-light);
+    animation: growLine 1.6s ease forwards 0.3s;
+  }
+  @keyframes growLine{ to{ height:120px; top:calc(50% - 60px);} }
+  .hero-label{
+    font-size:12px;
+    letter-spacing:4px;
+    color:var(--burgundy-light);
+    opacity:0;
+    animation: fadeIn 1s ease forwards 0.2s;
+  }
+  .hero-names{
+    font-size:clamp(48px,11vw,96px);
+    letter-spacing:1px;
+    margin:26px 0 10px;
+    opacity:0;
+    animation: fadeUp 1.2s ease forwards 0.6s;
+  }
+  .hero-amp{
+    display:block;
+    font-style:italic;
+    color:var(--burgundy-light);
+    font-size:0.5em;
+    margin:6px 0;
+  }
+  .hero-date{
+    font-size:15px;
+    letter-spacing:3px;
+    color:var(--beige-soft);
+    opacity:0;
+    animation: fadeIn 1s ease forwards 1.1s;
+  }
+  .hero-venue{
+    margin-top:8px;
+    font-size:13px;
+    letter-spacing:2px;
+    color:#8a7f6e;
+    opacity:0;
+    animation: fadeIn 1s ease forwards 1.3s;
+  }
+  .hero-venue .fill{
+    border-bottom:1px dashed #8a7f6e;
+    padding:0 6px;
+  }
+  @keyframes fadeIn{ to{opacity:1;} }
+  @keyframes fadeUp{ from{opacity:0; transform:translateY(18px);} to{opacity:1; transform:translateY(0);} }
+
+  /* ---- eyebrow / titles ---- */
+  .eyebrow{
+    font-size:12px;
+    letter-spacing:3px;
+    color:var(--burgundy-light);
+    margin-bottom:18px;
+  }
+  .section h2{
+    font-size:clamp(32px,5vw,46px);
+    margin-bottom:34px;
+  }
+  .section p{
+    color:#cfc4ac;
+    font-size:16px;
+    max-width:60ch;
+  }
+
+  /* ---- program ---- */
+  .program-list{
+    list-style:none;
+    padding:0;
+    margin:0;
+    border-top:1px solid var(--line);
+  }
+  .program-list li{
+    display:flex;
+    justify-content:space-between;
+    gap:24px;
+    padding:20px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .program-time{
+    font-family:'Cormorant Garamond', serif;
+    font-size:24px;
+    color:var(--burgundy-light);
+    white-space:nowrap;
+  }
+  .program-desc{color:#cfc4ac; text-align:right;}
+
+  /* ---- venue ---- */
+  .venue-frame{
+    aspect-ratio:16/9;
+    border:1px solid var(--line);
+    background:linear-gradient(135deg, var(--charcoal), #1b1615);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:#6f6559;
+    font-size:13px;
+    letter-spacing:1px;
+    padding:20px;
+  }
+  .venue-address{
+    margin-top:22px;
+    font-family:'Cormorant Garamond', serif;
+    font-size:22px;
+    color:var(--beige-soft);
+  }
+  .venue-address .fill{
+    border-bottom:1px dashed #8a7f6e;
+    padding:0 8px;
+  }
+
+  /* ---- dress code ---- */
+  .palette{
+    display:flex;
+    gap:16px;
+    margin-bottom:44px;
+  }
+  .swatch{
+    flex:1;
+    height:64px;
+    border:1px solid var(--line);
+  }
+  .dress-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+  }
+  .dress-item{
+    aspect-ratio:3/4;
+    border:1px solid var(--line);
+    background:linear-gradient(160deg, var(--charcoal), #1b1615);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:#6f6559;
+    font-size:12px;
+    padding:10px;
+  }
+  .dress-note{
+    margin-top:20px;
+    font-size:13px;
+    color:#8a7f6e;
+  }
+
+  /* ---- gift ---- */
+  .gift{
+    text-align:center;
+    padding-top:100px;
+    padding-bottom:100px;
+  }
+  .gift-mark{
+    width:46px; height:46px;
+    margin:0 auto 28px;
+    border:1px solid var(--burgundy-light);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    color:var(--burgundy-light);
+    font-size:20px;
+  }
+  .gift p{margin:0 auto;}
+
+  /* ---- RSVP form ---- */
+  form{
+    display:flex;
+    flex-direction:column;
+    gap:22px;
+  }
+  .field{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  label{
+    font-size:12px;
+    letter-spacing:2px;
+    color:#8a7f6e;
+  }
+  input, textarea, select{
+    background:transparent;
+    border:none;
+    border-bottom:1px solid var(--line);
+    color:var(--beige-soft);
+    font-family:'Montserrat', sans-serif;
+    font-size:16px;
+    padding:8px 2px;
+    outline:none;
+    transition:border-color 0.3s ease;
+  }
+  input:focus, textarea:focus, select:focus{
+    border-color:var(--burgundy-light);
+  }
+  select option{background:var(--charcoal);}
+  textarea{resize:vertical; min-height:70px;}
+  .submit-btn{
+    margin-top:10px;
+    align-self:flex-start;
+    background:transparent;
+    border:1px solid var(--burgundy-light);
+    color:var(--beige-soft);
+    padding:14px 34px;
+    font-family:'Montserrat', sans-serif;
+    letter-spacing:2px;
+    font-size:13px;
+    cursor:pointer;
+    transition:background 0.35s ease, color 0.35s ease;
+  }
+  .submit-btn:hover{
+    background:var(--burgundy);
+    color:var(--beige-soft);
+  }
+  .form-status{
+    font-size:13px;
+    color:#8a7f6e;
+    min-height:20px;
+  }
+
+  footer{
+    text-align:center;
+    padding:50px 20px 60px;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    color:#6f6559;
+    font-size:15px;
+  }
+
+  @media (max-width:560px){
+    .section{padding:80px 20px;}
+    .program-list li{flex-direction:column; gap:4px;}
+    .program-desc{text-align:left;}
+    .dress-grid{grid-template-columns:repeat(2,1fr);}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+</style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-label">ПРИГЛАШАЕМ НА НАШУ СВАДЬБУ</div>
+    <h1 class="hero-names">Сергей<span class="hero-amp">&amp;</span>Софья</h1>
+    <div class="hero-date">00 . 00 . 0000</div>
+    <div class="hero-venue">Место проведения — <span class="fill">заполнить</span></div>
+  </section>
+
+  <!-- ПРОГРАММА ДНЯ -->
+  <section class="section">
+    <div class="eyebrow reveal">ПРОГРАММА</div>
+    <h2 class="reveal">Как пройдёт день</h2>
+    <ul class="program-list reveal">
+      <li><span class="program-time">15:00</span><span class="program-desc">Сбор гостей</span></li>
+      <li><span class="program-time">16:00</span><span class="program-desc">Церемония</span></li>
+      <li><span class="program-time">17:30</span><span class="program-desc">Фотосессия и фуршет</span></li>
+      <li><span class="program-time">19:00</span><span class="program-desc">Банкет</span></li>
+      <li><span class="program-time">23:00</span><span class="program-desc">Завершение вечера</span></li>
+    </ul>
+  </section>
+
+  <!-- МЕСТО -->
+  <section class="section">
+    <div class="eyebrow reveal">МЕСТО</div>
+    <h2 class="reveal">Где мы вас ждём</h2>
+    <div class="venue-frame reveal">ФОТОГРАФИЯ МЕСТА ПРОВЕДЕНИЯ</div>
+    <div class="venue-address reveal">г. <span class="fill">заполнить</span>, <span class="fill">адрес</span></div>
+  </section>
+
+  <!-- ДРЕСС-КОД -->
+  <section class="section">
+    <div class="eyebrow reveal">ДРЕСС-КОД</div>
+    <h2 class="reveal">Оттенки вечера</h2>
+    <div class="palette reveal">
+      <div class="swatch" style="background:#141110;"></div>
+      <div class="swatch" style="background:#e8ddc9;"></div>
+      <div class="swatch" style="background:#6e1f2a;"></div>
+      <div class="swatch" style="background:#8f3240;"></div>
+      <div class="swatch" style="background:#3a322c;"></div>
+    </div>
+    <div class="dress-grid reveal">
+      <div class="dress-item">ОБРАЗ 1</div>
+      <div class="dress-item">ОБРАЗ 2</div>
+      <div class="dress-item">ОБРАЗ 3</div>
+    </div>
+    <p class="dress-note reveal">Будем рады видеть вас в чёрных, бежевых и бордовых тонах. Просим избегать белого и слишком ярких оттенков.</p>
+  </section>
+
+  <!-- ПОДАРКИ -->
+  <section class="section gift">
+    <div class="gift-mark reveal">&amp;</div>
+    <h2 class="reveal">О подарках</h2>
+    <p class="reveal" style="margin-top:18px;">Ваше присутствие — главный подарок для нас. Если вы всё же хотите порадовать нас чем-то материальным, вместо цветов мы будем благодарны за комплект постельного белья для нашего нового дома.</p>
+  </section>
+
+  <!-- RSVP -->
+  <section class="section">
+    <div class="eyebrow reveal">RSVP</div>
+    <h2 class="reveal">Подтвердите присутствие</h2>
+    <p class="reveal" style="margin-bottom:34px;">Пожалуйста, заполните форму до [дата], чтобы мы могли всё подготовить.</p>
+
+    <form class="reveal" id="rsvp-form">
+      <div class="field">
+        <label for="name">ИМЯ И ФАМИЛИЯ</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+      <div class="field">
+        <label for="phone">ТЕЛЕФОН</label>
+        <input type="tel" id="phone" name="phone" required>
+      </div>
+      <div class="field">
+        <label for="guests">КОЛИЧЕСТВО ГОСТЕЙ</label>
+        <select id="guests" name="guests">
+          <option value="1">1</option>
+          <option value="2">2</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="comment">ПОЖЕЛАНИЯ ПО МЕНЮ / КОММЕНТАРИЙ</label>
+        <textarea id="comment" name="comment"></textarea>
+      </div>
+      <button type="submit" class="submit-btn">Отправить</button>
+      <div class="form-status" id="form-status"></div>
+    </form>
+  </section>
+
+  <footer>Ждём встречи с вами</footer>
+
+<script>
+  // ---- scroll reveal ----
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  // ---- RSVP submit ----
+  // Замените SCRIPT_URL на адрес вашего опубликованного Google Apps Script (Web App),
+  // который принимает POST и добавляет строку в Google Sheets.
+  const SCRIPT_URL = "ВСТАВЬТЕ_СЮДА_URL_GOOGLE_APPS_SCRIPT";
+
+  const form = document.getElementById('rsvp-form');
+  const status = document.getElementById('form-status');
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    status.textContent = 'Отправляем...';
+
+    const data = {
+      name: form.name.value,
+      phone: form.phone.value,
+      guests: form.guests.value,
+      comment: form.comment.value
+    };
+
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then(() => {
+      status.textContent = 'Спасибо! Мы получили ваш ответ.';
+      form.reset();
+    })
+    .catch(() => {
+      status.textContent = 'Не получилось отправить. Попробуйте ещё раз.';
+    });
+  });
+</script>
+
+</body>
+</html>
