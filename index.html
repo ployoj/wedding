@@ -18,14 +18,15 @@
     --burgundy-light:#8f3240;
     --line: rgba(232,221,201,0.18);
     
-    /* Текстура бумаги (легкий шум) */
+    /* Текстура бумаги (шум) */
     --paper-noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.06'/%3E%3C/svg%3E");
     
-    /* Реалистичные оттенки картона с учетом освещения сверху-слева */
-    --env-top-color: linear-gradient(135deg, #6c1c28, #55151f);
-    --env-bottom-color: linear-gradient(135deg, #5c1822, #47111a);
-    --env-left-color: linear-gradient(135deg, #52141e, #47111a);
-    --env-right-color: linear-gradient(135deg, #47111a, #3d0d16);
+    /* ИСПРАВЛЕНО: Светлый верх, темный низ для реалистичного объема */
+    --env-top-color: linear-gradient(135deg, #8a2535, #701c29);
+    --env-left-color: linear-gradient(135deg, #7a1f2e, #611722);
+    --env-right-color: linear-gradient(135deg, #7a1f2e, #611722);
+    --env-bottom-color: linear-gradient(135deg, #701c29, #59141f);
+    
     --env-inside: linear-gradient(135deg, #2b0308, #170104);
   }
   *{box-sizing:border-box;}
@@ -183,7 +184,7 @@
   }
 
   /* ========================================= */
-  /* КОНВЕРТ НА ВЕСЬ ЭКРАН (ПЛАВНОЕ ОТКРЫТИЕ ВСЕХ ЧАСТЕЙ) */
+  /* КОНВЕРТ С ИДЕАЛЬНЫМ ЗАКРЫТИЕМ             */
   /* ========================================= */
   .envelope-wrapper {
     position: fixed;
@@ -196,7 +197,6 @@
     justify-content: center;
     z-index: 9999;
     perspective: 1500px;
-    /* Задержка исчезновения, чтобы дать клапанам красиво распахнуться */
     transition: opacity 1.5s ease 1s, visibility 0s linear 2.5s;
   }
   .envelope-wrapper.opened {
@@ -224,70 +224,75 @@
     transform: scale(1.05) translateY(20px);
   }
 
-  /* Общие стили для оберток клапанов - они все открываются медленно и плавно */
   .env-flap-wrapper {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     transition: transform 1.8s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .env-flap-shape {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background-size: cover;
   }
 
-  /* Нижний клапан (теперь в самом низу, под боковыми) */
+  /* 
+     ИСПРАВЛЕНО: Нахлест клапанов. 
+     Теперь они не сходятся в центре (50%), а накладываются друг на друга.
+  */
+
+  /* Нижний клапан - в самом низу, заходит чуть выше центра (48%) */
   .env-bottom-wrapper { 
     z-index: 3; 
-    transform-origin: bottom; /* Откидывается вниз */
+    transform-origin: bottom; 
   }
   .env-flap-bottom { 
     background: var(--paper-noise), var(--env-bottom-color);
-    clip-path: polygon(0 100%, 50% 50%, 100% 100%); 
+    clip-path: polygon(0 100%, 50% 48%, 100% 100%); 
   }
 
-  /* Боковые клапаны (сверху нижнего, отбрасывают тень) */
+  /* Боковые клапаны - лежат ПОВЕРХ нижнего (заходят за центр на 52/48) */
   .env-left-wrapper { 
     z-index: 4; 
-    transform-origin: left; /* Откидывается влево */
-    filter: drop-shadow(5px 0px 10px rgba(0,0,0,0.5)); 
+    transform-origin: left; 
+    filter: drop-shadow(4px 0px 8px rgba(0,0,0,0.5)); 
   }
   .env-flap-left { 
     background: var(--paper-noise), var(--env-left-color);
-    clip-path: polygon(0 0, 50% 50%, 0 100%); 
+    clip-path: polygon(0 0, 52% 51%, 0 100%); 
   }
 
   .env-right-wrapper { 
     z-index: 4; 
-    transform-origin: right; /* Откидывается вправо */
-    filter: drop-shadow(-5px 0px 10px rgba(0,0,0,0.5)); 
+    transform-origin: right; 
+    filter: drop-shadow(-4px 0px 8px rgba(0,0,0,0.5)); 
   }
   .env-flap-right { 
     background: var(--paper-noise), var(--env-right-color);
-    clip-path: polygon(100% 0, 50% 50%, 100% 100%); 
+    clip-path: polygon(100% 0, 48% 51%, 100% 100%); 
   }
 
-  /* Верхний клапан (накрывает всё) */
+  /* Верхний клапан - накрывает ВСЁ, заходит сильно вниз (до 55%) */
   .env-top-wrapper {
     z-index: 5;
-    transform-origin: top; /* Откидывается вверх */
+    transform-origin: top; 
+    /* Мощная тень теперь падает ровно на боковые и нижний слои */
     filter: drop-shadow(0px 6px 12px rgba(0,0,0,0.7));
   }
   .env-flap-top-shape {
     background: var(--paper-noise), var(--env-top-color);
-    clip-path: polygon(0 0, 100% 0, 50% 50%);
+    clip-path: polygon(0 0, 100% 0, 50% 55%);
   }
 
-  /* АНИМАЦИИ ОТКРЫТИЯ (все 4 клапана раскрываются наружу) */
+  /* Анимация: раскрытие как бутон */
   .envelope-wrapper.opened .env-top-wrapper { transform: rotateX(160deg); }
   .envelope-wrapper.opened .env-bottom-wrapper { transform: rotateX(-160deg); }
   .envelope-wrapper.opened .env-left-wrapper { transform: rotateY(-160deg); }
   .envelope-wrapper.opened .env-right-wrapper { transform: rotateY(160deg); }
 
   /* ========================================= */
-  /* ПЕЧАТЬ (ПО ЦЕНТРУ СТЫКА)                  */
+  /* ПЕЧАТЬ (ПЕРЕДВИНУТА НА ОСТРИЕ)            */
   /* ========================================= */
   .wax-seal-img {
     position: absolute;
-    top: 50%; 
+    /* Центрируем по острию удлиненного верхнего клапана */
+    top: 55%; 
     left: 50%;
     transform: translate(-50%, -50%);
     width: clamp(120px, 32vw, 200px);
@@ -298,15 +303,14 @@
 
   .envelope-wrapper.opened .wax-seal-img {
     opacity: 0; 
-    transform: translate(-50%, -50%) scale(1.6); /* Красиво увеличивается и растворяется */
+    transform: translate(-50%, -50%) scale(1.6);
   }
 
 </style>
 </head>
 <body class="locked">
 
-  <!-- МУЗЫКА НА ФОНЕ -->
-  <!-- loop означает, что музыка будет повторяться бесконечно -->
+  <!-- МУЗЫКА НА ФОНЕ (ИГРАЕТ БЕСКОНЕЧНО) -->
   <audio id="bg-music" loop>
     <source src="music.mp3" type="audio/mpeg">
   </audio>
@@ -315,7 +319,6 @@
   <div class="envelope-wrapper" id="envelope-wrapper">
     <div class="envelope">
       
-      <!-- Обратите внимание: порядок изменен для z-index теней -->
       <div class="env-flap-wrapper env-bottom-wrapper">
         <div class="env-flap-shape env-flap-bottom"></div>
       </div>
@@ -441,19 +444,16 @@
   const bgMusic = document.getElementById('bg-music');
 
   envelopeWrapper.addEventListener('click', function() {
-    // 1. Запускаем анимацию открытия всех клапанов
     this.classList.add('opened'); 
     
-    // 2. Включаем музыку (play может вернуть ошибку, если браузер строгий, поэтому ловим её)
-    bgMusic.play().catch(e => console.log("Браузер заблокировал автовоспроизведение:", e));
+    // Включаем музыку
+    bgMusic.play().catch(e => console.log("Браузер заблокировал музыку:", e));
     
-    // 3. Запускаем анимации сайта, пока конверт плавно растворяется
     setTimeout(() => {
       document.body.classList.remove('locked'); 
       heroSection.classList.add('hero-active'); 
     }, 800); 
 
-    // 4. Окончательно удаляем конверт
     setTimeout(() => {
       this.style.display = 'none';
     }, 2500);
