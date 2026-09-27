@@ -182,7 +182,7 @@
   }
 
   /* ========================================= */
-  /* РЕАЛИСТИЧНЫЙ КОНВЕРТ С ЧЕТКИМИ ТЕНЯМИ     */
+  /* ВЕРТИКАЛЬНЫЙ КОНВЕРТ НА ВЕСЬ ЭКРАН        */
   /* ========================================= */
   .envelope-wrapper {
     position: fixed;
@@ -205,8 +205,11 @@
 
   .envelope {
     position: relative;
-    width: clamp(300px, 92vw, 1000px);
-    aspect-ratio: 1.55 / 1;
+    /* Вертикальные пропорции, адаптированные под мобильные телефоны */
+    width: 90vw;
+    height: 85vh;
+    max-width: 480px; /* Ограничитель ширины для ПК */
+    max-height: 750px; /* Ограничитель высоты для ПК */
     background: var(--env-inside);
     box-shadow: 0 40px 80px rgba(0,0,0,0.8), inset 0 0 100px rgba(0,0,0,0.8);
     cursor: pointer;
@@ -220,7 +223,6 @@
     transform: scale(1.1) translateY(30px);
   }
 
-  /* Клапаны - структура и тени как на первом фото */
   .env-flap-wrapper {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
   }
@@ -228,27 +230,25 @@
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
   }
 
-  /* Боковые клапаны лежат в самом низу */
+  /* Скорректированные углы для вертикального формата */
   .env-left-wrapper { z-index: 1; }
   .env-flap-left { 
     background: var(--paper-noise), var(--env-left-color);
-    clip-path: polygon(0 0, 52% 52%, 0 100%); 
+    clip-path: polygon(0 0, 55% 45%, 0 100%); 
   }
 
   .env-right-wrapper { z-index: 1; }
   .env-flap-right { 
     background: var(--paper-noise), var(--env-right-color);
-    clip-path: polygon(100% 0, 48% 52%, 100% 100%); 
+    clip-path: polygon(100% 0, 45% 45%, 100% 100%); 
   }
 
-  /* Нижний клапан накрывает боковые - даем ему легкую тень вверх */
   .env-bottom-wrapper { filter: drop-shadow(0px -3px 6px rgba(0,0,0,0.4)); z-index: 2; }
   .env-flap-bottom { 
     background: var(--paper-noise), var(--env-bottom-color);
-    clip-path: polygon(0 100%, 50% 46%, 100% 100%); 
+    clip-path: polygon(0 100%, 50% 40%, 100% 100%); 
   }
 
-  /* Верхний клапан накрывает все - даем ему четкую тень вниз */
   .env-top-wrapper {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     transform-origin: top;
@@ -259,7 +259,7 @@
   .env-flap-top-shape {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background: var(--paper-noise), var(--env-top-color);
-    clip-path: polygon(0 0, 100% 0, 50% 58%);
+    clip-path: polygon(0 0, 100% 0, 50% 45%); /* Острие заканчивается на 45% высоты */
   }
   .envelope-wrapper.opened .env-top-wrapper {
     transform: rotateX(175deg);
@@ -270,10 +270,10 @@
   /* ========================================= */
   .wax-seal-img {
     position: absolute;
-    top: 58%; 
+    top: 45%; /* Смещено выше, чтобы совпадать с острием клапана */
     left: 50%;
     transform: translate(-50%, -50%);
-    width: clamp(75px, 12vw, 120px);
+    width: clamp(75px, 20vw, 120px);
     z-index: 6;
     transition: opacity 0.3s ease, transform 0.4s ease;
     
@@ -310,7 +310,7 @@
         <div class="env-flap-top-shape"></div>
         
         <!-- Картинка-печать в формате PNG -->
-        <img src="sru.png" class="wax-seal-img" alt="Печать S&S">
+        <img src="seal.png" class="wax-seal-img" alt="Печать S&S">
         
       </div>
     </div>
