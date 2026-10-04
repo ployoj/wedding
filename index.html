@@ -48,8 +48,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover; 
-    /* ВАЖНО ДЛЯ iOS: Запрещаем видео перехватывать клики, чтобы скрипт срабатывал с первого раза */
-    pointer-events: none; 
+    pointer-events: none; /* Чтобы клик точно прошел */
   }
 
   /* ========================================= */
@@ -159,8 +158,9 @@
 
   <!-- ОВЕРЛЕЙ С ВИДЕО -->
   <div class="video-overlay" id="video-overlay">
+    <!-- Хак с #t=0.001 принуждает iOS загрузить первый кадр видео вместо черного фона -->
     <video id="envelope-video" playsinline muted preload="auto">
-      <source src="4172012_1080p_20261004185959.mp4" type="video/mp4">
+      <source src="4172012_1080p_20261004185959.mp4#t=0.001" type="video/mp4">
     </video>
   </div>
 
@@ -292,12 +292,12 @@
     }, 1000); 
   }
 
-  // Общая функция для старта, чтобы срабатывала и от клика мыши, и от касания пальцем
-  function startExperience() {
+  videoOverlay.addEventListener('click', function() {
     if (isPlaying) return; 
     isPlaying = true;
     
-    bgMusic.play().catch(e => console.log("Музыка заблокирована браузером:", e));
+    // Играем музыку и видео по единому стандартному клику
+    bgMusic.play().catch(e => console.log("Музыка не запустилась:", e));
     
     const playPromise = video.play();
     if (playPromise !== undefined) {
@@ -306,19 +306,16 @@
           heroSection.classList.add('hero-active');
         }, 2000);
       }).catch(e => {
-        console.log("Видео заблокировано iOS:", e);
+        console.log("Видео заблокировано:", e);
         unlockSite();
       });
     }
 
+    // Если всё зависнет, сайт откроется через 8 секунд принудительно
     setTimeout(() => {
       unlockSite();
-    }, 6000);
-  }
-
-  // Слушаем и обычный клик, и мгновенное касание экрана (для телефонов)
-  videoOverlay.addEventListener('click', startExperience);
-  videoOverlay.addEventListener('touchstart', startExperience, {passive: true});
+    }, 8000);
+  });
 
   video.addEventListener('timeupdate', function() {
     if (video.duration > 0 && video.currentTime >= video.duration - 1.5) {
