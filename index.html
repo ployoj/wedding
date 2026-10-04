@@ -37,7 +37,7 @@
     background-color: var(--black);
     z-index: 9999;
     cursor: pointer;
-    /* Плавное растворение в самом конце */
+    /* Плавное растворение в самом конце (длится 1 секунду) */
     transition: opacity 1s ease;
   }
   
@@ -51,7 +51,6 @@
     height: 100%;
     object-fit: cover; /* Видео всегда заполняет весь экран без искажений */
   }
-
 
   /* ========================================= */
   /* ОСНОВНОЙ КОД САЙТА                        */
@@ -131,11 +130,8 @@
 
   <!-- ОВЕРЛЕЙ С ВИДЕО -->
   <div class="video-overlay" id="video-overlay">
-    <!-- Подсказку можно удалить, если не нужна -->
-    <div class="play-hint">Нажмите, чтобы открыть</div> 
-    
     <video id="envelope-video" playsinline preload="auto">
-      <source src="video_ca0eb9.mp4" type="video/mp4">
+      <source src="4172012_1080p_20261004185959.mp4" type="video/mp4">
     </video>
   </div>
 
@@ -254,8 +250,6 @@
     bgMusic.play().catch(e => console.log("Автоплей аудио заблокирован:", e));
     video.play().catch(e => console.log("Автоплей видео заблокирован:", e));
     
-    videoOverlay.classList.add('playing');
-    
     // Анимация текста Hero начинается, когда видео проигралось примерно наполовину (подстройте 2000мс под темп вашего видео)
     setTimeout(() => {
       heroSection.classList.add('hero-active');
@@ -264,19 +258,19 @@
 
   // Отслеживаем момент, когда видео подошло к концу
   video.addEventListener('timeupdate', function() {
-    // Если до конца видео осталось менее 0.5 секунд, начинаем его плавно растворять
-    if (video.duration > 0 && video.currentTime >= video.duration - 0.5) {
+    // Изменено: видео начинает растворяться за 1.5 секунды до конца (на 1 сек раньше)
+    if (video.duration > 0 && video.currentTime >= video.duration - 1.5) {
       videoOverlay.classList.add('fading');
       // Разблокируем скролл сайта
       document.body.classList.remove('locked');
     }
   });
 
-  // Когда видео полностью закончится — удаляем его, чтобы не мешало
+  // Когда видео полностью закончится — удаляем его, чтобы не мешало кликать по сайту
   video.addEventListener('ended', function() {
     setTimeout(() => {
       videoOverlay.style.display = 'none';
-    }, 1000); // Даем 1 секунду на завершение анимации растворения (opacity)
+    }, 1000); // Даем 1 секунду на завершение анимации растворения
   });
 
   // Отправка формы RSVP (Google Apps Script)
