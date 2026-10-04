@@ -73,31 +73,26 @@
     position:relative; 
   }
   
-  /* Контейнер для фотографий - теперь ВСЕГДА в ряд */
-  .hero-photos {
-    display: flex;
-    flex-direction: row; /* Принудительно ставим в ряд */
-    gap: 15px; /* Небольшой отступ между фото */
+  /* Контейнер для одной фотографии */
+  .hero-photo-container {
     margin-bottom: 35px;
     opacity: 0;
-    justify-content: center;
     width: 100%;
-    max-width: 700px;
+    max-width: 380px; /* Ограничиваем ширину, чтобы смотрелось эстетично */
   }
   
-  /* Фотографии адаптируются под размер экрана */
   .hero-photo {
-    flex: 1; /* Заставляет фото делиться пространством поровну */
-    min-width: 0; /* Защита от багов сжатия в Safari */
+    width: 100%;
     border-radius: 8px;
     object-fit: cover;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    display: block;
   }
 
   .hero::before{ content:""; position:absolute; top:40%; left:50%; width:1px; height:0; background:#8f3240; } 
   
   .hero-active::before { animation: growLine 1.6s ease forwards 0.2s; }
-  .hero-active .hero-photos { animation: fadeUp 1s ease forwards 0.1s; } 
+  .hero-active .hero-photo-container { animation: fadeUp 1s ease forwards 0.1s; } 
   .hero-active .hero-label { animation: fadeIn 1s ease forwards 0.4s; }
   .hero-active .hero-names { animation: fadeUp 1.2s ease forwards 0.6s; }
   .hero-active .hero-date { animation: fadeIn 1s ease forwards 1.1s; }
@@ -162,7 +157,8 @@
 
   <!-- ОВЕРЛЕЙ С ВИДЕО -->
   <div class="video-overlay" id="video-overlay">
-    <video id="envelope-video" playsinline preload="auto">
+    <!-- ВАЖНО: Добавлен атрибут muted, без него iOS жестко блокирует видео -->
+    <video id="envelope-video" playsinline muted preload="auto">
       <source src="4172012_1080p_20261004185959.mp4" type="video/mp4">
     </video>
   </div>
@@ -170,10 +166,9 @@
   <!-- HERO (Первый экран) -->
   <section class="hero" id="hero-section">
     
-    <!-- Фотографии (Всегда горизонтально) -->
-    <div class="hero-photos">
+    <!-- Одна фотография -->
+    <div class="hero-photo-container">
       <img src="sonyasergey1.jpg" alt="Сергей и Софья" class="hero-photo">
-      <img src="sonyasergey2.jpg" alt="Сергей и Софья" class="hero-photo">
     </div>
 
     <!-- Текст под фотографиями -->
@@ -278,33 +273,68 @@
   const video = document.getElementById('envelope-video');
   const bgMusic = document.getElementById('bg-music');
   const heroSection = document.getElementById('hero-section');
+  
   let isPlaying = false;
+  let siteUnlocked = false;
+
+  // Универсальная функция разблокировки сайта
+  function unlockSite() {
+    if (siteUnlocked) return;
+    siteUnlocked = true;
+    
+    videoOverlay.classList.add('fading');
+    document.body.classList.remove('locked');
+    
+    // Если сайт разблокировался принудительно (из-за ошибки iOS), запускаем появление контента
+    heroSection.classList.add('hero-active');
+    
+    setTimeout(() => {
+      videoOverlay.style.display = 'none';
+    }, 1000); 
+  }
 
   videoOverlay.addEventListener('click', function() {
     if (isPlaying) return; 
     isPlaying = true;
     
-    bgMusic.play().catch(e => console.log("Автоплей аудио заблокирован:", e));
-    video.play().catch(e => console.log("Автоплей видео заблокирован:", e));
+    // Пытаемся запустить музыку (iOS может заблокировать, это не страшно)
+    bgMusic.play().catch(e => console.log("Музыка заблокирована браузером:", e));
     
+    // Пытаемся запустить видео
+    const playPromise = video.play();
+    
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        // Видео успешно запустилось. Начинаем появление контента сайта через 2 секунды.
+        setTimeout(() => {
+          heroSection.classList.add('hero-active');
+        }, 2000);
+      }).catch(e => {
+        console.log("Видео заблокировано iOS:", e);
+        // iOS ЗАБЛОКИРОВАЛ ВИДЕО! Срочно разблокируем сайт, чтобы не было черного экрана.
+        unlockSite();
+      });
+    }
+
+    // ЗАПАСНОЙ ПРЕДОХРАНИТЕЛЬ: если через 6 секунд сайт всё ещё не открыт (видео зависло)
     setTimeout(() => {
-      heroSection.classList.add('hero-active');
-    }, 2000);
+      unlockSite();
+    }, 6000);
   });
 
+  // Штатное исчезновение видео (за 1.5 секунды до конца)
   video.addEventListener('timeupdate', function() {
     if (video.duration > 0 && video.currentTime >= video.duration - 1.5) {
-      videoOverlay.classList.add('fading');
-      document.body.classList.remove('locked');
+      unlockSite();
     }
   });
 
+  // Резервное срабатывание в конце видео
   video.addEventListener('ended', function() {
-    setTimeout(() => {
-      videoOverlay.style.display = 'none';
-    }, 1000); 
+    unlockSite();
   });
 
+  // Отправка формы RSVP (Google Apps Script)
   const SCRIPT_URL = "ВСТАВЬТЕ_СЮДА_URL_GOOGLE_APPS_SCRIPT";
   const form = document.getElementById('rsvp-form');
   const status = document.getElementById('form-status');
