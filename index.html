@@ -14,82 +14,81 @@
     --charcoal:#221d1b;
     --beige:#e8ddc9;
     --beige-soft:#f2ead9;
-    --burgundy:#6e1f2a;
     --line: rgba(232,221,201,0.18);
-    
-    /* Текстура бумаги */
-    --paper-noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
-    
-    /* Цвета клапанов */
-    --env-top-color: #8a2535;
-    --env-left-color: #751e2c;
-    --env-right-color: #751e2c;
-    --env-bottom-color: #631824;
-    
-    /* Внутренняя часть конверта */
-    --env-inside: #2b0308;
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
   body{
-    margin:0;
-    padding:0;
-    background:var(--black);
-    color:var(--beige);
-    font-family:'Montserrat', sans-serif;
-    font-weight:300;
-    line-height:1.6;
-    overflow-x:hidden;
+    margin:0; padding:0; background:var(--black); color:var(--beige);
+    font-family:'Montserrat', sans-serif; font-weight:300; line-height:1.6; overflow-x:hidden;
   }
+  
+  /* Класс для блокировки скролла, пока видео не исчезнет */
   body.locked { overflow: hidden; }
 
-  h1,h2,h3,.serif{
-    font-family:'Cormorant Garamond', serif;
-    font-weight:500;
-    margin:0;
+  /* ========================================= */
+  /* ВИДЕО-КОНВЕРТ НА ВЕСЬ ЭКРАН               */
+  /* ========================================= */
+  .video-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    width: 100dvw; height: 100dvh;
+    background-color: var(--black);
+    z-index: 9999;
+    cursor: pointer;
+    /* Плавное растворение в самом конце */
+    transition: opacity 1s ease;
   }
-  .section{
-    max-width:760px;
-    margin:0 auto;
-    padding:110px 28px;
-    position:relative;
+  
+  .video-overlay.fading {
+    opacity: 0;
+    pointer-events: none;
   }
+
+  .video-overlay video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Видео всегда заполняет весь экран без искажений */
+  }
+
+  /* Скрытая кнопка/подсказка поверх видео, если нужно */
+  .play-hint {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgba(255,255,255,0.7);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    letter-spacing: 2px;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+  }
+  .video-overlay.playing .play-hint {
+    opacity: 0;
+  }
+
+
+  /* ========================================= */
+  /* ОСНОВНОЙ КОД САЙТА                        */
+  /* ========================================= */
+  h1,h2,h3,.serif{ font-family:'Cormorant Garamond', serif; font-weight:500; margin:0; }
+  .section{ max-width:760px; margin:0 auto; padding:110px 28px; position:relative; }
   .section + .section{ border-top:1px solid var(--line); }
 
-  .reveal{
-    opacity:0;
-    transform:translateY(28px);
-    transition:opacity 1s ease, transform 1s ease;
-  }
-  .reveal.visible{opacity:1; transform:translateY(0);}
+  .reveal{ opacity:0; transform:translateY(28px); transition:opacity 1s ease, transform 1s ease; }
+  .reveal.visible{ opacity:1; transform:translateY(0); }
 
-  .hero{
-    min-height:100vh;
-    min-height:100dvh;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    padding:40px 24px;
-    position:relative;
-  }
-  .hero::before{
-    content:"";
-    position:absolute;
-    top:50%; left:50%;
-    width:1px; height:0;
-    background:#8f3240;
-  }
+  .hero{ min-height:100vh; min-height:100dvh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:40px 24px; position:relative; }
+  .hero::before{ content:""; position:absolute; top:50%; left:50%; width:1px; height:0; background:#8f3240; }
   
   .hero-active::before { animation: growLine 1.6s ease forwards 0.2s; }
   .hero-active .hero-label { animation: fadeIn 1s ease forwards 0.1s; }
   .hero-active .hero-names { animation: fadeUp 1.2s ease forwards 0.3s; }
   .hero-active .hero-date { animation: fadeIn 1s ease forwards 0.8s; }
   .hero-active .hero-venue { animation: fadeIn 1s ease forwards 1s; }
-
-  @keyframes growLine{ to{ height:120px; top:calc(50% - 60px);} }
   
+  @keyframes growLine{ to{ height:120px; top:calc(50% - 60px);} }
   .hero-label{ font-size:12px; letter-spacing:4px; color:#8f3240; opacity:0; }
   .hero-names{ font-size:clamp(48px,11vw,96px); letter-spacing:1px; margin:26px 0 10px; opacity:0; }
   .hero-amp{ display:block; font-style:italic; color:#8f3240; font-size:0.5em; margin:6px 0; }
@@ -103,263 +102,60 @@
   .eyebrow{ font-size:12px; letter-spacing:3px; color:#8f3240; margin-bottom:18px; }
   .section h2{ font-size:clamp(32px,5vw,46px); margin-bottom:34px; }
   .section p{ color:#cfc4ac; font-size:16px; max-width:60ch; }
-
   .program-list{ list-style:none; padding:0; margin:0; border-top:1px solid var(--line); }
   .program-list li{ display:flex; justify-content:space-between; gap:24px; padding:20px 0; border-bottom:1px solid var(--line); }
   .program-time{ font-family:'Cormorant Garamond', serif; font-size:24px; color:#8f3240; white-space:nowrap; }
   .program-desc{ color:#cfc4ac; text-align:right; }
 
-  .venue-frame{
-    aspect-ratio:16/9; border:1px solid var(--line);
-    background:linear-gradient(135deg, var(--charcoal), #1b1615);
-    display:flex; align-items:center; justify-content:center; text-align:center;
-    color:#6f6559; font-size:13px; letter-spacing:1px; padding:20px;
-  }
+  .venue-frame{ aspect-ratio:16/9; border:1px solid var(--line); background:linear-gradient(135deg, var(--charcoal), #1b1615); display:flex; align-items:center; justify-content:center; text-align:center; color:#6f6559; font-size:13px; letter-spacing:1px; padding:20px; }
   .venue-address{ margin-top:22px; font-family:'Cormorant Garamond', serif; font-size:22px; color:var(--beige-soft); }
   .venue-address .fill{ border-bottom:1px dashed #8a7f6e; padding:0 8px; }
 
   .palette{ display:flex; gap:16px; margin-bottom:44px; }
   .swatch{ flex:1; height:64px; border:1px solid var(--line); }
   .dress-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
-  .dress-item{
-    aspect-ratio:3/4; border:1px solid var(--line);
-    background:linear-gradient(160deg, var(--charcoal), #1b1615);
-    display:flex; align-items:center; justify-content:center; text-align:center;
-    color:#6f6559; font-size:12px; padding:10px;
-  }
+  .dress-item{ aspect-ratio:3/4; border:1px solid var(--line); background:linear-gradient(160deg, var(--charcoal), #1b1615); display:flex; align-items:center; justify-content:center; text-align:center; color:#6f6559; font-size:12px; padding:10px; }
   .dress-note{ margin-top:20px; font-size:13px; color:#8a7f6e; }
 
   .gift{ text-align:center; padding-top:100px; padding-bottom:100px; }
-  .gift-mark{
-    width:46px; height:46px; margin:0 auto 28px;
-    border:1px solid #8f3240; border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-    font-family:'Cormorant Garamond', serif; font-style:italic;
-    color:#8f3240; font-size:20px;
-  }
+  .gift-mark{ width:46px; height:46px; margin:0 auto 28px; border:1px solid #8f3240; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond', serif; font-style:italic; color:#8f3240; font-size:20px; }
   .gift p{ margin:0 auto; }
 
   form{ display:flex; flex-direction:column; gap:22px; }
   .field{ display:flex; flex-direction:column; gap:8px; }
   label{ font-size:12px; letter-spacing:2px; color:#8a7f6e; }
-  input, textarea, select{
-    background:transparent; border:none; border-bottom:1px solid var(--line);
-    color:var(--beige-soft); font-family:'Montserrat', sans-serif; font-size:16px;
-    padding:8px 2px; outline:none; transition:border-color 0.3s ease;
-  }
+  input, textarea, select{ background:transparent; border:none; border-bottom:1px solid var(--line); color:var(--beige-soft); font-family:'Montserrat', sans-serif; font-size:16px; padding:8px 2px; outline:none; transition:border-color 0.3s ease; }
   input:focus, textarea:focus, select:focus{ border-color:#8f3240; }
   select option{ background:var(--charcoal); }
   textarea{ resize:vertical; min-height:70px; }
-  .submit-btn{
-    margin-top:10px; align-self:flex-start;
-    background:transparent; border:1px solid #8f3240;
-    color:var(--beige-soft); padding:14px 34px;
-    font-family:'Montserrat', sans-serif; letter-spacing:2px; font-size:13px;
-    cursor:pointer; transition:background 0.35s ease, color 0.35s ease;
-  }
+  .submit-btn{ margin-top:10px; align-self:flex-start; background:transparent; border:1px solid #8f3240; color:var(--beige-soft); padding:14px 34px; font-family:'Montserrat', sans-serif; letter-spacing:2px; font-size:13px; cursor:pointer; transition:background 0.35s ease, color 0.35s ease; }
   .submit-btn:hover{ background:var(--burgundy); color:var(--beige-soft); }
   .form-status{ font-size:13px; color:#8a7f6e; min-height:20px; }
   footer{ text-align:center; padding:50px 20px 60px; font-family:'Cormorant Garamond', serif; font-style:italic; color:#6f6559; font-size:15px; }
 
   @media (max-width:560px){
-    .section{padding:80px 20px;}
-    .program-list li{flex-direction:column; gap:4px;}
-    .program-desc{text-align:left;}
-    .dress-grid{grid-template-columns:repeat(2,1fr);}
+    .section{padding:80px 20px;} .program-list li{flex-direction:column; gap:4px;} .program-desc{text-align:left;} .dress-grid{grid-template-columns:repeat(2,1fr);}
   }
-  @media (prefers-reduced-motion: reduce){
-    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
-  }
-
-  /* ========================================= */
-  /* КОНВЕРТ НА ВЕСЬ ЭКРАН                     */
-  /* ========================================= */
-  .envelope-wrapper {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    width: 100dvw; height: 100dvh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    perspective: 1800px;
-  }
-  .envelope-wrapper.opened { pointer-events: none; }
-
-  .envelope {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    border-radius: 16px;
-    cursor: pointer;
-    transition: transform 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-    transform-style: preserve-3d;
-  }
-  
-  .envelope:hover { transform: scale(1.02); }
-  .envelope-wrapper.opened .envelope { transform: scale(1.05) translateY(10px); }
-
-  /* ВНУТРЕННИЙ ФОН КОНВЕРТА */
-  .envelope::before {
-    content: "";
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: var(--env-inside);
-    box-shadow: inset 0 0 150px rgba(0,0,0,0.9);
-    z-index: 1;
-    border-radius: 16px;
-    transition: opacity 1.2s ease 0.1s;
-  }
-  .envelope-wrapper.opened .envelope::before { opacity: 0; }
-
-  /* ОБЕРТКИ КЛАПАНОВ */
-  .env-flap-wrapper {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    transition: transform 5s cubic-bezier(0.25, 1, 0.5, 1);
-  }
-  
-  .envelope-wrapper.opened .env-flap-wrapper {
-    opacity: 0;
-    transition: transform 5s cubic-bezier(0.25, 1, 0.5, 1), opacity 2s ease 3s;
-  }
-
-  .env-flap-shape {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background-image: var(--paper-noise);
-    overflow: hidden;
-  }
-
-  /* 1. Нижний клапан */
-  .env-bottom-wrapper { z-index: 3; transform-origin: bottom; }
-  .env-flap-bottom {
-    background-color: var(--env-bottom-color);
-    clip-path: polygon(0 100%, 48% 50%, 49% 48.5%, 50% 48%, 51% 48.5%, 52% 50%, 100% 100%);
-  }
-
-  /* 2. Боковые клапаны */
-  .env-left-wrapper { z-index: 4; transform-origin: left; filter: drop-shadow(6px 0px 10px rgba(0,0,0,0.4)); }
-  .env-flap-left {
-    background-color: var(--env-left-color);
-    clip-path: polygon(0 0, 50% 48%, 51.5% 49.5%, 52% 51%, 51.5% 52.5%, 50% 54%, 0 100%);
-  }
-
-  .env-right-wrapper { z-index: 4; transform-origin: right; filter: drop-shadow(-6px 0px 10px rgba(0,0,0,0.4)); }
-  .env-flap-right {
-    background-color: var(--env-right-color);
-    clip-path: polygon(100% 0, 50% 48%, 48.5% 49.5%, 48% 51%, 48.5% 52.5%, 50% 54%, 100% 100%);
-  }
-
-  /* 3. Верхний клапан */
-  .env-top-wrapper { z-index: 5; transform-origin: top; filter: drop-shadow(0px 10px 20px rgba(0,0,0,0.6)); }
-  .env-flap-top-shape {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background-color: var(--env-top-color);
-    background-image: var(--paper-noise);
-    clip-path: polygon(0 0, 100% 0, 52% 53%, 51% 54.5%, 50% 55%, 49% 54.5%, 48% 53%);
-    overflow: hidden;
-  }
-
-  /* РАСКРЫТИЕ КЛАПАНОВ НАРУЖУ */
-  .envelope-wrapper.opened .env-top-wrapper { transform: rotateX(170deg); }
-  .envelope-wrapper.opened .env-bottom-wrapper { transform: rotateX(-170deg); }
-  .envelope-wrapper.opened .env-left-wrapper { transform: rotateY(-170deg); }
-  .envelope-wrapper.opened .env-right-wrapper { transform: rotateY(170deg); }
-
-  /* ========================================= */
-  /* УЗОР НА КОНВЕРТЕ (ЭФФЕКТ ТИСНЕНИЯ)        */
-  /* ========================================= */
-  .env-pattern-layer {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background-image: url('pattern.svg');
-    background-repeat: no-repeat;
-    pointer-events: none;
-    z-index: 2;
-    opacity: 0.9;
-    /* Смешивание с красным фоном, чтобы узор стал темно-бордовым */
-    mix-blend-mode: multiply;
-    /* Магия для эффекта ВЫДАВЛИВАНИЯ (Debossed): 
-       Белая тень сверху-слева (подсветка края) + Черная тень снизу-справа (тень углубления) */
-    filter: brightness(0.65) contrast(1.2) 
-            drop-shadow(-1.5px -1.5px 1px rgba(255, 255, 255, 0.25)) 
-            drop-shadow(1.5px 1.5px 1px rgba(0, 0, 0, 0.9));
-  }
-
-  /* Левый клапан: узор строго в НИЖНЕМ ЛЕВОМ углу */
-  .env-flap-left .env-pattern-layer {
-    background-position: bottom left;
-    background-size: 80%;
-  }
-
-  /* Правый клапан: узор строго в ВЕРХНЕМ ПРАВОМ углу + зеркальное отражение */
-  .env-flap-right .env-pattern-layer {
-    background-position: top right;
-    background-size: 80%;
-    transform: scaleX(-1); /* Отражаем узор по горизонтали для симметрии */
-  }
-
-  /* ========================================= */
-  /* ПЕЧАТЬ                                    */
-  /* ========================================= */
-  .wax-seal-img {
-    position: absolute;
-    top: 55%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: clamp(120px, 15vw, 180px);
-    z-index: 6;
-    transition: opacity 1s ease 0.3s, transform 2.5s cubic-bezier(0.25, 1, 0.5, 1);
-    filter: drop-shadow(0px 8px 12px rgba(0,0,0,0.7));
-  }
-
-  .envelope-wrapper.opened .wax-seal-img {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(1.5);
-  }
-
 </style>
 </head>
 <body class="locked">
 
-  <!-- МУЗЫКА НА ФОНЕ -->
+  <!-- Музыка на фоне -->
   <audio id="bg-music" loop>
     <source src="music.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- КОНВЕРТ -->
-  <div class="envelope-wrapper" id="envelope-wrapper">
-    <div class="envelope">
-      
-      <!-- Нижний клапан (БЕЗ узора) -->
-      <div class="env-flap-wrapper env-bottom-wrapper">
-        <div class="env-flap-shape env-flap-bottom"></div>
-      </div>
-      
-      <!-- Левый клапан (УЗОР ВНИЗУ СЛЕВА) -->
-      <div class="env-flap-wrapper env-left-wrapper">
-        <div class="env-flap-shape env-flap-left">
-          <div class="env-pattern-layer"></div>
-        </div>
-      </div>
-      
-      <!-- Правый клапан (УЗОР ВВЕРХУ СПРАВА) -->
-      <div class="env-flap-wrapper env-right-wrapper">
-        <div class="env-flap-shape env-flap-right">
-          <div class="env-pattern-layer"></div>
-        </div>
-      </div>
-      
-      <!-- Верхний клапан (БЕЗ узора) -->
-      <div class="env-flap-wrapper env-top-wrapper">
-        <div class="env-flap-top-shape"></div>
-        <img src="seal.png" class="wax-seal-img" alt="Печать S&S">
-      </div>
-      
-    </div>
+  <!-- ОВЕРЛЕЙ С ВИДЕО -->
+  <div class="video-overlay" id="video-overlay">
+    <!-- Подсказку можно удалить, если не нужна -->
+    <div class="play-hint">Нажмите, чтобы открыть</div> 
+    
+    <video id="envelope-video" playsinline preload="auto">
+      <source src="video_ca0eb9.mp4" type="video/mp4">
+    </video>
   </div>
 
-  <!-- HERO -->
+  <!-- HERO (Первый экран) -->
   <section class="hero" id="hero-section">
     <div class="hero-label">ПРИГЛАШАЕМ НА НАШУ СВАДЬБУ</div>
     <h1 class="hero-names">Сергей<span class="hero-amp">&amp;</span>Софья</h1>
@@ -448,6 +244,7 @@
   <footer>Ждём встречи с вами</footer>
 
 <script>
+  // Анимация при скролле
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -458,27 +255,48 @@
   }, { threshold: 0.15 });
   document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-  const envelopeWrapper = document.getElementById('envelope-wrapper');
-  const heroSection = document.getElementById('hero-section');
+  // ЛОГИКА ВИДЕО И МУЗЫКИ
+  const videoOverlay = document.getElementById('video-overlay');
+  const video = document.getElementById('envelope-video');
   const bgMusic = document.getElementById('bg-music');
+  const heroSection = document.getElementById('hero-section');
+  let isPlaying = false;
 
-  envelopeWrapper.addEventListener('click', function() {
-    this.classList.add('opened');
-
-    bgMusic.play().catch(e => console.log("Браузер заблокировал музыку:", e));
-
+  videoOverlay.addEventListener('click', function() {
+    if (isPlaying) return; // Предотвращаем повторные клики
+    isPlaying = true;
+    
+    // Запускаем музыку и видео
+    bgMusic.play().catch(e => console.log("Автоплей аудио заблокирован:", e));
+    video.play().catch(e => console.log("Автоплей видео заблокирован:", e));
+    
+    videoOverlay.classList.add('playing');
+    
+    // Анимация текста Hero начинается, когда видео проигралось примерно наполовину (подстройте 2000мс под темп вашего видео)
     setTimeout(() => {
-      document.body.classList.remove('locked');
       heroSection.classList.add('hero-active');
-    }, 400);
-
-    setTimeout(() => {
-      this.style.display = 'none';
-    }, 6000);
+    }, 2000);
   });
 
-  const SCRIPT_URL = "ВСТАВЬТЕ_СЮДА_URL_GOOGLE_APPS_SCRIPT";
+  // Отслеживаем момент, когда видео подошло к концу
+  video.addEventListener('timeupdate', function() {
+    // Если до конца видео осталось менее 0.5 секунд, начинаем его плавно растворять
+    if (video.duration > 0 && video.currentTime >= video.duration - 0.5) {
+      videoOverlay.classList.add('fading');
+      // Разблокируем скролл сайта
+      document.body.classList.remove('locked');
+    }
+  });
 
+  // Когда видео полностью закончится — удаляем его, чтобы не мешало
+  video.addEventListener('ended', function() {
+    setTimeout(() => {
+      videoOverlay.style.display = 'none';
+    }, 1000); // Даем 1 секунду на завершение анимации растворения (opacity)
+  });
+
+  // Отправка формы RSVP (Google Apps Script)
+  const SCRIPT_URL = "ВСТАВЬТЕ_СЮДА_URL_GOOGLE_APPS_SCRIPT";
   const form = document.getElementById('rsvp-form');
   const status = document.getElementById('form-status');
 
