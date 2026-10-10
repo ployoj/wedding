@@ -9,6 +9,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet">
 
 <style>
+  /* Подключение кастомных шрифтов */
+  @font-face {
+    font-family: 'Isadora Cyr';
+    src: url('Isadora Cyr.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'Ametist';
+    src: url('Ametist.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
   :root{
     --black:#141110;
     --charcoal:#221d1b;
@@ -25,7 +39,8 @@
     margin:0; padding:0; 
     background: var(--black); 
     color:var(--beige);
-    font-family:'Montserrat', sans-serif; font-weight:300; line-height:1.6; overflow-x:hidden;
+    font-family:'Ametist', sans-serif; /* Основной текст шрифтом Ametist */
+    font-weight:300; line-height:1.6; overflow-x:hidden;
     text-shadow: 0 2px 4px rgba(0,0,0,0.8); 
   }
   
@@ -65,7 +80,8 @@
   .video-overlay {
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
     width: 100dvw; height: 100dvh; background-color: var(--black);
-    z-index: 9999; cursor: pointer; transition: opacity 1s ease;
+    z-index: 9999; cursor: pointer; 
+    transition: opacity 2.5s ease-in-out; /* Очень плавное исчезновение конверта */
   }
   .video-overlay.fading { opacity: 0; pointer-events: none; }
   .video-overlay video { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
@@ -95,7 +111,8 @@
     }
   }
 
-  h1,h2,h3,.serif{ font-family:'Playfair Display', serif; font-weight:500; margin:0; text-shadow: 0 4px 15px rgba(0,0,0,0.8); }
+  /* Заголовки шрифтом Isadora */
+  h1,h2,h3,.serif{ font-family:'Isadora Cyr', serif; font-weight:500; margin:0; text-shadow: 0 4px 15px rgba(0,0,0,0.8); }
 
   .reveal{ opacity:0; transform:translateY(28px); transition:opacity 1s ease, transform 1s ease; }
   .reveal.visible{ opacity:1; transform:translateY(0); }
@@ -126,6 +143,7 @@
   .countdown-item { display: flex; flex-direction: column; align-items: center; min-width: 50px; }
   .countdown-label { font-size: 10px; letter-spacing: 2px; color: #8a7f6e; text-transform: uppercase; margin-bottom: 6px; }
   
+  /* Цифры оставлены шрифтом Playfair Display */
   .countdown-value { 
     font-family: 'Playfair Display', serif; font-style: italic; font-weight: 500;
     font-size: clamp(36px, 8vw, 48px); color: var(--beige-soft); line-height: 1; 
@@ -143,7 +161,7 @@
   .section{ padding: 80px 28px; }
   .eyebrow{ font-size:12px; letter-spacing:3px; color:#8f3240; margin-bottom:18px; }
   .section h2{ font-size:clamp(32px,5vw,46px); margin-bottom:20px; }
-  .section p{ color:#cfc4ac; font-size:16px; max-width:60ch; }
+  .section p{ color:#cfc4ac; font-size:18px; max-width:60ch; }
 
   /* --- ПРОГРАММА --- */
   .timeline { position: relative; max-width: 600px; margin: 40px auto 0; }
@@ -167,14 +185,15 @@
     color: var(--beige-soft); z-index: 2; 
   }
   .timeline-icon svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 1.2; fill: none; }
+  /* Время оставлено шрифтом Playfair Display */
   .time-val { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 500; font-size: 34px; color: #8f3240; line-height: 1; }
-  .text-title { font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 15px; color: var(--beige-soft); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
-  .text-desc { font-size: 13px; color: #8a7f6e; line-height: 1.5; }
+  .text-title { font-family: 'Ametist', sans-serif; font-weight: 400; font-size: 18px; color: var(--beige-soft); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  .text-desc { font-size: 15px; color: #8a7f6e; line-height: 1.5; }
 
   /* --- МЕСТО И КНОПКА МАРШРУТА --- */
   .venue-desc {
     color: #cfc4ac;
-    font-size: 15px;
+    font-size: 18px;
     margin-bottom: 30px;
     line-height: 1.6;
   }
@@ -201,8 +220,8 @@
     margin-top: 25px;
   }
   .venue-address{ 
-    font-family:'Playfair Display', serif; 
-    font-size:22px; 
+    font-family:'Isadora Cyr', serif; 
+    font-size:24px; 
     color:var(--beige-soft); 
   }
   
@@ -212,9 +231,9 @@
     border: 1px solid #8f3240;
     color: var(--beige-soft);
     padding: 12px 30px;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Ametist', sans-serif;
     letter-spacing: 2px;
-    font-size: 12px;
+    font-size: 16px;
     text-transform: uppercase;
     text-decoration: none;
     border-radius: 4px;
@@ -314,7 +333,7 @@
     background: #8f3240;
   }
 
-  .dress-note{ margin-top:25px; font-size:13px; color:#8a7f6e; text-align: center; max-width: 50ch; margin-left: auto; margin-right: auto; }
+  .dress-note{ margin-top:25px; font-size:16px; color:#8a7f6e; text-align: center; max-width: 50ch; margin-left: auto; margin-right: auto; }
 
   /* --- СТИЛИ ДЛЯ БЛОКА "ДЕТАЛИ" --- */
   .details-container {
@@ -325,14 +344,14 @@
     text-align: center;
   }
   .detail-item h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 24px;
+    font-family: 'Isadora Cyr', serif;
+    font-size: 32px;
     color: var(--beige-soft);
     margin-bottom: 12px;
   }
   .detail-item p {
     color: #cfc4ac;
-    font-size: 15px;
+    font-size: 18px;
     line-height: 1.6;
     margin: 0 auto;
     max-width: 55ch;
@@ -351,30 +370,30 @@
     opacity: 0.8;
   }
   
-  /* --- ФОРМА RSVP --- */
+  /* --- ФОРМА --- */
   form{ display:flex; flex-direction:column; gap:22px; margin-top: 20px; }
   .field{ display:flex; flex-direction:column; gap:8px; }
-  label{ font-size:12px; letter-spacing:2px; color:#8a7f6e; }
+  label{ font-size:14px; letter-spacing:2px; color:#8a7f6e; }
   input, select{ 
     background: rgba(20, 17, 16, 0.4); 
     border:none; border-bottom:1px solid var(--line); color:var(--beige-soft); 
-    font-family:'Montserrat', sans-serif; font-size:16px; padding:12px 8px; outline:none; transition:border-color 0.3s ease; 
+    font-family:'Ametist', sans-serif; font-size:18px; padding:12px 8px; outline:none; transition:border-color 0.3s ease; 
   }
   input:focus, select:focus{ border-color:#8f3240; }
   select option{ background:var(--charcoal); color:var(--beige-soft); }
   
-  .submit-btn{ margin-top:10px; align-self:flex-start; background: rgba(20, 17, 16, 0.4); border:1px solid #8f3240; color:var(--beige-soft); padding:14px 34px; font-family:'Montserrat', sans-serif; letter-spacing:2px; font-size:13px; cursor:pointer; transition:background 0.35s ease, color 0.35s ease; border-radius: 4px; }
+  .submit-btn{ margin-top:10px; align-self:flex-start; background: rgba(20, 17, 16, 0.4); border:1px solid #8f3240; color:var(--beige-soft); padding:14px 34px; font-family:'Ametist', sans-serif; letter-spacing:2px; font-size:16px; cursor:pointer; transition:background 0.35s ease, color 0.35s ease; border-radius: 4px; }
   .submit-btn:hover{ background:#8f3240; color:var(--beige-soft); }
-  .form-status{ font-size:13px; color:#8a7f6e; min-height:20px; }
+  .form-status{ font-size:16px; color:#8a7f6e; min-height:20px; }
   
-  footer{ text-align:center; padding:50px 20px; font-family:'Playfair Display', serif; font-style:italic; color:#6f6559; font-size:16px; }
+  footer{ text-align:center; padding:50px 20px; font-family:'Isadora Cyr', serif; font-style:italic; color:#6f6559; font-size:20px; }
 
   @media (max-width: 560px) {
     .section{padding:60px 20px;} 
     .timeline-item { margin-bottom: 35px; }
     .time-val { font-size: 24px; }
-    .text-title { font-size: 12px; margin-bottom: 4px; }
-    .text-desc { font-size: 11px; line-height: 1.4; }
+    .text-title { font-size: 15px; margin-bottom: 4px; }
+    .text-desc { font-size: 13px; line-height: 1.4; }
     .timeline-icon { width: 32px; height: 32px; }
     .timeline-icon svg { width: 16px; height: 16px; }
     .timeline-time, .timeline-text { width: 44%; }
@@ -701,7 +720,9 @@
     videoOverlay.classList.add('fading');
     document.body.classList.remove('locked');
     heroSection.classList.add('hero-active');
-    setTimeout(() => { videoOverlay.style.display = 'none'; }, 1000); 
+    
+    // Задержка удаления элемента увеличена до 2.5 секунд для завершения анимации CSS
+    setTimeout(() => { videoOverlay.style.display = 'none'; }, 2500); 
   }
 
   function startExperience() {
