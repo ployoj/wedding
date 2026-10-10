@@ -242,7 +242,7 @@
     box-shadow: 0 4px 10px rgba(0,0,0,0.4);
   }
 
-  /* --- КАРУСЕЛЬ ДРЕССР-КОДА (со свайпами) --- */
+  /* --- КАРУСЕЛЬ ДРЕССР-КОДА --- */
   .carousel-container {
     position: relative;
     width: 100%;
@@ -315,10 +315,41 @@
   }
 
   .dress-note{ margin-top:25px; font-size:13px; color:#8a7f6e; text-align: center; max-width: 50ch; margin-left: auto; margin-right: auto; }
-  
-  .gift{ text-align:center; padding-top:40px; padding-bottom:40px; }
-  .gift-mark{ width:46px; height:46px; margin:0 auto 28px; border:1px solid #8f3240; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Playfair Display', serif; font-style:italic; color:#8f3240; font-size:22px; }
-  .gift p{ margin:0 auto; }
+
+  /* --- СТИЛИ ДЛЯ БЛОКА "ДЕТАЛИ" --- */
+  .details-container {
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+    margin-top: 30px;
+    text-align: center;
+  }
+  .detail-item h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    color: var(--beige-soft);
+    margin-bottom: 12px;
+  }
+  .detail-item p {
+    color: #cfc4ac;
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0 auto;
+    max-width: 55ch;
+  }
+  .organizer-phone {
+    display: inline-block;
+    margin-top: 8px;
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: #8f3240;
+    text-decoration: none;
+    letter-spacing: 1px;
+    transition: opacity 0.3s;
+  }
+  .organizer-phone:hover {
+    opacity: 0.8;
+  }
   
   /* --- ФОРМА RSVP --- */
   form{ display:flex; flex-direction:column; gap:22px; margin-top: 20px; }
@@ -439,14 +470,12 @@
     <h2 class="reveal">Где мы вас ждём</h2>
     <p class="venue-desc reveal">Наш праздник — от самой душевной церемонии до теплого ужина — пройдет в ресторане «Эко-хаус МОХ»</p>
     
-    <!-- Фотография места -->
     <div class="venue-photo-container reveal">
       <img src="location.jpg" alt="Ресторан Эко-хаус МОХ" class="venue-photo">
     </div>
 
     <div class="venue-footer reveal">
       <div class="venue-address">ул. Янтарная 68</div>
-      <!-- Кнопка маршрута по центру -->
       <a href="https://yandex.ru/maps?whatshere%5Bpoint%5D=82.928068%2C55.178856&whatshere%5Bzoom%5D=18.766525&ll=82.92806799999998%2C55.17885599961327&z=18.766525&si=fk5u44jwxk53nmvtynkdhe0e68" target="_blank" class="route-btn">Маршрут</a>
     </div>
   </section>
@@ -456,7 +485,6 @@
     <div class="eyebrow reveal">ДРЕСС-КОД</div>
     <h2 class="reveal">Оттенки вечера</h2>
     
-    <!-- Круги с точными цветами с макета -->
     <div class="palette reveal">
       <div class="color-circle" style="background: #4A1525;" title="Бордовый"></div>
       <div class="color-circle" style="background: #141212;" title="Черный"></div>
@@ -464,7 +492,6 @@
       <div class="color-circle" style="background: #4A332B;" title="Шоколадный"></div>
     </div>
 
-    <!-- Карусель образов со свайпами -->
     <div class="carousel-container reveal" id="carouselContainer">
       <button class="carousel-btn carousel-prev" onclick="moveSlide(-1)">&#10094;</button>
       <div class="carousel-track" id="carouselTrack">
@@ -478,7 +505,6 @@
       <button class="carousel-btn carousel-next" onclick="moveSlide(1)">&#10095;</button>
     </div>
     
-    <!-- Индикаторы (точки) -->
     <div class="carousel-dots reveal" id="carouselDots">
       <span class="carousel-dot active" onclick="currentSlide(0)"></span>
       <span class="carousel-dot" onclick="currentSlide(1)"></span>
@@ -491,20 +517,33 @@
     <p class="dress-note reveal">Нам будет очень приятно, если ваши наряды поддержат благородную и спокойную палитру нашего праздника. Просим избегать белого и слишком светлых оттенков.</p>
   </section>
 
-  <!-- БЛОК 5: ПОДАРКИ И RSVP -->
+  <!-- БЛОК 5: ДЕТАЛИ И АНКЕТА -->
   <section class="content-block section">
-    <div class="gift">
-      <div class="gift-mark reveal">&amp;</div>
-      <h2 class="reveal">О подарках</h2>
-      <p class="reveal" style="margin-top:18px;">Ваше присутствие — главный подарок для нас. Если вы всё же хотите порадовать нас чем-то материальным, вместо цветов мы будем благодарны за комплект постельного белья для нашего нового дома.</p>
+    <div class="eyebrow reveal">ИНФОРМАЦИЯ</div>
+    <h2 class="reveal">Детали</h2>
+    
+    <div class="details-container">
+      <div class="detail-item reveal">
+        <h3>Подарки</h3>
+        <p>Будем очень благодарны, если ваши поздравления поместятся в конверт и станут приятным вкладом в бюджет нашей семьи. Так мы точно сможем осуществить наши заветные мечты!</p>
+      </div>
+
+      <div class="detail-item reveal">
+        <h3>Вместо цветов</h3>
+        <p>Мы будем очень рады, если традиционным букетам вы предпочтете комплект постельного белья — он будет радовать нас и напоминать о вашем внимании долгие годы.</p>
+      </div>
+
+      <div class="detail-item reveal">
+        <h3>Организатор</h3>
+        <p>Если у вас возникнут какие-либо вопросы о предстоящем празднике, на них с удовольствием ответит наш организатор.<br>
+        <a href="tel:+79133732629" class="organizer-phone">Александр: +7 (913) 373-26-29</a></p>
+      </div>
     </div>
     
-    <div style="margin-top: 40px;">
-      <div class="eyebrow reveal">RSVP</div>
-      <h2 class="reveal">Подтвердите присутствие</h2>
-      <p class="reveal" style="margin-bottom:24px;">Пожалуйста, заполните форму до 1 июня 2027.</p>
+    <div style="margin-top: 60px; border-top: 1px solid var(--line); padding-top: 50px;">
+      <h2 class="reveal" style="font-size: clamp(28px, 4vw, 38px); margin-bottom: 12px;">Подтвердите присутствие</h2>
+      <p class="reveal" style="margin-bottom:24px;">Пожалуйста, заполните форму до 20 июня 2027.</p>
       
-      <!-- ФОРМА С 3 ПОЛЯМИ -->
       <form class="reveal" id="rsvp-form">
         <div class="field">
           <label for="name">ФАМИЛИЯ И ИМЯ</label>
