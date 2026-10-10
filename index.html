@@ -32,16 +32,17 @@
   body.locked { overflow: hidden; }
 
   /* ========================================= */
-  /* 1. ЖЕЛЕЗОБЕТОННЫЙ ФОНОВЫЙ СЛОЙ            */
+  /* ФОНОВОЕ ВИДЕО                             */
   /* ========================================= */
   .site-background {
     position: fixed;
     top: 0; left: 0;
     width: 100vw; height: 100vh;
     width: 100dvw; height: 100dvh;
-    z-index: 1; /* Видео теперь на самом нижнем, но активном слое */
+    z-index: 0; 
     pointer-events: none;
     overflow: hidden;
+    background-color: var(--black);
   }
   
   .site-background video {
@@ -53,14 +54,13 @@
     object-fit: cover; 
   }
 
-  /* Все элементы сайта поднимаем наверх поверх видео */
   .content-block, .video-overlay, audio, footer {
     position: relative;
     z-index: 2;
   }
 
   /* ========================================= */
-  /* 2. ВИДЕО-КОНВЕРТ НА ВХОДЕ                 */
+  /* ВИДЕО-КОНВЕРТ НА ВХОДЕ                    */
   /* ========================================= */
   .video-overlay {
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -71,7 +71,7 @@
   .video-overlay video { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
 
   /* ========================================= */
-  /* 3. БЛОКИ-КАРТОЧКИ (С РАЗРЫВАМИ)           */
+  /* БЛОКИ-КАРТОЧКИ (С РАЗРЫВАМИ)              */
   /* ========================================= */
   .content-block {
     background-color: rgba(36, 5, 10, 0.90);
@@ -100,7 +100,7 @@
   .reveal{ opacity:0; transform:translateY(28px); transition:opacity 1s ease, transform 1s ease; }
   .reveal.visible{ opacity:1; transform:translateY(0); }
 
-  /* --- ВНУТРЕННОСТИ СЕКЦИИ HERO --- */
+  /* --- HERO --- */
   .hero{ 
     min-height: calc(100vh - 80px);
     min-height: calc(100dvh - 80px); 
@@ -140,21 +140,17 @@
   @keyframes fadeIn{ to{opacity:1;} }
   @keyframes fadeUp{ from{opacity:0; transform:translateY(18px);} to{opacity:1; transform:translateY(0);} }
 
-  /* --- ВНУТРЕННОСТИ ОБЫЧНОЙ СЕКЦИИ --- */
   .section{ padding: 80px 28px; }
   .eyebrow{ font-size:12px; letter-spacing:3px; color:#8f3240; margin-bottom:18px; }
   .section h2{ font-size:clamp(32px,5vw,46px); margin-bottom:34px; }
   .section p{ color:#cfc4ac; font-size:16px; max-width:60ch; }
 
-  /* ========================================= */
-  /* ПРОГРАММА (ТАЙМЛАЙН)                      */
-  /* ========================================= */
+  /* --- ПРОГРАММА --- */
   .timeline { position: relative; max-width: 600px; margin: 40px auto 0; }
   .timeline::before {
     content: ''; position: absolute; top: 0; bottom: 0; left: 50%;
     transform: translateX(-50%); width: 1px; background: rgba(143, 50, 64, 0.4);
   }
-  
   .timeline-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 55px; position: relative; }
   .timeline-item:last-child { margin-bottom: 0; }
   .timeline-item:nth-child(even) { flex-direction: row-reverse; }
@@ -163,7 +159,6 @@
   .timeline-item:nth-child(odd) .timeline-text { text-align: left; }
   .timeline-item:nth-child(even) .timeline-time { text-align: left; }
   .timeline-item:nth-child(even) .timeline-text { text-align: right; }
-  
   .timeline-icon {
     position: absolute; left: 50%; transform: translateX(-50%);
     width: 44px; height: 44px; background: rgba(36, 5, 10, 1);
@@ -172,44 +167,38 @@
     color: var(--beige-soft); z-index: 2; 
   }
   .timeline-icon svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 1.2; fill: none; }
-  
-  .time-val { 
-    font-family: 'Playfair Display', serif; font-style: italic;
-    font-weight: 500; font-size: 34px; color: #8f3240; line-height: 1; 
-  }
+  .time-val { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 500; font-size: 34px; color: #8f3240; line-height: 1; }
   .text-title { font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 15px; color: var(--beige-soft); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
   .text-desc { font-size: 13px; color: #8a7f6e; line-height: 1.5; }
 
-  /* ========================================= */
-  /* ОСТАЛЬНЫЕ ЭЛЕМЕНТЫ В БЛОКАХ               */
-  /* ========================================= */
+  /* --- ДРИМ-КОД И МЕСТО --- */
   .venue-frame{ aspect-ratio:16/9; border:1px solid var(--line); background: rgba(20, 17, 16, 0.4); display:flex; align-items:center; justify-content:center; text-align:center; color:#6f6559; font-size:13px; letter-spacing:1px; padding:20px; border-radius: 8px; }
   .venue-address{ margin-top:22px; font-family:'Playfair Display', serif; font-size:24px; color:var(--beige-soft); }
   .venue-address .fill{ border-bottom:1px dashed #8a7f6e; padding:0 8px; }
-  
   .palette{ display:flex; gap:16px; margin-bottom:44px; }
   .swatch{ flex:1; height:64px; border:1px solid var(--line); border-radius: 4px; }
   .dress-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
   .dress-item{ aspect-ratio:3/4; border:1px solid var(--line); background: rgba(20, 17, 16, 0.4); display:flex; align-items:center; justify-content:center; text-align:center; color:#6f6559; font-size:12px; padding:10px; border-radius: 6px; }
   .dress-note{ margin-top:20px; font-size:13px; color:#8a7f6e; }
   
-  .gift{ text-align:center; padding-top:80px; padding-bottom:80px; }
+  .gift{ text-align:center; padding-top:40px; padding-bottom:40px; }
   .gift-mark{ width:46px; height:46px; margin:0 auto 28px; border:1px solid #8f3240; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Playfair Display', serif; font-style:italic; color:#8f3240; font-size:22px; }
   .gift p{ margin:0 auto; }
   
-  form{ display:flex; flex-direction:column; gap:22px; }
+  /* --- ФОРМА RSVP --- */
+  form{ display:flex; flex-direction:column; gap:22px; margin-top: 20px; }
   .field{ display:flex; flex-direction:column; gap:8px; }
   label{ font-size:12px; letter-spacing:2px; color:#8a7f6e; }
-  input, textarea, select{ 
+  input, select{ 
     background: rgba(20, 17, 16, 0.4); 
     border:none; border-bottom:1px solid var(--line); color:var(--beige-soft); 
     font-family:'Montserrat', sans-serif; font-size:16px; padding:12px 8px; outline:none; transition:border-color 0.3s ease; 
   }
-  input:focus, textarea:focus, select:focus{ border-color:#8f3240; }
-  select option{ background:var(--charcoal); }
-  textarea{ resize:vertical; min-height:70px; }
+  input:focus, select:focus{ border-color:#8f3240; }
+  select option{ background:var(--charcoal); color:var(--beige-soft); }
+  
   .submit-btn{ margin-top:10px; align-self:flex-start; background: rgba(20, 17, 16, 0.4); border:1px solid #8f3240; color:var(--beige-soft); padding:14px 34px; font-family:'Montserrat', sans-serif; letter-spacing:2px; font-size:13px; cursor:pointer; transition:background 0.35s ease, color 0.35s ease; border-radius: 4px; }
-  .submit-btn:hover{ background:var(--burgundy); color:var(--beige-soft); }
+  .submit-btn:hover{ background:#8f3240; color:var(--beige-soft); }
   .form-status{ font-size:13px; color:#8a7f6e; min-height:20px; }
   
   footer{ text-align:center; padding:50px 20px; font-family:'Playfair Display', serif; font-style:italic; color:#6f6559; font-size:16px; }
@@ -217,7 +206,6 @@
   @media (max-width: 560px) {
     .section{padding:60px 20px;} 
     .dress-grid{grid-template-columns:repeat(2,1fr);}
-    
     .timeline-item { margin-bottom: 35px; }
     .time-val { font-size: 24px; }
     .text-title { font-size: 12px; margin-bottom: 4px; }
@@ -230,12 +218,10 @@
 </head>
 <body class="locked">
 
-  <!-- ========================================= -->
-  <!-- 1. ФОНОВОЕ ВИДЕО (ГАРАНТИРОВАННЫЙ СЛОЙ)   -->
-  <!-- ========================================= -->
+  <!-- ФОНОВОЕ ВИДЕО -->
   <div class="site-background">
     <video id="bg-video" autoplay loop muted playsinline webkit-playsinline>
-      <source src="Videoback_slow4x.mp4" type="video/mp4">
+      <source src="Videoback.mp4" type="video/mp4">
     </video>
   </div>
 
@@ -243,17 +229,13 @@
     <source src="music.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- ОВЕРЛЕЙ С ВИДЕО-КОНВЕРТОМ -->
+  <!-- КОНВЕРТ НА ВХОДЕ -->
   <div class="video-overlay" id="video-overlay">
     <video id="envelope-video" playsinline muted preload="auto">
       <source src="4172012_1080p_20261004185959.mp4#t=0.001" type="video/mp4">
     </video>
   </div>
 
-
-  <!-- ========================================= -->
-  <!-- БЛОКИ-КАРТОЧКИ (С РАЗРЫВАМИ)              -->
-  <!-- ========================================= -->
 
   <!-- БЛОК 1: HERO -->
   <section class="content-block hero" id="hero-section">
@@ -281,9 +263,7 @@
     <div class="timeline">
       <div class="timeline-item reveal">
         <div class="timeline-time"><div class="time-val">16:30</div></div>
-        <div class="timeline-icon">
-          <svg viewBox="0 0 24 24"><path d="M6 3h12M7 3l1.5 7c.4 2 2 3.5 3.5 3.5s3.1-1.5 3.5-3.5L17 3M12 13.5V21M9 21h6"/></svg>
-        </div>
+        <div class="timeline-icon"><svg viewBox="0 0 24 24"><path d="M6 3h12M7 3l1.5 7c.4 2 2 3.5 3.5 3.5s3.1-1.5 3.5-3.5L17 3M12 13.5V21M9 21h6"/></svg></div>
         <div class="timeline-text">
           <div class="text-title">Сбор гостей</div>
           <div class="text-desc">Welcome-зона, фуршет и атмосфера праздника. Будем рады видеть вас!</div>
@@ -292,9 +272,7 @@
 
       <div class="timeline-item reveal">
         <div class="timeline-time"><div class="time-val">17:00</div></div>
-        <div class="timeline-icon">
-          <svg viewBox="0 0 24 24"><circle cx="9" cy="12" r="5"/><circle cx="15" cy="12" r="5"/></svg>
-        </div>
+        <div class="timeline-icon"><svg viewBox="0 0 24 24"><circle cx="9" cy="12" r="5"/><circle cx="15" cy="12" r="5"/></svg></div>
         <div class="timeline-text">
           <div class="text-title">Регистрация</div>
           <div class="text-desc">Самый важный и трогательный момент обмена клятвами.</div>
@@ -303,9 +281,7 @@
 
       <div class="timeline-item reveal">
         <div class="timeline-time"><div class="time-val">18:00</div></div>
-        <div class="timeline-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z"/><path d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"/></svg>
-        </div>
+        <div class="timeline-icon"><svg viewBox="0 0 24 24"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z"/><path d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"/></svg></div>
         <div class="timeline-text">
           <div class="text-title">Начало банкета</div>
           <div class="text-desc">Праздничный ужин, танцы, сюрпризы и поздравления.</div>
@@ -314,9 +290,7 @@
 
       <div class="timeline-item reveal">
         <div class="timeline-time"><div class="time-val">01:00</div></div>
-        <div class="timeline-icon">
-          <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        </div>
+        <div class="timeline-icon"><svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
         <div class="timeline-text">
           <div class="text-title">Окончание банкета</div>
           <div class="text-desc">Провожаем гостей, зажигаем огни и сохраняем теплые воспоминания.</div>
@@ -360,19 +334,29 @@
       <p class="reveal" style="margin-top:18px;">Ваше присутствие — главный подарок для нас. Если вы всё же хотите порадовать нас чем-то материальным, вместо цветов мы будем благодарны за комплект постельного белья для нашего нового дома.</p>
     </div>
     
-    <div style="margin-top: 60px;">
+    <div style="margin-top: 40px;">
       <div class="eyebrow reveal">RSVP</div>
       <h2 class="reveal">Подтвердите присутствие</h2>
-      <p class="reveal" style="margin-bottom:34px;">Пожалуйста, заполните форму до [дата], чтобы мы могли всё подготовить.</p>
+      <p class="reveal" style="margin-bottom:24px;">Пожалуйста, заполните форму до 1 июня 2027.</p>
       
+      <!-- ФОРМА С 3 ПОЛЯМИ -->
       <form class="reveal" id="rsvp-form">
-        <div class="field"><label for="name">ИМЯ И ФАМИЛИЯ</label><input type="text" id="name" name="name" required></div>
-        <div class="field"><label for="phone">ТЕЛЕФОН</label><input type="tel" id="phone" name="phone" required></div>
         <div class="field">
-          <label for="guests">КОЛИЧЕСТВО ГОСТЕЙ</label>
-          <select id="guests" name="guests"><option value="1">1</option><option value="2">2</option></select>
+          <label for="name">ФАМИЛИЯ И ИМЯ</label>
+          <input type="text" id="name" name="name" required placeholder="Например: Иванов Алексей">
         </div>
-        <div class="field"><label for="comment">ПОЖЕЛАНИЯ ПО МЕНЮ / КОММЕНТАРИЙ</label><textarea id="comment" name="comment"></textarea></div>
+        <div class="field">
+          <label for="phone">ТЕЛЕФОН</label>
+          <input type="tel" id="phone" name="phone" required placeholder="+7 (...) ...-..-..">
+        </div>
+        <div class="field">
+          <label for="attendance">ПОДТВЕРЖДЕНИЕ ПРИСУТСТВИЯ</label>
+          <select id="attendance" name="attendance" required>
+            <option value="" disabled selected>Выберите вариант</option>
+            <option value="С радостью буду!">С радостью буду!</option>
+            <option value="К сожалению, не смогу">К сожалению, не смогу</option>
+          </select>
+        </div>
         <button type="submit" class="submit-btn">Отправить</button>
         <div class="form-status" id="form-status"></div>
       </form>
@@ -382,25 +366,13 @@
   <footer>Ждём встречи с вами</footer>
 
 <script>
-  // Принудительный запуск фонового видео принудительно через JS
   document.addEventListener("DOMContentLoaded", function() {
     const bgVideo = document.getElementById('bg-video');
     const envVideo = document.getElementById('envelope-video');
-    
-    if (bgVideo) {
-      bgVideo.volume = 0;
-      bgVideo.muted = true;
-      bgVideo.play().catch(err => {
-        console.log("Автоплей фонового видео сработал по требованию браузера позже:", err);
-      });
-    }
-    if (envVideo) { 
-      envVideo.volume = 0; 
-      envVideo.muted = true; 
-    }
+    if (bgVideo) { bgVideo.volume = 0; bgVideo.muted = true; }
+    if (envVideo) { envVideo.volume = 0; envVideo.muted = true; }
   });
 
-  // Логика таймера
   function initCountdown() {
     const weddingDate = new Date('2027-07-16T16:30:00').getTime();
     const elDays = document.getElementById('cd-days');
@@ -433,7 +405,6 @@
   }
   document.addEventListener("DOMContentLoaded", initCountdown);
 
-  // Анимация при скролле
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -444,7 +415,6 @@
   }, { threshold: 0.15 });
   document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-  // Логика конверта, музыки и надежного запуска фонового видео
   const videoOverlay = document.getElementById('video-overlay');
   const video = document.getElementById('envelope-video');
   const bgMusic = document.getElementById('bg-music');
@@ -467,16 +437,13 @@
     if (isPlaying) return; 
     isPlaying = true;
     
-    // Включаем фоновую музыку
     bgMusic.volume = 1;
-    bgMusic.play().catch(e => console.log("Браузер заблокировал музыку:", e));
+    bgMusic.play().catch(e => console.log("Музыка заблокирована:", e));
 
-    // Гарантированный запуск фонового видео по клику на конверт
     if (bgVideo) {
       bgVideo.play().catch(e => console.log("Фоновое видео заблокировано:", e));
     }
 
-    // Включаем видео-конверт
     const playPromise = video.play();
     if (playPromise !== undefined) {
       playPromise.then(() => {
@@ -496,20 +463,32 @@
   });
   video.addEventListener('ended', function() { unlockSite(); });
 
-  // Логика формы
-  const SCRIPT_URL = "ВСТАВЬТЕ_СЮДА_URL_GOOGLE_APPS_SCRIPT";
+  // Отправка данных формы в Google Таблицу
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzM-sfBiEwXMgAgShPsE6wCIzojNSk_Fi-3hptPrAk7dvLZYJN2_c5zTprDwqdWAguk/exec";
   const form = document.getElementById('rsvp-form');
   const status = document.getElementById('form-status');
 
   form.addEventListener('submit', function(e){
     e.preventDefault();
     status.textContent = 'Отправляем...';
-    const data = { name: form.name.value, phone: form.phone.value, guests: form.guests.value, comment: form.comment.value };
+    
+    const data = { 
+      name: form.name.value, 
+      phone: form.phone.value, 
+      attendance: form.attendance.value 
+    };
+
     fetch(SCRIPT_URL, {
-      method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data)
-    }).then(() => {
-      status.textContent = 'Спасибо! Мы получили ваш ответ.'; form.reset();
-    }).catch(() => {
+      method: 'POST', 
+      mode: 'no-cors', 
+      headers: { 'Content-Type': 'application/json' }, 
+      body: JSON.stringify(data)
+    })
+    .then(() => {
+      status.textContent = 'Спасибо! Ваш ответ записан.'; 
+      form.reset();
+    })
+    .catch(() => {
       status.textContent = 'Не получилось отправить. Попробуйте ещё раз.';
     });
   });
