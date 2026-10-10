@@ -171,7 +171,7 @@
   .text-title { font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 15px; color: var(--beige-soft); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
   .text-desc { font-size: 13px; color: #8a7f6e; line-height: 1.5; }
 
-  /* --- МЕСТО И КНОПКА МАРШРУТА --- */
+  /* --- МЕСТО И КНОПКА МАРШРУТА (ПО ЦЕНТРУ) --- */
   .venue-desc {
     color: #cfc4ac;
     font-size: 15px;
@@ -196,16 +196,15 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    text-align: center;
+    gap: 15px;
     margin-top: 25px;
   }
   .venue-address{ 
     font-family:'Playfair Display', serif; 
     font-size:22px; 
     color:var(--beige-soft); 
-    text-align: center;
   }
-  .venue-address .fill{ border-bottom:1px dashed #8a7f6e; padding:0 8px; }
   
   .route-btn {
     display: inline-block;
@@ -221,18 +220,86 @@
     border-radius: 4px;
     transition: background 0.35s ease, color 0.35s ease;
     box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    margin: 0 auto;
   }
   .route-btn:hover {
     background: #8f3240;
     color: var(--beige-soft);
   }
 
-  /* --- ДРИМ-КОД И ДРУГОЕ --- */
-  .palette{ display:flex; gap:16px; margin-bottom:44px; }
+  /* --- КАРУСЕЛЬ ДРЕССР-КОДА --- */
+  .palette{ display:flex; gap:16px; margin-bottom:30px; }
   .swatch{ flex:1; height:64px; border:1px solid var(--line); border-radius: 4px; }
-  .dress-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
-  .dress-item{ aspect-ratio:3/4; border:1px solid var(--line); background: rgba(20, 17, 16, 0.4); display:flex; align-items:center; justify-content:center; text-align:center; color:#6f6559; font-size:12px; padding:10px; border-radius: 6px; }
-  .dress-note{ margin-top:20px; font-size:13px; color:#8a7f6e; }
+  
+  .carousel-container {
+    position: relative;
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    background: rgba(20, 17, 16, 0.4);
+  }
+  .carousel-track {
+    display: flex;
+    transition: transform 0.5s ease;
+    aspect-ratio: 3/4;
+  }
+  .carousel-slide {
+    min-width: 100%;
+    height: 100%;
+  }
+  .carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(20, 17, 16, 0.6);
+    border: 1px solid var(--line);
+    color: var(--beige);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: background 0.3s;
+    z-index: 5;
+  }
+  .carousel-btn:hover {
+    background: #8f3240;
+  }
+  .carousel-prev { left: 10px; }
+  .carousel-next { right: 10px; }
+
+  .carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 15px;
+  }
+  .carousel-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(232, 221, 201, 0.3);
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .carousel-dot.active {
+    background: #8f3240;
+  }
+
+  .dress-note{ margin-top:25px; font-size:13px; color:#8a7f6e; text-align: center; }
   
   .gift{ text-align:center; padding-top:40px; padding-bottom:40px; }
   .gift-mark{ width:46px; height:46px; margin:0 auto 28px; border:1px solid #8f3240; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Playfair Display', serif; font-style:italic; color:#8f3240; font-size:22px; }
@@ -258,7 +325,6 @@
 
   @media (max-width: 560px) {
     .section{padding:60px 20px;} 
-    .dress-grid{grid-template-columns:repeat(2,1fr);}
     .timeline-item { margin-bottom: 35px; }
     .time-val { font-size: 24px; }
     .text-title { font-size: 12px; margin-bottom: 4px; }
@@ -271,7 +337,7 @@
 </head>
 <body class="locked">
 
-  <!-- ФОНОВОЕ ВИДЕО (Videoback_slow4x.mp4) -->
+  <!-- ФОНОВОЕ ВИДЕО -->
   <div class="site-background">
     <video id="bg-video" autoplay loop muted playsinline webkit-playsinline>
       <source src="Videoback_slow4x.mp4" type="video/mp4">
@@ -363,12 +429,14 @@
       <img src="location.jpg" alt="Ресторан Эко-хаус МОХ" class="venue-photo">
     </div>
 
-      <!-- Кнопка маршрута (замените # на вашу ссылку на карты) -->
+    <div class="venue-footer reveal">
+      <div class="venue-address">ул. Янтарная 68</div>
+      <!-- Кнопка маршрута по центру -->
       <a href="https://yandex.ru/maps?whatshere%5Bpoint%5D=82.928068%2C55.178856&whatshere%5Bzoom%5D=18.766525&ll=82.92806799999998%2C55.17885599961327&z=18.766525&si=fk5u44jwxk53nmvtynkdhe0e68" target="_blank" class="route-btn">Маршрут</a>
     </div>
   </section>
 
-  <!-- БЛОК 4: ДРЕСС-КОД -->
+  <!-- БЛОК 4: ДРЕСС-КОД (КАРУСЕЛЬ) -->
   <section class="content-block section">
     <div class="eyebrow reveal">ДРЕСС-КОД</div>
     <h2 class="reveal">Оттенки вечера</h2>
@@ -379,11 +447,31 @@
       <div class="swatch" style="background:#8f3240;"></div>
       <div class="swatch" style="background:#3a322c;"></div>
     </div>
-    <div class="dress-grid reveal">
-      <div class="dress-item">ОБРАЗ 1</div>
-      <div class="dress-item">ОБРАЗ 2</div>
-      <div class="dress-item">ОБРАЗ 3</div>
+
+    <!-- Карусель образов -->
+    <div class="carousel-container reveal">
+      <button class="carousel-btn carousel-prev" onclick="moveSlide(-1)">&#10094;</button>
+      <div class="carousel-track" id="carouselTrack">
+        <div class="carousel-slide"><img src="look1.jpg" alt="Образ 1"></div>
+        <div class="carousel-slide"><img src="look2.jpg" alt="Образ 2"></div>
+        <div class="carousel-slide"><img src="look3.jpg" alt="Образ 3"></div>
+        <div class="carousel-slide"><img src="look4.jpg" alt="Образ 4"></div>
+        <div class="carousel-slide"><img src="look5.jpg" alt="Образ 5"></div>
+        <div class="carousel-slide"><img src="look6.jpg" alt="Образ 6"></div>
+      </div>
+      <button class="carousel-btn carousel-next" onclick="moveSlide(1)">&#10095;</button>
     </div>
+    
+    <!-- Индикаторы (точки) -->
+    <div class="carousel-dots reveal" id="carouselDots">
+      <span class="carousel-dot active" onclick="currentSlide(0)"></span>
+      <span class="carousel-dot" onclick="currentSlide(1)"></span>
+      <span class="carousel-dot" onclick="currentSlide(2)"></span>
+      <span class="carousel-dot" onclick="currentSlide(3)"></span>
+      <span class="carousel-dot" onclick="currentSlide(4)"></span>
+      <span class="carousel-dot" onclick="currentSlide(5)"></span>
+    </div>
+
     <p class="dress-note reveal">Будем рады видеть вас в чёрных, бежевых и бордовых тонах. Просим избегать белого и слишком ярких оттенков.</p>
   </section>
 
@@ -427,6 +515,33 @@
   <footer>Ждём встречи с вами</footer>
 
 <script>
+  // Логика карусели
+  let slideIndex = 0;
+  const totalSlides = 6;
+
+  function showSlide(index) {
+    if (index >= totalSlides) slideIndex = 0;
+    if (index < 0) slideIndex = totalSlides - 1;
+    
+    const track = document.getElementById('carouselTrack');
+    track.style.transform = `translateX(-${slideIndex * 100}%)`;
+    
+    const dots = document.querySelectorAll('.carousel-dot');
+    dots.forEach((dot, idx) => {
+      dot.classList.toggle('active', idx === slideIndex);
+    });
+  }
+
+  function moveSlide(step) {
+    slideIndex += step;
+    showSlide(slideIndex);
+  }
+
+  function currentSlide(index) {
+    slideIndex = index;
+    showSlide(slideIndex);
+  }
+
   document.addEventListener("DOMContentLoaded", function() {
     const bgVideo = document.getElementById('bg-video');
     const envVideo = document.getElementById('envelope-video');
