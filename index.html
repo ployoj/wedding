@@ -29,27 +29,12 @@
   /* ВИДЕО-КОНВЕРТ НА ВЕСЬ ЭКРАН               */
   /* ========================================= */
   .video-overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    width: 100dvw; height: 100dvh;
-    background-color: var(--black);
-    z-index: 9999;
-    cursor: pointer;
-    transition: opacity 1s ease;
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    width: 100dvw; height: 100dvh; background-color: var(--black);
+    z-index: 9999; cursor: pointer; transition: opacity 1s ease;
   }
-  
-  .video-overlay.fading {
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .video-overlay video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; 
-    pointer-events: none;
-  }
+  .video-overlay.fading { opacity: 0; pointer-events: none; }
+  .video-overlay video { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
 
   /* ========================================= */
   /* ОСНОВНОЙ КОД САЙТА                        */
@@ -63,32 +48,12 @@
 
   /* --- СЕКЦИЯ HERO --- */
   .hero{ 
-    min-height:100vh; 
-    min-height:100dvh; 
-    display:flex; 
-    flex-direction:column; 
-    align-items:center; 
-    justify-content:center; 
-    text-align:center; 
-    padding:80px 24px 40px; 
-    position:relative; 
+    min-height:100vh; min-height:100dvh; display:flex; flex-direction:column; 
+    align-items:center; justify-content:center; text-align:center; 
+    padding:80px 24px 40px; position:relative; 
   }
-  
-  .hero-photo-container {
-    margin-bottom: 30px;
-    opacity: 0;
-    width: 100%;
-    max-width: 380px;
-  }
-  
-  .hero-photo {
-    width: 100%;
-    border-radius: 8px;
-    object-fit: cover;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    display: block;
-  }
-
+  .hero-photo-container { margin-bottom: 30px; opacity: 0; width: 100%; max-width: 380px; }
+  .hero-photo { width: 100%; border-radius: 8px; object-fit: cover; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: block; }
   .hero::before{ content:""; position:absolute; top:40%; left:50%; width:1px; height:0; background:#8f3240; } 
   
   .hero-active::before { animation: growLine 1.6s ease forwards 0.2s; }
@@ -97,85 +62,98 @@
   .hero-active .hero-countdown-block { animation: fadeIn 1s ease forwards 0.8s; }
   
   @keyframes growLine{ to{ height:120px; top:calc(40% - 60px);} } 
-  
   .hero-names{ font-size:clamp(48px,11vw,96px); letter-spacing:1px; margin:0 0 24px; opacity:0; }
   .hero-amp{ display:block; font-style:italic; color:#8f3240; font-size:0.5em; margin:6px 0; }
   
-  /* --- НОВЫЙ ТАЙМЕР И ДАТА --- */
-  .hero-countdown-block {
-    opacity: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-  }
-
-  .countdown-container {
-    display: flex;
-    gap: clamp(12px, 4vw, 24px);
-    justify-content: center;
-  }
-
-  .countdown-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 50px;
-  }
-
-  .countdown-label {
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: #8a7f6e;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-  }
-
-  .countdown-value {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(32px, 8vw, 46px);
-    color: var(--beige-soft);
-    line-height: 1;
-    font-variant-numeric: tabular-nums; /* Чтобы цифры не прыгали по ширине */
-  }
-
-  /* Красивая крупная дата под таймером */
-  .wedding-date-large {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(24px, 6vw, 34px);
-    color: #8f3240;
-    letter-spacing: 4px;
-    margin-top: 10px;
-  }
+  .hero-countdown-block { opacity: 0; display: flex; flex-direction: column; align-items: center; gap: 20px; }
+  .countdown-container { display: flex; gap: clamp(12px, 4vw, 24px); justify-content: center; }
+  .countdown-item { display: flex; flex-direction: column; align-items: center; min-width: 50px; }
+  .countdown-label { font-size: 10px; letter-spacing: 2px; color: #8a7f6e; text-transform: uppercase; margin-bottom: 6px; }
+  .countdown-value { font-family: 'Cormorant Garamond', serif; font-size: clamp(32px, 8vw, 46px); color: var(--beige-soft); line-height: 1; font-variant-numeric: tabular-nums; }
+  .wedding-date-large { font-family: 'Cormorant Garamond', serif; font-size: clamp(24px, 6vw, 34px); color: #8f3240; letter-spacing: 4px; margin-top: 10px; }
   
   @keyframes fadeIn{ to{opacity:1;} }
   @keyframes fadeUp{ from{opacity:0; transform:translateY(18px);} to{opacity:1; transform:translateY(0);} }
 
-  /* ========================================= */
-  /* ОСТАЛЬНЫЕ СЕКЦИИ                          */
-  /* ========================================= */
   .eyebrow{ font-size:12px; letter-spacing:3px; color:#8f3240; margin-bottom:18px; }
   .section h2{ font-size:clamp(32px,5vw,46px); margin-bottom:34px; }
   .section p{ color:#cfc4ac; font-size:16px; max-width:60ch; }
-  .program-list{ list-style:none; padding:0; margin:0; border-top:1px solid var(--line); }
-  .program-list li{ display:flex; justify-content:space-between; gap:24px; padding:20px 0; border-bottom:1px solid var(--line); }
-  .program-time{ font-family:'Cormorant Garamond', serif; font-size:24px; color:#8f3240; white-space:nowrap; }
-  .program-desc{ color:#cfc4ac; text-align:right; }
 
+  /* ========================================= */
+  /* НОВАЯ СЕКЦИЯ ПРОГРАММЫ (ТАЙМЛАЙН)         */
+  /* ========================================= */
+  .timeline {
+    position: relative;
+    max-width: 600px;
+    margin: 50px auto 0;
+    padding-bottom: 20px;
+  }
+  /* Центральная линия */
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    background: rgba(143, 50, 64, 0.4);
+  }
+  
+  .timeline-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 55px;
+    position: relative;
+  }
+  .timeline-item:last-child { margin-bottom: 0; }
+  
+  /* Шахматный порядок для ПК */
+  .timeline-item:nth-child(even) { flex-direction: row-reverse; }
+  .timeline-time, .timeline-text { width: 42%; }
+  
+  .timeline-item:nth-child(odd) .timeline-time { text-align: right; }
+  .timeline-item:nth-child(odd) .timeline-text { text-align: left; }
+  
+  .timeline-item:nth-child(even) .timeline-time { text-align: left; }
+  .timeline-item:nth-child(even) .timeline-text { text-align: right; }
+  
+  /* Круглая иконка в центре */
+  .timeline-icon {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 44px; height: 44px;
+    background: var(--black);
+    border: 1px solid #8f3240;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--beige-soft);
+    z-index: 2;
+    box-shadow: 0 0 15px var(--black);
+  }
+  .timeline-icon svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 1.2; fill: none; }
+  
+  /* Текстовые стили таймлайна */
+  .time-val { font-family: 'Cormorant Garamond', serif; font-size: 34px; color: #8f3240; line-height: 1; }
+  .text-title { font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 15px; color: var(--beige-soft); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  .text-desc { font-size: 13px; color: #8a7f6e; line-height: 1.5; }
+
+  /* ========================================= */
+  /* ОСТАЛЬНЫЕ БЛОКИ                           */
+  /* ========================================= */
   .venue-frame{ aspect-ratio:16/9; border:1px solid var(--line); background:linear-gradient(135deg, var(--charcoal), #1b1615); display:flex; align-items:center; justify-content:center; text-align:center; color:#6f6559; font-size:13px; letter-spacing:1px; padding:20px; }
   .venue-address{ margin-top:22px; font-family:'Cormorant Garamond', serif; font-size:22px; color:var(--beige-soft); }
   .venue-address .fill{ border-bottom:1px dashed #8a7f6e; padding:0 8px; }
-
   .palette{ display:flex; gap:16px; margin-bottom:44px; }
   .swatch{ flex:1; height:64px; border:1px solid var(--line); }
   .dress-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
   .dress-item{ aspect-ratio:3/4; border:1px solid var(--line); background:linear-gradient(160deg, var(--charcoal), #1b1615); display:flex; align-items:center; justify-content:center; text-align:center; color:#6f6559; font-size:12px; padding:10px; }
   .dress-note{ margin-top:20px; font-size:13px; color:#8a7f6e; }
-
   .gift{ text-align:center; padding-top:100px; padding-bottom:100px; }
   .gift-mark{ width:46px; height:46px; margin:0 auto 28px; border:1px solid #8f3240; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond', serif; font-style:italic; color:#8f3240; font-size:20px; }
   .gift p{ margin:0 auto; }
-
   form{ display:flex; flex-direction:column; gap:22px; }
   .field{ display:flex; flex-direction:column; gap:8px; }
   label{ font-size:12px; letter-spacing:2px; color:#8a7f6e; }
@@ -188,8 +166,20 @@
   .form-status{ font-size:13px; color:#8a7f6e; min-height:20px; }
   footer{ text-align:center; padding:50px 20px 60px; font-family:'Cormorant Garamond', serif; font-style:italic; color:#6f6559; font-size:15px; }
 
-  @media (max-width:560px){
-    .section{padding:80px 20px;} .program-list li{flex-direction:column; gap:4px;} .program-desc{text-align:left;} .dress-grid{grid-template-columns:repeat(2,1fr);}
+  /* Адаптив для таймлайна (перестраивается на телефонах) */
+  @media (max-width: 560px) {
+    .section{padding:80px 20px;} 
+    .dress-grid{grid-template-columns:repeat(2,1fr);}
+    
+    .timeline::before { left: 22px; transform: none; }
+    .timeline-item, .timeline-item:nth-child(even) {
+      flex-direction: column; align-items: flex-start;
+      padding-left: 64px; margin-bottom: 45px;
+    }
+    .timeline-icon { left: 22px; transform: translateX(-50%); }
+    .timeline-time, .timeline-text { width: 100%; text-align: left !important; }
+    .timeline-time { margin-bottom: 6px; }
+    .time-val { font-size: 28px; }
   }
 </style>
 </head>
@@ -208,49 +198,82 @@
 
   <!-- HERO (Первый экран) -->
   <section class="hero" id="hero-section">
-    
     <div class="hero-photo-container">
       <img src="photoglawnoe.jpg" alt="Сергей и Софья" class="hero-photo">
     </div>
-
     <h1 class="hero-names">Сергей<span class="hero-amp">&amp;</span>Софья</h1>
     
-    <!-- Таймер отсчета и Дата -->
     <div class="hero-countdown-block">
       <div class="countdown-container">
-        <div class="countdown-item">
-          <span class="countdown-label">Дни</span>
-          <span class="countdown-value" id="cd-days">00</span>
-        </div>
-        <div class="countdown-item">
-          <span class="countdown-label">Часы</span>
-          <span class="countdown-value" id="cd-hours">00</span>
-        </div>
-        <div class="countdown-item">
-          <span class="countdown-label">Минуты</span>
-          <span class="countdown-value" id="cd-minutes">00</span>
-        </div>
-        <div class="countdown-item">
-          <span class="countdown-label">Секунды</span>
-          <span class="countdown-value" id="cd-seconds">00</span>
-        </div>
+        <div class="countdown-item"><span class="countdown-label">Дни</span><span class="countdown-value" id="cd-days">00</span></div>
+        <div class="countdown-item"><span class="countdown-label">Часы</span><span class="countdown-value" id="cd-hours">00</span></div>
+        <div class="countdown-item"><span class="countdown-label">Минуты</span><span class="countdown-value" id="cd-minutes">00</span></div>
+        <div class="countdown-item"><span class="countdown-label">Секунды</span><span class="countdown-value" id="cd-seconds">00</span></div>
       </div>
       <div class="wedding-date-large">16 . 07 . 2027</div>
     </div>
-    
   </section>
 
-  <!-- ПРОГРАММА ДНЯ -->
+  <!-- НОВАЯ ПРОГРАММА ДНЯ С ИКОНКАМИ -->
   <section class="section">
     <div class="eyebrow reveal">ПРОГРАММА</div>
     <h2 class="reveal">Как пройдёт день</h2>
-    <ul class="program-list reveal">
-      <li><span class="program-time">15:00</span><span class="program-desc">Сбор гостей</span></li>
-      <li><span class="program-time">16:30</span><span class="program-desc">Церемония</span></li>
-      <li><span class="program-time">17:30</span><span class="program-desc">Фотосессия и фуршет</span></li>
-      <li><span class="program-time">19:00</span><span class="program-desc">Банкет</span></li>
-      <li><span class="program-time">23:00</span><span class="program-desc">Завершение вечера</span></li>
-    </ul>
+    
+    <div class="timeline">
+      
+      <!-- 1. Велком -->
+      <div class="timeline-item reveal">
+        <div class="timeline-time"><div class="time-val">16:30</div></div>
+        <div class="timeline-icon">
+          <!-- Иконка бокала -->
+          <svg viewBox="0 0 24 24"><path d="M6 3h12M7 3l1.5 7c.4 2 2 3.5 3.5 3.5s3.1-1.5 3.5-3.5L17 3M12 13.5V21M9 21h6"/></svg>
+        </div>
+        <div class="timeline-text">
+          <div class="text-title">Сбор гостей</div>
+          <div class="text-desc">Welcome-зона, фуршет и атмосфера праздника. Будем рады видеть вас!</div>
+        </div>
+      </div>
+
+      <!-- 2. Регистрация -->
+      <div class="timeline-item reveal">
+        <div class="timeline-time"><div class="time-val">17:00</div></div>
+        <div class="timeline-icon">
+          <!-- Иконка колец -->
+          <svg viewBox="0 0 24 24"><circle cx="9" cy="12" r="5"/><circle cx="15" cy="12" r="5"/></svg>
+        </div>
+        <div class="timeline-text">
+          <div class="text-title">Регистрация</div>
+          <div class="text-desc">Самый важный и трогательный момент обмена клятвами.</div>
+        </div>
+      </div>
+
+      <!-- 3. Банкет -->
+      <div class="timeline-item reveal">
+        <div class="timeline-time"><div class="time-val">18:00</div></div>
+        <div class="timeline-icon">
+          <!-- Иконка сервировки -->
+          <svg viewBox="0 0 24 24"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z"/><path d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"/></svg>
+        </div>
+        <div class="timeline-text">
+          <div class="text-title">Начало банкета</div>
+          <div class="text-desc">Праздничный ужин, танцы, сюрпризы и поздравления.</div>
+        </div>
+      </div>
+
+      <!-- 4. Окончание -->
+      <div class="timeline-item reveal">
+        <div class="timeline-time"><div class="time-val">01:00</div></div>
+        <div class="timeline-icon">
+          <!-- Иконка луны со звездами -->
+          <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </div>
+        <div class="timeline-text">
+          <div class="text-title">Окончание банкета</div>
+          <div class="text-desc">Провожаем гостей, зажигаем огни и сохраняем теплые воспоминания.</div>
+        </div>
+      </div>
+
+    </div>
   </section>
 
   <!-- МЕСТО -->
@@ -292,27 +315,14 @@
     <div class="eyebrow reveal">RSVP</div>
     <h2 class="reveal">Подтвердите присутствие</h2>
     <p class="reveal" style="margin-bottom:34px;">Пожалуйста, заполните форму до [дата], чтобы мы могли всё подготовить.</p>
-
     <form class="reveal" id="rsvp-form">
-      <div class="field">
-        <label for="name">ИМЯ И ФАМИЛИЯ</label>
-        <input type="text" id="name" name="name" required>
-      </div>
-      <div class="field">
-        <label for="phone">ТЕЛЕФОН</label>
-        <input type="tel" id="phone" name="phone" required>
-      </div>
+      <div class="field"><label for="name">ИМЯ И ФАМИЛИЯ</label><input type="text" id="name" name="name" required></div>
+      <div class="field"><label for="phone">ТЕЛЕФОН</label><input type="tel" id="phone" name="phone" required></div>
       <div class="field">
         <label for="guests">КОЛИЧЕСТВО ГОСТЕЙ</label>
-        <select id="guests" name="guests">
-          <option value="1">1</option>
-          <option value="2">2</option>
-        </select>
+        <select id="guests" name="guests"><option value="1">1</option><option value="2">2</option></select>
       </div>
-      <div class="field">
-        <label for="comment">ПОЖЕЛАНИЯ ПО МЕНЮ / КОММЕНТАРИЙ</label>
-        <textarea id="comment" name="comment"></textarea>
-      </div>
+      <div class="field"><label for="comment">ПОЖЕЛАНИЯ ПО МЕНЮ / КОММЕНТАРИЙ</label><textarea id="comment" name="comment"></textarea></div>
       <button type="submit" class="submit-btn">Отправить</button>
       <div class="form-status" id="form-status"></div>
     </form>
@@ -321,11 +331,8 @@
   <footer>Ждём встречи с вами</footer>
 
 <script>
-  // --- ЛОГИКА ТАЙМЕРА ОБРАТНОГО ОТСЧЕТА ---
   function initCountdown() {
-    // Точная дата свадьбы: 16 июля 2027 года 16:30
     const weddingDate = new Date('2027-07-16T16:30:00').getTime();
-    
     const elDays = document.getElementById('cd-days');
     const elHours = document.getElementById('cd-hours');
     const elMinutes = document.getElementById('cd-minutes');
@@ -335,36 +342,27 @@
       const now = new Date().getTime();
       const distance = weddingDate - now;
 
-      // Если дата уже наступила, оставляем нули
       if (distance < 0) {
-        elDays.innerText = "00";
-        elHours.innerText = "00";
-        elMinutes.innerText = "00";
-        elSeconds.innerText = "00";
+        elDays.innerText = "00"; elHours.innerText = "00";
+        elMinutes.innerText = "00"; elSeconds.innerText = "00";
         return;
       }
 
-      // Вычисляем время
       const days = Math.floor(distance / (1000 * 60 * 60 * 24));
       const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      // Добавляем нули спереди, если число меньше 10 (например, "05" вместо "5")
       elDays.innerText = days.toString().padStart(2, '0');
       elHours.innerText = hours.toString().padStart(2, '0');
       elMinutes.innerText = minutes.toString().padStart(2, '0');
       elSeconds.innerText = seconds.toString().padStart(2, '0');
     }
-
-    updateTimer(); // Обновляем немедленно при загрузке
-    setInterval(updateTimer, 1000); // Обновляем каждую секунду
+    updateTimer(); 
+    setInterval(updateTimer, 1000);
   }
-  
   document.addEventListener("DOMContentLoaded", initCountdown);
 
-
-  // --- АНИМАЦИИ И ВИДЕО ---
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -386,51 +384,36 @@
   function unlockSite() {
     if (siteUnlocked) return;
     siteUnlocked = true;
-    
     videoOverlay.classList.add('fading');
     document.body.classList.remove('locked');
-    
     heroSection.classList.add('hero-active');
-    
-    setTimeout(() => {
-      videoOverlay.style.display = 'none';
-    }, 1000); 
+    setTimeout(() => { videoOverlay.style.display = 'none'; }, 1000); 
   }
 
-  videoOverlay.addEventListener('click', function() {
+  function startExperience() {
     if (isPlaying) return; 
     isPlaying = true;
-    
-    bgMusic.play().catch(e => console.log("Музыка не запустилась:", e));
-    
+    bgMusic.play().catch(e => console.log("Музыка заблокирована:", e));
     const playPromise = video.play();
     if (playPromise !== undefined) {
       playPromise.then(() => {
-        setTimeout(() => {
-          heroSection.classList.add('hero-active');
-        }, 2000);
+        setTimeout(() => { heroSection.classList.add('hero-active'); }, 2000);
       }).catch(e => {
-        console.log("Видео заблокировано:", e);
+        console.log("Видео заблокировано iOS:", e);
         unlockSite();
       });
     }
+    setTimeout(() => { unlockSite(); }, 6000);
+  }
 
-    setTimeout(() => {
-      unlockSite();
-    }, 8000);
-  });
+  videoOverlay.addEventListener('click', startExperience);
+  videoOverlay.addEventListener('touchstart', startExperience, {passive: true});
 
   video.addEventListener('timeupdate', function() {
-    if (video.duration > 0 && video.currentTime >= video.duration - 1.5) {
-      unlockSite();
-    }
+    if (video.duration > 0 && video.currentTime >= video.duration - 1.5) { unlockSite(); }
   });
+  video.addEventListener('ended', function() { unlockSite(); });
 
-  video.addEventListener('ended', function() {
-    unlockSite();
-  });
-
-  // --- ФОРМА ОТПРАВКИ ---
   const SCRIPT_URL = "ВСТАВЬТЕ_СЮДА_URL_GOOGLE_APPS_SCRIPT";
   const form = document.getElementById('rsvp-form');
   const status = document.getElementById('form-status');
@@ -438,25 +421,12 @@
   form.addEventListener('submit', function(e){
     e.preventDefault();
     status.textContent = 'Отправляем...';
-
-    const data = {
-      name: form.name.value,
-      phone: form.phone.value,
-      guests: form.guests.value,
-      comment: form.comment.value
-    };
-
+    const data = { name: form.name.value, phone: form.phone.value, guests: form.guests.value, comment: form.comment.value };
     fetch(SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    })
-    .then(() => {
-      status.textContent = 'Спасибо! Мы получили ваш ответ.';
-      form.reset();
-    })
-    .catch(() => {
+      method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data)
+    }).then(() => {
+      status.textContent = 'Спасибо! Мы получили ваш ответ.'; form.reset();
+    }).catch(() => {
       status.textContent = 'Не получилось отправить. Попробуйте ещё раз.';
     });
   });
