@@ -23,7 +23,7 @@
   }
   body{
     margin:0; padding:0; 
-    background: transparent; 
+    background: var(--black); 
     color:var(--beige);
     font-family:'Montserrat', sans-serif; font-weight:300; line-height:1.6; overflow-x:hidden;
     text-shadow: 0 2px 4px rgba(0,0,0,0.8); 
@@ -32,22 +32,31 @@
   body.locked { overflow: hidden; }
 
   /* ========================================= */
-  /* 1. ФОНОВОЕ ВИДЕО НА ВЕСЬ ЭКРАН            */
+  /* 1. ЖЕЛЕЗОБЕТОННЫЙ ФОНОВЫЙ СЛОЙ            */
   /* ========================================= */
   .site-background {
     position: fixed;
     top: 0; left: 0;
     width: 100vw; height: 100vh;
     width: 100dvw; height: 100dvh;
-    z-index: -10; 
+    z-index: 1; /* Видео теперь на самом нижнем, но активном слое */
     pointer-events: none;
+    overflow: hidden;
   }
   
   .site-background video {
     position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 100%; min-height: 100%;
+    width: auto; height: auto;
     object-fit: cover; 
+  }
+
+  /* Все элементы сайта поднимаем наверх поверх видео */
+  .content-block, .video-overlay, audio, footer {
+    position: relative;
+    z-index: 2;
   }
 
   /* ========================================= */
@@ -62,12 +71,10 @@
   .video-overlay video { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
 
   /* ========================================= */
-  /* 3. ОБЩИЕ СТИЛИ БЛОКОВ-КАРТОЧЕК            */
+  /* 3. БЛОКИ-КАРТОЧКИ (С РАЗРЫВАМИ)           */
   /* ========================================= */
   .content-block {
-    background-color: rgba(36, 5, 10, 0.88);
-    position: relative;
-    z-index: 1;
+    background-color: rgba(36, 5, 10, 0.90);
     margin: 40px 16px; 
     border-radius: 12px; 
     
@@ -224,11 +231,10 @@
 <body class="locked">
 
   <!-- ========================================= -->
-  <!-- 1. ФОНОВОЕ ВИДЕО (ЧИСТОЕ)                 -->
+  <!-- 1. ФОНОВОЕ ВИДЕО (ГАРАНТИРОВАННЫЙ СЛОЙ)   -->
   <!-- ========================================= -->
   <div class="site-background">
-    <!-- Строгое аппаратное глушение звука (muted) + autoplay + loop -->
-    <video id="bg-video" autoplay loop muted playsinline>
+    <video id="bg-video" autoplay loop muted playsinline webkit-playsinline>
       <source src="Videoback.mp4" type="video/mp4">
     </video>
   </div>
@@ -376,12 +382,22 @@
   <footer>Ждём встречи с вами</footer>
 
 <script>
-  // Принудительное удаление звука у видео
+  // Принудительный запуск фонового видео принудительно через JS
   document.addEventListener("DOMContentLoaded", function() {
     const bgVideo = document.getElementById('bg-video');
     const envVideo = document.getElementById('envelope-video');
-    if (bgVideo) { bgVideo.volume = 0; bgVideo.muted = true; }
-    if (envVideo) { envVideo.volume = 0; envVideo.muted = true; }
+    
+    if (bgVideo) {
+      bgVideo.volume = 0;
+      bgVideo.muted = true;
+      bgVideo.play().catch(err => {
+        console.log("Автоплей фонового видео сработал по требованию браузера позже:", err);
+      });
+    }
+    if (envVideo) { 
+      envVideo.volume = 0; 
+      envVideo.muted = true; 
+    }
   });
 
   // Логика таймера
@@ -428,11 +444,11 @@
   }, { threshold: 0.15 });
   document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-  // Логика конверта и музыки
+  // Логика конверта, музыки и надежного запуска фонового видео
   const videoOverlay = document.getElementById('video-overlay');
   const video = document.getElementById('envelope-video');
   const bgMusic = document.getElementById('bg-music');
-  const bgVideo = document.getElementById('bg-video'); // Обращаемся к фоновому видео
+  const bgVideo = document.getElementById('bg-video');
   const heroSection = document.getElementById('hero-section');
   
   let isPlaying = false;
@@ -455,8 +471,7 @@
     bgMusic.volume = 1;
     bgMusic.play().catch(e => console.log("Браузер заблокировал музыку:", e));
 
-    // ПРИНУДИТЕЛЬНЫЙ ЗАПУСК ФОНОВОГО ВИДЕО
-    // iOS/Safari может ставить видео на паузу в режиме энергосбережения
+    // Гарантированный запуск фонового видео по клику на конверт
     if (bgVideo) {
       bgVideo.play().catch(e => console.log("Фоновое видео заблокировано:", e));
     }
