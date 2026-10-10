@@ -26,7 +26,6 @@
     background: transparent; 
     color:var(--beige);
     font-family:'Montserrat', sans-serif; font-weight:300; line-height:1.6; overflow-x:hidden;
-    /* Легкая тень текста для читаемости поверх светлых частей видео */
     text-shadow: 0 2px 4px rgba(0,0,0,0.8); 
   }
   
@@ -65,15 +64,13 @@
   /* ========================================= */
   /* 3. ОБЩИЕ СТИЛИ БЛОКОВ-КАРТОЧЕК            */
   /* ========================================= */
-  /* Теперь каждая секция — это отдельный бордовый блок с прорезями по краям */
   .content-block {
-    background-color: rgba(36, 5, 10, 0.88); /* Бордовый полупрозрачный фон */
+    background-color: rgba(36, 5, 10, 0.88);
     position: relative;
     z-index: 1;
-    margin: 40px 16px; /* Разрывы между блоками (сверху/снизу) и отступы по краям экрана */
-    border-radius: 12px; /* Закругляем верхние и нижние углы блоков */
+    margin: 40px 16px; 
+    border-radius: 12px; 
     
-    /* УМНАЯ МАСКА: создает перфорацию (мелкие полукруги) вдоль левого и правого края */
     -webkit-mask: 
       linear-gradient(#000, #000) center/calc(100% - 20px) 100% no-repeat,
       radial-gradient(circle at left center, transparent 6px, #000 6.5px) left/10px 22px repeat-y,
@@ -84,10 +81,9 @@
       radial-gradient(circle at right center, transparent 6px, #000 6.5px) right/10px 22px repeat-y;
   }
   
-  /* Размеры карточек на компьютерах */
   @media (min-width: 800px) {
     .content-block { 
-      margin: 60px auto; /* Увеличиваем разрывы между блоками на ПК */
+      margin: 60px auto; 
       max-width: 760px; 
     }
   }
@@ -99,7 +95,7 @@
 
   /* --- ВНУТРЕННОСТИ СЕКЦИИ HERO --- */
   .hero{ 
-    min-height: calc(100vh - 80px); /* Учитываем отступы, чтобы блок влезал в экран */
+    min-height: calc(100vh - 80px);
     min-height: calc(100dvh - 80px); 
     display:flex; flex-direction:column; 
     align-items:center; justify-content:center; text-align:center; 
@@ -180,7 +176,6 @@
   /* ========================================= */
   /* ОСТАЛЬНЫЕ ЭЛЕМЕНТЫ В БЛОКАХ               */
   /* ========================================= */
-  /* Делаем внутренние рамочки прозрачнее, чтобы они не спорили с карточкой */
   .venue-frame{ aspect-ratio:16/9; border:1px solid var(--line); background: rgba(20, 17, 16, 0.4); display:flex; align-items:center; justify-content:center; text-align:center; color:#6f6559; font-size:13px; letter-spacing:1px; padding:20px; border-radius: 8px; }
   .venue-address{ margin-top:22px; font-family:'Playfair Display', serif; font-size:24px; color:var(--beige-soft); }
   .venue-address .fill{ border-bottom:1px dashed #8a7f6e; padding:0 8px; }
@@ -232,7 +227,7 @@
   <!-- 1. ФОНОВОЕ ВИДЕО (ЧИСТОЕ)                 -->
   <!-- ========================================= -->
   <div class="site-background">
-    <!-- Строгое аппаратное глушение звука (muted) -->
+    <!-- Строгое аппаратное глушение звука (muted) + autoplay + loop -->
     <video id="bg-video" autoplay loop muted playsinline>
       <source src="Videoback.mp4" type="video/mp4">
     </video>
@@ -381,7 +376,7 @@
   <footer>Ждём встречи с вами</footer>
 
 <script>
-  // Принудительное удаление звука у видео, чтобы не блокировалась музыка
+  // Принудительное удаление звука у видео
   document.addEventListener("DOMContentLoaded", function() {
     const bgVideo = document.getElementById('bg-video');
     const envVideo = document.getElementById('envelope-video');
@@ -437,6 +432,7 @@
   const videoOverlay = document.getElementById('video-overlay');
   const video = document.getElementById('envelope-video');
   const bgMusic = document.getElementById('bg-music');
+  const bgVideo = document.getElementById('bg-video'); // Обращаемся к фоновому видео
   const heroSection = document.getElementById('hero-section');
   
   let isPlaying = false;
@@ -458,6 +454,12 @@
     // Включаем фоновую музыку
     bgMusic.volume = 1;
     bgMusic.play().catch(e => console.log("Браузер заблокировал музыку:", e));
+
+    // ПРИНУДИТЕЛЬНЫЙ ЗАПУСК ФОНОВОГО ВИДЕО
+    // iOS/Safari может ставить видео на паузу в режиме энергосбережения
+    if (bgVideo) {
+      bgVideo.play().catch(e => console.log("Фоновое видео заблокировано:", e));
+    }
 
     // Включаем видео-конверт
     const playPromise = video.play();
