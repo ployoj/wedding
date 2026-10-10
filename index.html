@@ -171,7 +171,7 @@
   .text-title { font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 15px; color: var(--beige-soft); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
   .text-desc { font-size: 13px; color: #8a7f6e; line-height: 1.5; }
 
-  /* --- МЕСТО И КНОПКА МАРШРУТА (ПО ЦЕНТРУ) --- */
+  /* --- МЕСТО И КНОПКА МАРШРУТА --- */
   .venue-desc {
     color: #cfc4ac;
     font-size: 15px;
@@ -227,10 +227,22 @@
     color: var(--beige-soft);
   }
 
-  /* --- КАРУСЕЛЬ ДРЕССР-КОДА --- */
-  .palette{ display:flex; gap:16px; margin-bottom:30px; }
-  .swatch{ flex:1; height:64px; border:1px solid var(--line); border-radius: 4px; }
-  
+  /* --- КРУГЛЫЕ ЦВЕТА ДРЕСС-КОДА --- */
+  .palette { 
+    display: flex; 
+    justify-content: center;
+    gap: 20px; 
+    margin-bottom: 35px; 
+  }
+  .color-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  }
+
+  /* --- КАРУСЕЛЬ ДРЕССР-КОДА (со свайпами) --- */
   .carousel-container {
     position: relative;
     width: 100%;
@@ -241,21 +253,24 @@
     border: 1px solid var(--line);
     box-shadow: 0 10px 30px rgba(0,0,0,0.6);
     background: rgba(20, 17, 16, 0.4);
+    touch-action: pan-y;
   }
   .carousel-track {
     display: flex;
-    transition: transform 0.5s ease;
+    transition: transform 0.4s ease-out;
     aspect-ratio: 3/4;
   }
   .carousel-slide {
     min-width: 100%;
     height: 100%;
+    user-select: none;
   }
   .carousel-slide img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+    pointer-events: none;
   }
   .carousel-btn {
     position: absolute;
@@ -299,7 +314,7 @@
     background: #8f3240;
   }
 
-  .dress-note{ margin-top:25px; font-size:13px; color:#8a7f6e; text-align: center; }
+  .dress-note{ margin-top:25px; font-size:13px; color:#8a7f6e; text-align: center; max-width: 50ch; margin-left: auto; margin-right: auto; }
   
   .gift{ text-align:center; padding-top:40px; padding-bottom:40px; }
   .gift-mark{ width:46px; height:46px; margin:0 auto 28px; border:1px solid #8f3240; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Playfair Display', serif; font-style:italic; color:#8f3240; font-size:22px; }
@@ -436,20 +451,21 @@
     </div>
   </section>
 
-  <!-- БЛОК 4: ДРЕСС-КОД (КАРУСЕЛЬ) -->
+  <!-- БЛОК 4: ДРЕСС-КОД -->
   <section class="content-block section">
     <div class="eyebrow reveal">ДРЕСС-КОД</div>
     <h2 class="reveal">Оттенки вечера</h2>
+    
+    <!-- Круги с точными цветами с макета -->
     <div class="palette reveal">
-      <div class="swatch" style="background:#141110;"></div>
-      <div class="swatch" style="background:#e8ddc9;"></div>
-      <div class="swatch" style="background:#6e1f2a;"></div>
-      <div class="swatch" style="background:#8f3240;"></div>
-      <div class="swatch" style="background:#3a322c;"></div>
+      <div class="color-circle" style="background: #4A1525;" title="Бордовый"></div>
+      <div class="color-circle" style="background: #141212;" title="Черный"></div>
+      <div class="color-circle" style="background: #5B6B47;" title="Оливковый"></div>
+      <div class="color-circle" style="background: #4A332B;" title="Шоколадный"></div>
     </div>
 
-    <!-- Карусель образов -->
-    <div class="carousel-container reveal">
+    <!-- Карусель образов со свайпами -->
+    <div class="carousel-container reveal" id="carouselContainer">
       <button class="carousel-btn carousel-prev" onclick="moveSlide(-1)">&#10094;</button>
       <div class="carousel-track" id="carouselTrack">
         <div class="carousel-slide"><img src="look1.jpg" alt="Образ 1"></div>
@@ -472,7 +488,7 @@
       <span class="carousel-dot" onclick="currentSlide(5)"></span>
     </div>
 
-    <p class="dress-note reveal">Будем рады видеть вас в чёрных, бежевых и бордовых тонах. Просим избегать белого и слишком ярких оттенков.</p>
+    <p class="dress-note reveal">Нам будет очень приятно, если ваши наряды поддержат благородную и спокойную палитру нашего праздника. Просим избегать белого и слишком светлых оттенков.</p>
   </section>
 
   <!-- БЛОК 5: ПОДАРКИ И RSVP -->
@@ -515,7 +531,7 @@
   <footer>Ждём встречи с вами</footer>
 
 <script>
-  // Логика карусели
+  // Логика карусели со свайпами и стрелками
   let slideIndex = 0;
   const totalSlides = 6;
 
@@ -541,6 +557,46 @@
     slideIndex = index;
     showSlide(slideIndex);
   }
+
+  // Свайпы для сенсорных экранов и мышки
+  const container = document.getElementById('carouselContainer');
+  let startX = 0;
+  let isDragging = false;
+
+  container.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+    isDragging = true;
+  });
+
+  container.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    let currentX = e.touches[0].clientX;
+    let diff = startX - currentX;
+    
+    if (Math.abs(diff) > 40) {
+      if (diff > 0) moveSlide(1);
+      else moveSlide(-1);
+      isDragging = false;
+    }
+  });
+
+  container.addEventListener('touchend', () => { isDragging = false; });
+
+  container.addEventListener('mousedown', (e) => {
+    startX = e.clientX;
+    isDragging = true;
+  });
+
+  container.addEventListener('mouseup', (e) => {
+    if (!isDragging) return;
+    let diff = startX - e.clientX;
+    if (Math.abs(diff) > 40) {
+      if (diff > 0) moveSlide(1);
+      else moveSlide(-1);
+    }
+    isDragging = false;
+  });
+
 
   document.addEventListener("DOMContentLoaded", function() {
     const bgVideo = document.getElementById('bg-video');
