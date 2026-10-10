@@ -26,14 +26,14 @@
     background: transparent; 
     color:var(--beige);
     font-family:'Montserrat', sans-serif; font-weight:300; line-height:1.6; overflow-x:hidden;
-    text-shadow: 0 2px 5px rgba(0,0,0,0.7); 
-    position: relative; /* Важно для слоя маски во всю длину */
+    /* Легкая тень текста для читаемости поверх светлых частей видео */
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8); 
   }
   
   body.locked { overflow: hidden; }
 
   /* ========================================= */
-  /* ФОНОВОЕ ВИДЕО (Зафиксировано)             */
+  /* 1. ФОНОВОЕ ВИДЕО НА ВЕСЬ ЭКРАН            */
   /* ========================================= */
   .site-background {
     position: fixed;
@@ -52,18 +52,7 @@
   }
 
   /* ========================================= */
-  /* БОРДОВЫЙ СЛОЙ С ВЫРЕЗАМИ (Скроллится)     */
-  /* ========================================= */
-  .page-overlay-mask {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: -5; 
-    pointer-events: none;
-  }
-
-  /* ========================================= */
-  /* ВИДЕО-КОНВЕРТ НА ВЕСЬ ЭКРАН               */
+  /* 2. ВИДЕО-КОНВЕРТ НА ВХОДЕ                 */
   /* ========================================= */
   .video-overlay {
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -74,24 +63,47 @@
   .video-overlay video { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
 
   /* ========================================= */
-  /* ОСНОВНОЙ КОД САЙТА                        */
+  /* 3. ОБЩИЕ СТИЛИ БЛОКОВ-КАРТОЧЕК            */
   /* ========================================= */
-  h1,h2,h3,.serif{ 
-    font-family:'Playfair Display', serif; font-weight:500; margin:0; 
-    text-shadow: 0 4px 15px rgba(0,0,0,0.8); 
+  /* Теперь каждая секция — это отдельный бордовый блок с прорезями по краям */
+  .content-block {
+    background-color: rgba(36, 5, 10, 0.88); /* Бордовый полупрозрачный фон */
+    position: relative;
+    z-index: 1;
+    margin: 40px 16px; /* Разрывы между блоками (сверху/снизу) и отступы по краям экрана */
+    border-radius: 12px; /* Закругляем верхние и нижние углы блоков */
+    
+    /* УМНАЯ МАСКА: создает перфорацию (мелкие полукруги) вдоль левого и правого края */
+    -webkit-mask: 
+      linear-gradient(#000, #000) center/calc(100% - 20px) 100% no-repeat,
+      radial-gradient(circle at left center, transparent 6px, #000 6.5px) left/10px 22px repeat-y,
+      radial-gradient(circle at right center, transparent 6px, #000 6.5px) right/10px 22px repeat-y;
+    mask: 
+      linear-gradient(#000, #000) center/calc(100% - 20px) 100% no-repeat,
+      radial-gradient(circle at left center, transparent 6px, #000 6.5px) left/10px 22px repeat-y,
+      radial-gradient(circle at right center, transparent 6px, #000 6.5px) right/10px 22px repeat-y;
   }
   
-  .section{ max-width:760px; margin:0 auto; padding:110px 28px; position:relative; z-index: 1; }
-  .section + .section{ border-top:1px solid var(--line); }
+  /* Размеры карточек на компьютерах */
+  @media (min-width: 800px) {
+    .content-block { 
+      margin: 60px auto; /* Увеличиваем разрывы между блоками на ПК */
+      max-width: 760px; 
+    }
+  }
+
+  h1,h2,h3,.serif{ font-family:'Playfair Display', serif; font-weight:500; margin:0; text-shadow: 0 4px 15px rgba(0,0,0,0.8); }
 
   .reveal{ opacity:0; transform:translateY(28px); transition:opacity 1s ease, transform 1s ease; }
   .reveal.visible{ opacity:1; transform:translateY(0); }
 
-  /* --- СЕКЦИЯ HERO --- */
+  /* --- ВНУТРЕННОСТИ СЕКЦИИ HERO --- */
   .hero{ 
-    min-height:100vh; min-height:100dvh; display:flex; flex-direction:column; 
+    min-height: calc(100vh - 80px); /* Учитываем отступы, чтобы блок влезал в экран */
+    min-height: calc(100dvh - 80px); 
+    display:flex; flex-direction:column; 
     align-items:center; justify-content:center; text-align:center; 
-    padding:80px 24px 40px; position:relative; z-index: 1;
+    padding:60px 24px 40px; 
   }
   .hero-photo-container { margin-bottom: 30px; opacity: 0; width: 100%; max-width: 380px; }
   .hero-photo { width: 100%; border-radius: 8px; object-fit: cover; box-shadow: 0 10px 30px rgba(0,0,0,0.8); display: block; }
@@ -109,36 +121,32 @@
   .hero-countdown-block { opacity: 0; display: flex; flex-direction: column; align-items: center; gap: 20px; }
   .countdown-container { display: flex; gap: clamp(12px, 4vw, 24px); justify-content: center; }
   .countdown-item { display: flex; flex-direction: column; align-items: center; min-width: 50px; }
-  .countdown-label { font-size: 10px; letter-spacing: 2px; color: #8a7f6e; text-transform: uppercase; margin-bottom: 6px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+  .countdown-label { font-size: 10px; letter-spacing: 2px; color: #8a7f6e; text-transform: uppercase; margin-bottom: 6px; }
   
   .countdown-value { 
-    font-family: 'Playfair Display', serif; 
-    font-style: italic; font-weight: 500;
-    font-size: clamp(36px, 8vw, 48px); 
-    color: var(--beige-soft); line-height: 1; 
+    font-family: 'Playfair Display', serif; font-style: italic; font-weight: 500;
+    font-size: clamp(36px, 8vw, 48px); color: var(--beige-soft); line-height: 1; 
     font-variant-numeric: tabular-nums; 
-    text-shadow: 0 4px 15px rgba(0,0,0,0.8);
   }
   
   .wedding-date-large { 
-    font-family: 'Playfair Display', serif; 
-    font-style: italic; font-weight: 500;
-    font-size: clamp(28px, 6vw, 36px); 
-    color: #8f3240; letter-spacing: 2px; margin-top: 10px; 
-    text-shadow: 0 4px 15px rgba(0,0,0,0.8);
+    font-family: 'Playfair Display', serif; font-style: italic; font-weight: 500;
+    font-size: clamp(28px, 6vw, 36px); color: #8f3240; letter-spacing: 2px; margin-top: 10px; 
   }
   
   @keyframes fadeIn{ to{opacity:1;} }
   @keyframes fadeUp{ from{opacity:0; transform:translateY(18px);} to{opacity:1; transform:translateY(0);} }
 
-  .eyebrow{ font-size:12px; letter-spacing:3px; color:#8f3240; margin-bottom:18px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+  /* --- ВНУТРЕННОСТИ ОБЫЧНОЙ СЕКЦИИ --- */
+  .section{ padding: 80px 28px; }
+  .eyebrow{ font-size:12px; letter-spacing:3px; color:#8f3240; margin-bottom:18px; }
   .section h2{ font-size:clamp(32px,5vw,46px); margin-bottom:34px; }
   .section p{ color:#cfc4ac; font-size:16px; max-width:60ch; }
 
   /* ========================================= */
-  /* СЕКЦИЯ ПРОГРАММЫ (ТАЙМЛАЙН)               */
+  /* ПРОГРАММА (ТАЙМЛАЙН)                      */
   /* ========================================= */
-  .timeline { position: relative; max-width: 600px; margin: 50px auto 0; padding-bottom: 20px; }
+  .timeline { position: relative; max-width: 600px; margin: 40px auto 0; }
   .timeline::before {
     content: ''; position: absolute; top: 0; bottom: 0; left: 50%;
     transform: translateX(-50%); width: 1px; background: rgba(143, 50, 64, 0.4);
@@ -155,55 +163,59 @@
   
   .timeline-icon {
     position: absolute; left: 50%; transform: translateX(-50%);
-    width: 44px; height: 44px; background: var(--black);
+    width: 44px; height: 44px; background: rgba(36, 5, 10, 1);
     border: 1px solid #8f3240; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    color: var(--beige-soft); z-index: 2; box-shadow: 0 0 15px rgba(0,0,0,0.8);
+    color: var(--beige-soft); z-index: 2; 
   }
   .timeline-icon svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 1.2; fill: none; }
   
   .time-val { 
     font-family: 'Playfair Display', serif; font-style: italic;
     font-weight: 500; font-size: 34px; color: #8f3240; line-height: 1; 
-    text-shadow: 0 4px 10px rgba(0,0,0,0.8);
   }
   .text-title { font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 15px; color: var(--beige-soft); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
   .text-desc { font-size: 13px; color: #8a7f6e; line-height: 1.5; }
 
   /* ========================================= */
-  /* ОСТАЛЬНЫЕ БЛОКИ                           */
+  /* ОСТАЛЬНЫЕ ЭЛЕМЕНТЫ В БЛОКАХ               */
   /* ========================================= */
-  .venue-frame{ aspect-ratio:16/9; border:1px solid var(--line); background:linear-gradient(135deg, rgba(34,29,27,0.95), rgba(27,22,21,0.95)); display:flex; align-items:center; justify-content:center; text-align:center; color:#6f6559; font-size:13px; letter-spacing:1px; padding:20px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+  /* Делаем внутренние рамочки прозрачнее, чтобы они не спорили с карточкой */
+  .venue-frame{ aspect-ratio:16/9; border:1px solid var(--line); background: rgba(20, 17, 16, 0.4); display:flex; align-items:center; justify-content:center; text-align:center; color:#6f6559; font-size:13px; letter-spacing:1px; padding:20px; border-radius: 8px; }
   .venue-address{ margin-top:22px; font-family:'Playfair Display', serif; font-size:24px; color:var(--beige-soft); }
   .venue-address .fill{ border-bottom:1px dashed #8a7f6e; padding:0 8px; }
+  
   .palette{ display:flex; gap:16px; margin-bottom:44px; }
-  .swatch{ flex:1; height:64px; border:1px solid var(--line); box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+  .swatch{ flex:1; height:64px; border:1px solid var(--line); border-radius: 4px; }
   .dress-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
-  .dress-item{ aspect-ratio:3/4; border:1px solid var(--line); background:linear-gradient(160deg, rgba(34,29,27,0.95), rgba(27,22,21,0.95)); display:flex; align-items:center; justify-content:center; text-align:center; color:#6f6559; font-size:12px; padding:10px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+  .dress-item{ aspect-ratio:3/4; border:1px solid var(--line); background: rgba(20, 17, 16, 0.4); display:flex; align-items:center; justify-content:center; text-align:center; color:#6f6559; font-size:12px; padding:10px; border-radius: 6px; }
   .dress-note{ margin-top:20px; font-size:13px; color:#8a7f6e; }
-  .gift{ text-align:center; padding-top:100px; padding-bottom:100px; }
-  .gift-mark{ width:46px; height:46px; margin:0 auto 28px; border:1px solid #8f3240; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Playfair Display', serif; font-style:italic; color:#8f3240; font-size:22px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+  
+  .gift{ text-align:center; padding-top:80px; padding-bottom:80px; }
+  .gift-mark{ width:46px; height:46px; margin:0 auto 28px; border:1px solid #8f3240; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Playfair Display', serif; font-style:italic; color:#8f3240; font-size:22px; }
   .gift p{ margin:0 auto; }
   
   form{ display:flex; flex-direction:column; gap:22px; }
   .field{ display:flex; flex-direction:column; gap:8px; }
-  label{ font-size:12px; letter-spacing:2px; color:#8a7f6e; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+  label{ font-size:12px; letter-spacing:2px; color:#8a7f6e; }
   input, textarea, select{ 
-    background: rgba(20, 17, 16, 0.6); backdrop-filter: blur(4px);
+    background: rgba(20, 17, 16, 0.4); 
     border:none; border-bottom:1px solid var(--line); color:var(--beige-soft); 
     font-family:'Montserrat', sans-serif; font-size:16px; padding:12px 8px; outline:none; transition:border-color 0.3s ease; 
   }
   input:focus, textarea:focus, select:focus{ border-color:#8f3240; }
   select option{ background:var(--charcoal); }
   textarea{ resize:vertical; min-height:70px; }
-  .submit-btn{ margin-top:10px; align-self:flex-start; background: rgba(20, 17, 16, 0.6); backdrop-filter: blur(4px); border:1px solid #8f3240; color:var(--beige-soft); padding:14px 34px; font-family:'Montserrat', sans-serif; letter-spacing:2px; font-size:13px; cursor:pointer; transition:background 0.35s ease, color 0.35s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
+  .submit-btn{ margin-top:10px; align-self:flex-start; background: rgba(20, 17, 16, 0.4); border:1px solid #8f3240; color:var(--beige-soft); padding:14px 34px; font-family:'Montserrat', sans-serif; letter-spacing:2px; font-size:13px; cursor:pointer; transition:background 0.35s ease, color 0.35s ease; border-radius: 4px; }
   .submit-btn:hover{ background:var(--burgundy); color:var(--beige-soft); }
   .form-status{ font-size:13px; color:#8a7f6e; min-height:20px; }
-  footer{ text-align:center; padding:50px 20px 60px; font-family:'Playfair Display', serif; font-style:italic; color:#6f6559; font-size:16px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+  
+  footer{ text-align:center; padding:50px 20px; font-family:'Playfair Display', serif; font-style:italic; color:#6f6559; font-size:16px; }
 
   @media (max-width: 560px) {
-    .section{padding:80px 15px;} 
+    .section{padding:60px 20px;} 
     .dress-grid{grid-template-columns:repeat(2,1fr);}
+    
     .timeline-item { margin-bottom: 35px; }
     .time-val { font-size: 24px; }
     .text-title { font-size: 12px; margin-bottom: 4px; }
@@ -217,57 +229,33 @@
 <body class="locked">
 
   <!-- ========================================= -->
-  <!-- 1. ФОНОВОЕ ВИДЕО (ЗАФИКСИРОВАНО)        -->
+  <!-- 1. ФОНОВОЕ ВИДЕО (ЧИСТОЕ)                 -->
   <!-- ========================================= -->
   <div class="site-background">
-    <!-- Строгое глушение (muted) для предотвращения блокировок звука браузером -->
+    <!-- Строгое аппаратное глушение звука (muted) -->
     <video id="bg-video" autoplay loop muted playsinline>
       <source src="Videoback.mp4" type="video/mp4">
     </video>
   </div>
 
-  <!-- ========================================= -->
-  <!-- 2. БОРДОВАЯ МАСКА (СКРОЛЛИТСЯ СО СТРАНИЦЕЙ) -->
-  <!-- ========================================= -->
-  <div class="page-overlay-mask">
-    <!-- SVG растягивается на всю длину контента сайта -->
-    <svg width="100%" height="100%">
-      <defs>
-        <mask id="smooth-holes">
-          <!-- Белая основа (здесь будет виден бордовый цвет) -->
-          <rect width="100%" height="100%" fill="white" />
-          
-          <!-- Редкие плавные кривые (вырезы) по краям экрана -->
-          <!-- Левый край: на 15% высоты сайта и на 70% -->
-          <ellipse cx="0" cy="15%" rx="120" ry="400" fill="black" />
-          <ellipse cx="0" cy="70%" rx="100" ry="350" fill="black" />
-          
-          <!-- Правый край: на 40% высоты сайта и на 90% -->
-          <ellipse cx="100%" cy="40%" rx="150" ry="500" fill="black" />
-          <ellipse cx="100%" cy="90%" rx="180" ry="450" fill="black" />
-        </mask>
-      </defs>
-      <!-- Бордовый слой с непрозрачностью 85% -->
-      <rect width="100%" height="100%" fill="#24050a" fill-opacity="0.85" mask="url(#smooth-holes)" />
-    </svg>
-  </div>
-
-  <!-- ========================================= -->
-  <!-- МУЗЫКА И КОНВЕРТ                          -->
-  <!-- ========================================= -->
   <audio id="bg-music" loop>
     <source src="music.mp3" type="audio/mpeg">
   </audio>
 
+  <!-- ОВЕРЛЕЙ С ВИДЕО-КОНВЕРТОМ -->
   <div class="video-overlay" id="video-overlay">
-    <!-- Строгое глушение видео конверта, чтобы спасти аудио-канал для музыки -->
     <video id="envelope-video" playsinline muted preload="auto">
       <source src="4172012_1080p_20261004185959.mp4#t=0.001" type="video/mp4">
     </video>
   </div>
 
-  <!-- HERO (Первый экран) -->
-  <section class="hero" id="hero-section">
+
+  <!-- ========================================= -->
+  <!-- БЛОКИ-КАРТОЧКИ (С РАЗРЫВАМИ)              -->
+  <!-- ========================================= -->
+
+  <!-- БЛОК 1: HERO -->
+  <section class="content-block hero" id="hero-section">
     <div class="hero-photo-container">
       <img src="photoglawnoe.jpg" alt="Сергей и Софья" class="hero-photo">
     </div>
@@ -284,8 +272,8 @@
     </div>
   </section>
 
-  <!-- СЕКЦИЯ ПРОГРАММЫ С ИКОНКАМИ -->
-  <section class="section">
+  <!-- БЛОК 2: ПРОГРАММА -->
+  <section class="content-block section">
     <div class="eyebrow reveal">ПРОГРАММА</div>
     <h2 class="reveal">Как пройдёт день</h2>
     
@@ -336,16 +324,16 @@
     </div>
   </section>
 
-  <!-- МЕСТО -->
-  <section class="section">
+  <!-- БЛОК 3: МЕСТО -->
+  <section class="content-block section">
     <div class="eyebrow reveal">МЕСТО</div>
     <h2 class="reveal">Где мы вас ждём</h2>
     <div class="venue-frame reveal">ФОТОГРАФИЯ МЕСТА ПРОВЕДЕНИЯ</div>
     <div class="venue-address reveal">г. <span class="fill">заполнить</span>, <span class="fill">адрес</span></div>
   </section>
 
-  <!-- ДРЕСС-КОД -->
-  <section class="section">
+  <!-- БЛОК 4: ДРЕСС-КОД -->
+  <section class="content-block section">
     <div class="eyebrow reveal">ДРЕСС-КОД</div>
     <h2 class="reveal">Оттенки вечера</h2>
     <div class="palette reveal">
@@ -363,48 +351,42 @@
     <p class="dress-note reveal">Будем рады видеть вас в чёрных, бежевых и бордовых тонах. Просим избегать белого и слишком ярких оттенков.</p>
   </section>
 
-  <!-- ПОДАРКИ -->
-  <section class="section gift">
-    <div class="gift-mark reveal">&amp;</div>
-    <h2 class="reveal">О подарках</h2>
-    <p class="reveal" style="margin-top:18px;">Ваше присутствие — главный подарок для нас. Если вы всё же хотите порадовать нас чем-то материальным, вместо цветов мы будем благодарны за комплект постельного белья для нашего нового дома.</p>
-  </section>
-
-  <!-- RSVP -->
-  <section class="section">
-    <div class="eyebrow reveal">RSVP</div>
-    <h2 class="reveal">Подтвердите присутствие</h2>
-    <p class="reveal" style="margin-bottom:34px;">Пожалуйста, заполните форму до [дата], чтобы мы могли всё подготовить.</p>
-    <form class="reveal" id="rsvp-form">
-      <div class="field"><label for="name">ИМЯ И ФАМИЛИЯ</label><input type="text" id="name" name="name" required></div>
-      <div class="field"><label for="phone">ТЕЛЕФОН</label><input type="tel" id="phone" name="phone" required></div>
-      <div class="field">
-        <label for="guests">КОЛИЧЕСТВО ГОСТЕЙ</label>
-        <select id="guests" name="guests"><option value="1">1</option><option value="2">2</option></select>
-      </div>
-      <div class="field"><label for="comment">ПОЖЕЛАНИЯ ПО МЕНЮ / КОММЕНТАРИЙ</label><textarea id="comment" name="comment"></textarea></div>
-      <button type="submit" class="submit-btn">Отправить</button>
-      <div class="form-status" id="form-status"></div>
-    </form>
+  <!-- БЛОК 5: ПОДАРКИ И RSVP -->
+  <section class="content-block section">
+    <div class="gift">
+      <div class="gift-mark reveal">&amp;</div>
+      <h2 class="reveal">О подарках</h2>
+      <p class="reveal" style="margin-top:18px;">Ваше присутствие — главный подарок для нас. Если вы всё же хотите порадовать нас чем-то материальным, вместо цветов мы будем благодарны за комплект постельного белья для нашего нового дома.</p>
+    </div>
+    
+    <div style="margin-top: 60px;">
+      <div class="eyebrow reveal">RSVP</div>
+      <h2 class="reveal">Подтвердите присутствие</h2>
+      <p class="reveal" style="margin-bottom:34px;">Пожалуйста, заполните форму до [дата], чтобы мы могли всё подготовить.</p>
+      
+      <form class="reveal" id="rsvp-form">
+        <div class="field"><label for="name">ИМЯ И ФАМИЛИЯ</label><input type="text" id="name" name="name" required></div>
+        <div class="field"><label for="phone">ТЕЛЕФОН</label><input type="tel" id="phone" name="phone" required></div>
+        <div class="field">
+          <label for="guests">КОЛИЧЕСТВО ГОСТЕЙ</label>
+          <select id="guests" name="guests"><option value="1">1</option><option value="2">2</option></select>
+        </div>
+        <div class="field"><label for="comment">ПОЖЕЛАНИЯ ПО МЕНЮ / КОММЕНТАРИЙ</label><textarea id="comment" name="comment"></textarea></div>
+        <button type="submit" class="submit-btn">Отправить</button>
+        <div class="form-status" id="form-status"></div>
+      </form>
+    </div>
   </section>
 
   <footer>Ждём встречи с вами</footer>
 
 <script>
-  // Принудительное замедление фонового видео и отключение звука на уровне JS
+  // Принудительное удаление звука у видео, чтобы не блокировалась музыка
   document.addEventListener("DOMContentLoaded", function() {
     const bgVideo = document.getElementById('bg-video');
     const envVideo = document.getElementById('envelope-video');
-    
-    if (bgVideo) {
-      bgVideo.playbackRate = 0.5; // Скорость 0.5x
-      bgVideo.volume = 0;         // Жесткое глушение
-      bgVideo.muted = true;
-    }
-    if (envVideo) {
-      envVideo.volume = 0;        // Жесткое глушение
-      envVideo.muted = true;
-    }
+    if (bgVideo) { bgVideo.volume = 0; bgVideo.muted = true; }
+    if (envVideo) { envVideo.volume = 0; envVideo.muted = true; }
   });
 
   // Логика таймера
@@ -451,7 +433,7 @@
   }, { threshold: 0.15 });
   document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-  // Логика конверта и воспроизведения звука
+  // Логика конверта и музыки
   const videoOverlay = document.getElementById('video-overlay');
   const video = document.getElementById('envelope-video');
   const bgMusic = document.getElementById('bg-music');
@@ -473,15 +455,11 @@
     if (isPlaying) return; 
     isPlaying = true;
     
-    // Включаем музыку на 100% громкости. 
-    // Запускается только после чистого клика, чтобы iOS не блокировал.
+    // Включаем фоновую музыку
     bgMusic.volume = 1;
-    bgMusic.play().then(() => {
-        console.log("Музыка успешно запущена!");
-    }).catch(e => {
-        console.log("Браузер заблокировал музыку:", e);
-    });
+    bgMusic.play().catch(e => console.log("Браузер заблокировал музыку:", e));
 
+    // Включаем видео-конверт
     const playPromise = video.play();
     if (playPromise !== undefined) {
       playPromise.then(() => {
@@ -494,15 +472,14 @@
     setTimeout(() => { unlockSite(); }, 6000);
   }
 
-  // Оставили ТОЛЬКО классический клик, чтобы не сбивать аудио-движок Apple
   videoOverlay.addEventListener('click', startExperience);
-
+  
   video.addEventListener('timeupdate', function() {
     if (video.duration > 0 && video.currentTime >= video.duration - 1.5) { unlockSite(); }
   });
   video.addEventListener('ended', function() { unlockSite(); });
 
-  // Логика отправки формы
+  // Логика формы
   const SCRIPT_URL = "ВСТАВЬТЕ_СЮДА_URL_GOOGLE_APPS_SCRIPT";
   const form = document.getElementById('rsvp-form');
   const status = document.getElementById('form-status');
